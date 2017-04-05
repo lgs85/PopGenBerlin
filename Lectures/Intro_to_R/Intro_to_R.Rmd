@@ -33,6 +33,34 @@ R is:
 
 
 
+## R is free
+
+- Users have the freedom to run, copy, distribute, study, change and improve the software.
+- Free as in "free speech" not "free beer"
+- Part of the GNU project (along with Linux, Ginmp etc.)
+
+<br>
+<br>
+<br>
+
+<div align="center">
+<p style="font-size:12px">https://www.gnu.org/</p>
+</div>
+
+
+
+
+
+## R is popular
+
+<div align="center">
+<img src="Images/R_popularity.png" width=350>
+</div>
+
+<div align="center">
+<p style="font-size:12px">http://www.nature.com/news/programming-tools-adventures-with-r-1.16609</p>
+</div>
+
 
 
 #Getting started with R
@@ -161,11 +189,11 @@ x[c(4:6)]
 ##Functions
 
 ```{R}
-x <- c(1,2,4,4,4,5)
-
+x <- c(1,2,4,4,4,5,11)
 sum(x)
+length(x)
+sum(x)/length(x)
 mean(x)
-median(x)
 
 
 ```
@@ -231,10 +259,10 @@ x[2]
 ##Characters
 
 ```{R}
-x <- c("Martin","has","a","bushy","beard")
-x[1]
-x[2]
-x[c(3:5)]
+mb <- c("Martin","has","a","bushy","beard")
+mb[1]
+mb[2]
+mb[c(3:5)]
 ```
 
 
