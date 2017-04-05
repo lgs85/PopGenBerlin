@@ -139,6 +139,7 @@ Finally, we can test whether the proportion of heterozygotes differs between mai
 chisq.test(dd$Het,dd$Pop)
 ```
 
+What are you able to conclude from this? Is the effect significant? Is it in the expected direction? What is lacking from this data?
 
 
 ## Some challenges, if you have finished

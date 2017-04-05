@@ -314,6 +314,17 @@ barplot(height = sweets$Number_left,names.arg = sweets$Sweet_colours)
 ```
 
 
+##Reading data into R
+
+- `read.table()`
+- `read.csv()`
+- `readLines()`
+
+More in the practical...
+
+
+
+
 #Getting help with R
 
 
