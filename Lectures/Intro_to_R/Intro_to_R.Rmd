@@ -37,7 +37,7 @@ R is:
 
 - Users have the freedom to run, copy, distribute, study, change and improve the software.
 - Free as in "free speech" not "free beer"
-- Part of the GNU project (along with Linux, Ginmp etc.)
+- Part of the GNU project (along with Linux, Gimp etc.)
 
 <br>
 <br>
@@ -77,7 +77,7 @@ R is:
 
 
 
-##R is a calculator
+## R is a calculator
 
 ```{R}
 4 + 7
@@ -266,3 +266,78 @@ mb[c(3:5)]
 ```
 
 
+
+
+##Data frames
+
+```{R}
+Sweet_colours <- c("Red","Purple","Yellow","Green")
+Number_left <- c(0,1,20,23)
+
+sweets <- data.frame(Sweet_colours,Number_left)
+
+sweets
+```
+
+
+##Data frames
+
+```{R}
+str(sweets)
+
+nrow(sweets)
+
+ncol(sweets)
+```
+
+
+##Data frames
+
+```{R}
+sweets$Sweet_colours
+sweets$Number_left
+```
+
+##Data frames
+
+```{R}
+sweets[2,]
+sweets[,2]
+sweets[2,2]
+```
+
+
+##Data frames
+
+```{R}
+barplot(height = sweets$Number_left,names.arg = sweets$Sweet_colours)
+```
+
+
+#Getting help with R
+
+
+##The help hierarchy
+
+- Help within R (`?`)
+- Google
+- Stack overflow/ R help forums (careful!)
+- Your colleagues
+- Martin
+- Me
+
+
+
+
+
+#Your turn
+
+
+
+
+##Your turn
+- Open *Intro_to_R_practical.pdf*
+- Read the instructions
+- Follow the instructions
+- Green sticky note if you are finished
+- Red sticky note if you are stuck

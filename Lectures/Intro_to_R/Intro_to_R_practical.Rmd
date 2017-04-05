@@ -1,0 +1,150 @@
+---
+title: 'Introduction to R: practical'
+author: "Lewis Spurgin"
+date: "May 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+The aim of this practical is to get you comfortable using R and R studio. Some tips:
+
+- Write all your commands in a SCRIPT and run them from there.
+- Annotate your script well (using `#`). No amount of annotation is too much if it helps you understand what you're doing.
+- Use R's help (e.g. `?mean`) if you are not sure what a function does
+- Google is your friend
+
+## The data
+
+## Instructions
+Our aim is to calculate the proportion of heterozygotes in each of the populations in our dataset, and to plot these proportions using a barplot. *If you think you can do this without guidance, please go ahead and do so*. Otherwise, step-bystep instructions are provided below.
+
+###Step 1. Set the working directory, read in and explore the data.
+
+Set your working directory to the "Lectures/Intro_to_R" folder
+```{r eval=FALSE}
+setwd("path/PopGenBerlin/Lectures/Intro_to_R")
+```
+
+Now you can read in your data, and assign it to an object name. We will use the name `dd`.
+
+```{r}
+dd <- read.csv("Data/Microsat_data.csv")
+```
+
+In R studio, click on the "environment" tab in the top right, if it is not already open. You will notice that `dd` is there, along with the description. This, as you may have guessed, tells us that our data frame has `r nrow(dd)` rows and `r ncol(dd)` columns. Click on the table icon to the right of this pane. You should now be able to see your data. You will see that the four variables are called `r colnames(dd)`.
+
+We can also explore our data by typing and running some functions into our script. We will use the functions `head()` and `str()`.
+
+```{r}
+head(dd)
+str(dd)
+```
+
+The function `head()` can be very useful when you want a quick look data frames with many rows. But `str()` gives us all the same information and more. From the output above, you should be able to answer the following:
+
+- How many individuals are there in your dataset?
+- How many populations are there?
+- How has R stored the microsatellite allele data?
+
+###Step two - define our genotypes
+In our dataset we have separate information for each of the two alleles found in each individual. For example, we can see from when we ran the `head()` function that the first individual in our dataset has an allele of length `r dd$Allele_1[1]` for its first allele, and an allele of length `r dd$Allele_2[1]` for its second allele. This individual is therefore a `r ifelse(dd$Allele_1[1] == dd$Allele_2[1],"homozygote","heterozygote")` at this microsatellite locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your terminal (I know we said not to do this, but it's ok here!):
+
+```{r,eval = F}
+4 < 3
+4 > 3
+
+4 = 3
+4 == 3 #gives us an error. Why?
+
+x = 4
+x == 4
+
+"cat" == "dog"
+
+x <- "cat"
+x == "cat"
+```
+
+Hopefully you have figures out that a single equals sign and double equals sign mean very different things to R. A single equals sign generally works in the same way as the `<-` operator (with a few subtle differences), whereas a double equals sign asks a logical question, and returns a value of `TRUE` or `FALSE`.
+
+So coming back to our microsatellite data, we can use the `==` operator to ask whether an individual is a homozygote, by asking whether the variables `Allele_1` and `Allele_2` are the same.
+
+```{r}
+# Get the data for the first individual and have a look at it
+ind1 <- dd[1,]
+ind1
+
+# Now ask whether Allele 1 and Allele 2 are identical
+ind1$Allele_1 == ind1$Allele_2
+
+```
+
+Because R works so nicely with vectors, we can do this for every individual in our dataset very simply, as follows:
+
+```{r}
+
+dd$Allele_1 == dd$Allele_2
+
+```
+
+This gives us `r nrow(dd)` `TRUE` or `FALSE` values, and tells us whether each individual in our dataset is a homozygote or not. Now all we need to do is turn this into a column of our data frame, indicating whether each individual is a homozygote or a heterozygote. We can do this using the `ifelse()` function. Check out what this function does using `?ifelse`
+
+```{r}
+
+#Add a Heterozygosity column
+dd$Het <- ifelse(dd$Allele_1 == dd$Allele_2,"Homozygote","Heterozygote")
+
+#Check that it's worked
+head(dd)
+
+```
+
+Great - we can see that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot.
+
+###Step three - calculate and plot genotype frequencies
+
+Now we want to calculate the proportion of heterozygotes in each of our two populations. To do this, we need to know i) the number of heterozygotes in each population and ii) the total number of individuals in each population. We can get both of these pieces of information using the function `table()`.
+
+```{r,fig.width = 4}
+table(dd$Het) #Number of each genotype
+table(dd$Pop) #Number of individuals in each population
+table(dd$Het,dd$Pop) #Both combined
+
+```
+
+We can assign the output of the `table()` function to an object. Then using this we can extract subsets of tata and perform calculations using them. Using this approach, we can divide the number of heterozygotes by the sample size to calculate observed heterozygosity. 
+
+```{r}
+#Get the number of heterozygotes and the sample size for each population
+het_counts <- table(dd$Het,dd$Pop)["Heterozygote",] #pulls out the heterozygote row
+samplesizes <- table(dd$Pop) #Calculate sample sizes
+
+#Now divide the two together
+het_freqs <- het_counts/samplesizes
+het_freqs
+```
+
+Now we can plot the frequencies. We will get into plotting in much more detail later in the course. For now, we will use the function `barplot()`.
+```{r fig.width = 4}
+barplot(het_freqs,ylab = "Proportion heterozygotes")
+```
+
+Finally, we can test whether the proportion of heterozygotes differs between mainland and island population using a Chi-squared test (`?chisq.test`).
+
+```{r}
+chisq.test(dd$Het,dd$Pop)
+```
+
+
+
+## Some challenges, if you have finished
+
+- Calculate and plot the frequency of the two alleles in each population.
+
+- Calculate expected genotype frequencies for each population, according to Hardy-Weinberg. Compare your observed and expected frequencies using chi-squared tests.
+
+- I generated the microsatellite dataset for this practical in R. However, this dataset is very poorly annotated. Go through the script "Microsat_data.R", figure out what is being done with each line of code, and annotate the script accordingly.
