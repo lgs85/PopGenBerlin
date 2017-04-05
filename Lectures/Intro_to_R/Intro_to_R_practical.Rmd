@@ -5,12 +5,8 @@ date: "May 2017"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## Introduction
-The aim of this practical is to get you comfortable using R and R studio. Some tips:
+The aim of this practical is to get you comfortable using R and R studio. By the end of this practical, you ahould be able to read data into R, explore data frames, write a short program to perform some basic data processing, and plot and test some results. Somen general tips:
 
 - Write all your commands in a SCRIPT and run them from there.
 - Annotate your script well (using `#`). No amount of annotation is too much if it helps you understand what you're doing.
@@ -18,9 +14,12 @@ The aim of this practical is to get you comfortable using R and R studio. Some t
 - Google is your friend
 
 ## The data
+Scientists have taken blood samples from bearded finches captured from mainland and island populations. They have genotyped all the samples at a single micorsatellite locus, at which they found two alleles of 100bp an 102bp, respectively. They wish to know whether, at this locus, the mainland and island populations have different levels of genetic diversity.
 
 ## Instructions
-Our aim is to calculate the proportion of heterozygotes in each of the populations in our dataset, and to plot these proportions using a barplot. *If you think you can do this without guidance, please go ahead and do so*. Otherwise, step-bystep instructions are provided below.
+Our aim is to calculate *observed heterozygosity* (i.e. the proportion of heterozygotes) in each of the populations in our dataset. We will plot these proportions, and test whether levels of heterozygosity differ between the two populations. 
+
+*If you think you can do this without guidance, please go ahead and do so*. Otherwise, step-by-step instructions are provided below.
 
 ###Step 1. Set the working directory, read in and explore the data.
 
@@ -35,9 +34,7 @@ Now you can read in your data, and assign it to an object name. We will use the 
 dd <- read.csv("Data/Microsat_data.csv")
 ```
 
-In R studio, click on the "environment" tab in the top right, if it is not already open. You will notice that `dd` is there, along with the description. This, as you may have guessed, tells us that our data frame has `r nrow(dd)` rows and `r ncol(dd)` columns. Click on the table icon to the right of this pane. You should now be able to see your data. You will see that the four variables are called `r colnames(dd)`.
-
-We can also explore our data by typing and running some functions into our script. We will use the functions `head()` and `str()`.
+We can explore our data by typing some functions into our script and running them. We will use the functions `head()` and `str()`.
 
 ```{r}
 head(dd)
@@ -49,6 +46,26 @@ The function `head()` can be very useful when you want a quick look data frames 
 - How many individuals are there in your dataset?
 - How many populations are there?
 - How has R stored the microsatellite allele data?
+- How has it stored the Individual and Population ID data?
+
+Before we go further, take a look at the help sheed for the `read.csv()` function, by typing `?read.csv` into the console. You will see that there are lots of options within this function - for now, scroll down the list of arguments and read the entry for `as.is`. Have a think and discuss with a neighbour what you think this means. Compare the following to what you ran previously. 
+
+```{r}
+dd <- read.csv("Data/Microsat_data.csv",as.is = T)
+str(dd)
+```
+
+What is different here? What is the difference between a character and a factor? Note also the `$` symbols before each of the variable names. We can call up individual variable using this notation.
+
+```{r}
+dd$Pop
+```
+
+We can also use square bracket notation to call up individual rows and column. Using this notation, get R to print out:
+
+- the 45th row
+- the 2nd column
+- the value of *Allele_1* for the 22nd individual
 
 ###Step two - define our genotypes
 In our dataset we have separate information for each of the two alleles found in each individual. For example, we can see from when we ran the `head()` function that the first individual in our dataset has an allele of length `r dd$Allele_1[1]` for its first allele, and an allele of length `r dd$Allele_2[1]` for its second allele. This individual is therefore a `r ifelse(dd$Allele_1[1] == dd$Allele_2[1],"homozygote","heterozygote")` at this microsatellite locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your terminal (I know we said not to do this, but it's ok here!):
@@ -83,7 +100,7 @@ ind1$Allele_1 == ind1$Allele_2
 
 ```
 
-Because R works so nicely with vectors, we can do this for every individual in our dataset very simply, as follows:
+Because R works so nicely with vectors, we can do this for every individual in our dataset, as follows:
 
 ```{r}
 
@@ -103,7 +120,7 @@ head(dd)
 
 ```
 
-Great - we can see that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot.
+We can see that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot.
 
 ###Step three - calculate and plot genotype frequencies
 
@@ -142,10 +159,12 @@ chisq.test(dd$Het,dd$Pop)
 What are you able to conclude from this? Is the effect significant? Is it in the expected direction? What is lacking from this data?
 
 
-## Some challenges, if you have finished
+## Finished? Some more challenging tasks
 
 - Calculate and plot the frequency of the two alleles in each population.
 
 - Calculate expected genotype frequencies for each population, according to Hardy-Weinberg. Compare your observed and expected frequencies using chi-squared tests.
 
-- I generated the microsatellite dataset for this practical in R. However, this dataset is very poorly annotated. Go through the script "Microsat_data.R", figure out what is being done with each line of code, and annotate the script accordingly.
+- I simulated the microsatellite dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script "Microsat_data.R", figure out what is being done with each line of code, and annotate the script accordingly.
+
+- Simulate your own microsatellite dataset, either based on my approach, or by developing your own code.

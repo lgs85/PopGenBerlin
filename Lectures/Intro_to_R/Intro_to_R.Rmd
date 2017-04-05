@@ -323,6 +323,18 @@ barplot(height = sweets$Number_left,names.arg = sweets$Sweet_colours)
 More in the practical...
 
 
+## R scripts
+
+`rScript`
+
+<div align="center">
+<img src="Images/Rscript.png" width=700>
+</div>
+
+## R studio
+<div align="center">
+<img src="Images/Rstudio.png" width=700>
+</div>
 
 
 #Getting help with R
@@ -343,8 +355,15 @@ More in the practical...
 
 #Your turn
 
-
-
+##Your turn
+- Open R studio
+- Type a simple calculation into the console (e.g. `4*4`)
+- Now click File > New file > R script
+- In your script, create a named vector (e.g. `x <- c(1:10)`)
+- On a new line write a command to perform a calculation on your object (e.g. `x/10`)
+- Try running a line at a time (ctrl + enter)
+- Try running the whole script (select all then ctrl + enter)
+- Add some comments to your script
 
 ##Your turn
 - Open *Intro_to_R_practical.pdf*
