@@ -1,0 +1,240 @@
+---
+title: "Introduction to R"
+author: "Lewis Spurgin"
+date: "May 2017"
+output: 
+  ioslides_presentation
+---
+
+## What is R?
+
+<div align="center">
+<p style="font-size:12px">https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf</p>
+</div>
+
+## Why use R?
+
+R is:
+
+- Free
+- Popular
+- Powerful
+- Flexible
+- Well supported
+
+<br>
+<br>
+<br>
+<br>
+
+<div align="center">
+<p style="font-size:12px">https://www.r-bloggers.com/why-use-r-five-reasons/</p>
+</div>
+
+
+
+
+
+#Getting started with R
+
+
+
+
+## R and Unix
+
+<div align="center">
+<img src="Images/R_console.png" width=600>
+</div>
+
+
+
+
+##R is a calculator
+
+```{R}
+4 + 7
+```
+
+
+
+
+
+##R objects
+
+```{R,error = T}
+x <- 4
+x
+
+rm(x)
+x
+
+```
+
+
+##R objects
+
+```{R}
+x <- 4
+x + 7
+
+```
+
+
+
+##R objects
+
+```{R}
+x <- 4
+y <- 7
+x + y
+
+```
+
+
+
+
+
+##Vectors
+
+```{R}
+x <- c(6,7,8)
+x
+
+x <- c(1:10)
+x
+
+```
+
+
+
+
+
+
+##Vectors
+
+```{R}
+x <- c(1:10)
+x + 1
+x/2
+
+y <- c(101:110)
+x*y
+
+```
+
+
+
+##Vectors
+
+```{R}
+x <- c(1:10)
+x + 1
+x/2
+
+y <- c(101:110)
+x*y
+
+```
+
+
+
+
+
+
+##Vectors
+
+```{R}
+x <- c(1,2,4,4,4,5)
+
+x[5]
+x[c(4:6)]
+
+```
+
+
+
+
+
+
+
+
+##Functions
+
+```{R}
+x <- c(1,2,4,4,4,5)
+
+sum(x)
+mean(x)
+median(x)
+
+
+```
+
+
+
+
+##Functions
+
+```{R}
+?mean
+```
+
+<div align="center">
+<img src="Images/mean_help.png" width=300>
+</div>
+
+
+
+
+
+
+##Characters
+
+```{R,error = T}
+hello
+```
+
+```{R,error = T}
+"hello"
+
+"hello world"
+```
+
+
+
+
+
+
+##Characters
+
+```{R}
+x <- "Martin has a bushy beard"
+x
+```
+
+
+
+
+
+##Characters
+
+```{R}
+x <- "Martin has a bushy beard"
+x[1]
+x[2]
+```
+
+
+
+
+
+##Characters
+
+```{R}
+x <- c("Martin","has","a","bushy","beard")
+x[1]
+x[2]
+x[c(3:5)]
+```
+
+
