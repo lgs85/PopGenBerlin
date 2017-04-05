@@ -6,7 +6,23 @@ output:
   ioslides_presentation
 ---
 
+##Outline
+
+- What is R and why is it so great?
+- What doe R do?
+- How does R work?
+
+
+#What is R and why is it so great?
+
 ## What is R?
+
+R is an integrated suite of software facilities for data manipulation, calculation and graphical display. Among other things it has:
+
+- an effective data handling and storage facility
+- a large, coherent, integrated collection of tools for data analysis
+- graphical facilities for data analysis and display
+- a well developed, simple and effective programming language 
 
 <div align="center">
 <p style="font-size:12px">https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf</p>
@@ -63,7 +79,104 @@ R is:
 
 
 
-#Getting started with R
+
+##R is powerful
+- Can handle big data
+- Can perform complex simulations
+- Can be used with High Performance Clusters
+
+
+
+##R is flexible
+<div align="center">
+<img src="Images/Rdo.png" width=500>
+</div>
+
+<br>
+<br>
+
+<div align="center">
+<p style="font-size:12px">http://blog.revolutionanalytics.com/2012/07/a-big-list-of-the-things-r-can-do.html</p>
+</div>
+
+
+
+
+
+##R is well supported
+
+- Extensive built-in help
+- Tutorials with packages
+- Stack overflow
+- R bloggers
+- Twitter (#Rstats)
+
+
+
+
+
+
+#What does R do?
+
+
+
+
+
+##What can I do in R?
+- Simulate and generate data
+- Read, process and manipulate data
+- Data analysis and statistics
+- Make beautiful plots and graphics
+- Write papers, reports and presentations (R markdown)
+
+
+
+##Simulate and generate data
+```{r,echo = F,fig.width = 5,fig.height = 5,fig.align='center'}
+x <- c(1:20)
+y <- x + rnorm(20,sd = 2.5)
+plot(x,y)
+```
+
+
+##Simulate and generate data
+
+<div align="center">
+<img src="Images/simecol.png" width=600>
+</div>
+
+
+
+
+##Read, process and manipulate data
+
+- Read in text files and tables
+- Reformat tables
+- Add new variables
+- Recode variables
+- Condense data
+- Summarise data
+- Link data tables
+- Check for errors
+- Clean data
+
+
+
+
+
+##Data analysis and statistics
+- Linear models, mixed models
+- Bayesian models
+- Spatial analysis
+- Phylogenetics
+- Population genetics
+- Quantitative genetics
+
+
+
+
+
+#How does R work?
 
 
 
@@ -314,13 +427,6 @@ barplot(height = sweets$Number_left,names.arg = sweets$Sweet_colours)
 ```
 
 
-##Reading data into R
-
-- `read.table()`
-- `read.csv()`
-- `readLines()`
-
-More in the practical...
 
 
 ## R scripts
@@ -335,19 +441,6 @@ More in the practical...
 <div align="center">
 <img src="Images/Rstudio.png" width=700>
 </div>
-
-
-#Getting help with R
-
-
-##The help hierarchy
-
-- Help within R (`?`)
-- Google
-- Stack overflow/ R help forums (careful!)
-- Your colleagues
-- Martin
-- Me
 
 
 

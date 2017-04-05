@@ -6,9 +6,10 @@ output: pdf_document
 ---
 
 ## Introduction
-The aim of this practical is to get you comfortable using R and R studio. By the end of this practical, you ahould be able to read data into R, explore data frames, write a short program to perform some basic data processing, and plot and test some results. Somen general tips:
+The aim of this practical is to get you comfortable using R and R studio. By the end of this practical, you ahould be able to explore data frames, write a short program to perform some basic data processing, and plot and test some results. We will also have our first go at reading data into R. Some general tips:
 
-- Write all your commands in a SCRIPT and run them from there.
+- Write all your commands in a script and run them from there.
+- Remove commands from your script that are not a useful part of your analysis
 - Annotate your script well (using `#`). No amount of annotation is too much if it helps you understand what you're doing.
 - Use R's help (e.g. `?mean`) if you are not sure what a function does
 - Google is your friend
@@ -23,16 +24,21 @@ Our aim is to calculate *observed heterozygosity* (i.e. the proportion of hetero
 
 ###Step 1. Set the working directory, read in and explore the data.
 
-Set your working directory to the "Lectures/Intro_to_R" folder
+Open R studio. Either by typing in the console, or using the menu, set your working directory to the *Intro_to_R* folder. You will need to change the command below, depending on where the folder is stored on your computer. Also note how the command for changing the working directory in R differs to the corresponding command in bash and python.
+
 ```{r eval=FALSE}
-setwd("path/PopGenBerlin/Lectures/Intro_to_R")
+setwd("path-to-your-folder/Intro_to_R")
 ```
 
-Now you can read in your data, and assign it to an object name. We will use the name `dd`.
+Minimise R studio for a moment, and open up your file explorer. Find the *Intro_to_R/Data* folder for this lecture, and open the file *Microsat_data.csv*. You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see tht the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the size (in bp) of the two alleles at the microsatellite locus. This is a standard way of storing microsatellite genotype data.
+
+We are now going to data read this data into R using the function `read.csv()`, and assign it to an object name. We will use the name `dd`. Go back to R studio, and create a new R script. Save it using a sensible name in the *Intro_to_R* folder. At the top of your new R script, type the following:
 
 ```{r}
 dd <- read.csv("Data/Microsat_data.csv")
 ```
+
+Run the code. Now click on the "environment" tab in the top-right pane of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
 
 We can explore our data by typing some functions into our script and running them. We will use the functions `head()` and `str()`.
 
@@ -48,14 +54,7 @@ The function `head()` can be very useful when you want a quick look data frames 
 - How has R stored the microsatellite allele data?
 - How has it stored the Individual and Population ID data?
 
-Before we go further, take a look at the help sheed for the `read.csv()` function, by typing `?read.csv` into the console. You will see that there are lots of options within this function - for now, scroll down the list of arguments and read the entry for `as.is`. Have a think and discuss with a neighbour what you think this means. Compare the following to what you ran previously. 
-
-```{r}
-dd <- read.csv("Data/Microsat_data.csv",as.is = T)
-str(dd)
-```
-
-What is different here? What is the difference between a character and a factor? Note also the `$` symbols before each of the variable names. We can call up individual variable using this notation.
+Note also the `$` symbols before each of the variable names. We can call up individual variable using this notation.
 
 ```{r}
 dd$Pop
@@ -108,7 +107,7 @@ dd$Allele_1 == dd$Allele_2
 
 ```
 
-This gives us `r nrow(dd)` `TRUE` or `FALSE` values, and tells us whether each individual in our dataset is a homozygote or not. Now all we need to do is turn this into a column of our data frame, indicating whether each individual is a homozygote or a heterozygote. We can do this using the `ifelse()` function. Check out what this function does using `?ifelse`
+This gives us `r nrow(dd)` `TRUE` or `FALSE` values, and tells us whether each individual in our dataset is a homozygote or not. Now all we need to do is turn this into a column of our data frame, indicating whether each individual is a homozygote or a heterozygote. We can do this using the `ifelse()` function. Check out what this function does using `?ifelse`. Add the following to your R script.
 
 ```{r}
 
@@ -158,6 +157,8 @@ chisq.test(dd$Het,dd$Pop)
 
 What are you able to conclude from this? Is the effect significant? Is it in the expected direction? What is lacking from this data?
 
+##Putting it all together
+How does your script look? Can you figure out which commands you need to perform all the above analysis? Your script should end up looking something like the *Microsat_analysis.R* script including in the *Intro_to_R* folder. Note how we end up doing quite a lot with just five lines of code!
 
 ## Finished? Some more challenging tasks
 

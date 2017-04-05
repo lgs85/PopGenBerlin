@@ -1,0 +1,8 @@
+---
+title: "Reading and manipulating genetic data in R"
+author: "Lewis Spurgin"
+date: "May 2017"
+output: ioslides_presentation
+---
+
+## Outline
