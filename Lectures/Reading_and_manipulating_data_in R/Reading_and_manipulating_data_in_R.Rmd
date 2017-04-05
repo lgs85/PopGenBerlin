@@ -6,3 +6,6 @@ output: ioslides_presentation
 ---
 
 ## Outline
+- Reading different file types into R
+- Some data manipulation tools
+- Intro to some population genetic packages
