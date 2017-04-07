@@ -1,0 +1,30 @@
+---
+title: "Population Genomics 2017: software installation"
+author: "Lewis Spurgin and Martin Taylor"
+date: "May 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### The following will be installed on the server
+
+- vcftools
+- plink
+- admixture
+
+### You will need to install the following on your computers.
+
+- R
+- R studio
+- Sublime text
+- putty (windows users only)
+
+### In addition you will need to install some R packages. To do so, open R and paste the following code into the console:
+
+```{r, eval = FALSE}
+install.packages("ggplot2")
+install.packaged("plyr")
+```

@@ -1,0 +1,89 @@
+---
+title: "Genetic diversity in populations"
+author: "Lewis Spurgin"
+date: "7 April 2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+##Outline
+- Historical overview
+- Measures of genetic diversity
+- Hardy-Weinberg
+- Genetic diversity in the genomic era
+- Software and tools
+
+
+
+
+
+
+
+
+#Historical overview
+
+
+
+
+
+
+
+## Darwin and genetic diversity
+
+**Darwin’s four postulates in the Origin of Species (1859)**
+
+<div class = "columns-2">
+
+1. Individuals within species are variable
+2. Some variations are passed on to offspring
+3. In every generation more offspring are produced than can survive
+4. Individuals who survive and go on to reproduce are are naturally selected.
+
+
+<img src="Images/Darwin.png" width=250>
+</div>
+
+
+
+
+
+
+
+## Darwin and heritable variation
+
+- Natural selection based on heritable variation within populations
+- Darwin believed in blending inheritance
+- But this leads to homgenisation
+
+<div align = "center">
+<img src="Images/Blending.png" width=600>
+</div>
+
+
+
+
+## Particulate inheritance
+
+Gregor Mendel (1866): three“laws”
+
+- Individuals possess two alleles at each gene
+- Genes for separate traits are passed on independently
+- Recessive alleles are masked by dominance alleles
+
+<div align = "center">
+<img src="Images/Particulate.png" width=400>
+</div>
+
+
+
+
+
+
+
+## The modern synthesis
+
+
+
