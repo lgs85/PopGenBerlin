@@ -27,6 +27,7 @@ Our aim is to calculate *observed heterozygosity* (i.e. the proportion of hetero
 Open R studio. Either by typing in the console, or using the menu, set your working directory to the *Intro_to_R* folder. You will need to change the command below, depending on where the folder is stored on your computer. Also note how the command for changing the working directory in R differs to the corresponding command in bash and python.
 
 ```{r eval=FALSE}
+getwd
 setwd("path-to-your-folder/Intro_to_R")
 ```
 
@@ -35,10 +36,10 @@ Minimise R studio for a moment, and open up your file explorer. Find the *Intro_
 We are now going to data read this data into R using the function `read.csv()`, and assign it to an object name. We will use the name `dd`. Go back to R studio, and create a new R script. Save it using a sensible name in the *Intro_to_R* folder. At the top of your new R script, type the following:
 
 ```{r}
-dd <- read.csv("Data/Microsat_data.csv")
+dd <- read.csv("../Data/Microsat_data.csv")
 ```
 
-Run the code. Now click on the "environment" tab in the top-right pane of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
+Make sure that you understand what this command is doing, including what is happening with the ".." part of the file path. Run the code, then click on the "environment" tab in the top-right pane of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
 
 We can explore our data by typing some functions into our script and running them. We will use the functions `head()` and `str()`.
 

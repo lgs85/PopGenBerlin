@@ -7,5 +7,9 @@ output: ioslides_presentation
 
 ## Outline
 - Reading different file types into R
-- Some data manipulation tools
+- Manipulating data in R
 - Intro to some population genetic packages
+
+# Reading data into R
+
+## Entering data

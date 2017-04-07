@@ -1,5 +1,5 @@
 #Read in data
-dd <- read.csv("Data/Microsat_data.csv")
+dd <- read.csv("../Data/Microsat_data.csv")
 
 #Create a heterozygote/homozygote column
 dd$Het <- ifelse(dd$Allele_1 == dd$Allele_2,"Homozygote","Heterozygote")

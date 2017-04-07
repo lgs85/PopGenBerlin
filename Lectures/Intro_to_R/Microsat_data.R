@@ -33,4 +33,4 @@ p2 <- data.frame(Allele_1 = substr(p2_genos,1,3),Allele_2 = substr(p2_genos,4,6)
 towrite <- rbind(p1,p2)
 towrite$Ind_ID <- paste0("Ind_",c(1:nrow(towrite)))
 towrite <- towrite[,c("Ind_ID","Pop","Allele_1","Allele_2")]
-write.csv(towrite,"Data/Microsat_data.csv",row.names = F,quote = F)
+write.csv(towrite,"../Data/Microsat_data.csv",row.names = F,quote = F)
