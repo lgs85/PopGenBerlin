@@ -2,7 +2,7 @@
 title: 'Introduction to R: practical'
 author: "Lewis Spurgin"
 date: "May 2017"
-output: pdf_document
+output: html_document
 ---
 
 ## Introduction
@@ -15,7 +15,7 @@ The aim of this practical is to get you comfortable using R and R studio. By the
 - Google is your friend
 
 ## The data
-Scientists have taken blood samples from bearded finches captured from mainland and island populations. They have genotyped all the samples at a single micorsatellite locus, at which they found two alleles of 100bp an 102bp, respectively. They wish to know whether, at this locus, the mainland and island populations have different levels of genetic diversity.
+Scientists have taken blood samples from a rare passerine bird species captured from mainland and island populations. They have genotyped all the samples at a single nucleotide polymorphism (SNP), at which they found two alleles (A and C). They wish to know whether, at this locus, the mainland and island populations have different levels of genetic diversity.
 
 ## Instructions
 Our aim is to calculate *observed heterozygosity* (i.e. the proportion of heterozygotes) in each of the populations in our dataset. We will plot these proportions, and test whether levels of heterozygosity differ between the two populations. 
@@ -31,12 +31,12 @@ getwd
 setwd("path-to-your-folder/Intro_to_R")
 ```
 
-Minimise R studio for a moment, and open up your file explorer. Find the *Intro_to_R/Data* folder for this lecture, and open the file *Microsat_data.csv*. You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see tht the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the size (in bp) of the two alleles at the microsatellite locus. This is a standard way of storing microsatellite genotype data.
+Minimise R studio for a moment, and open up your file explorer. Find the *Intro_to_R/Data* folder for this lecture, and open the file *Microsat_data.csv*. You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see tht the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.
 
 We are now going to data read this data into R using the function `read.csv()`, and assign it to an object name. We will use the name `dd`. Go back to R studio, and create a new R script. Save it using a sensible name in the *Intro_to_R* folder. At the top of your new R script, type the following:
 
 ```{r}
-dd <- read.csv("../Data/Microsat_data.csv")
+dd <- read.csv("../Data/Mainland_Island_SNP_data.csv")
 ```
 
 Make sure that you understand what this command is doing, including what is happening with the ".." part of the file path. Run the code, then click on the "environment" tab in the top-right pane of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
@@ -52,8 +52,7 @@ The function `head()` can be very useful when you want a quick look data frames 
 
 - How many individuals are there in your dataset?
 - How many populations are there?
-- How has R stored the microsatellite allele data?
-- How has it stored the Individual and Population ID data?
+- How has R stored the SNP allele data?
 
 Note also the `$` symbols before each of the variable names. We can call up individual variable using this notation.
 
@@ -61,21 +60,21 @@ Note also the `$` symbols before each of the variable names. We can call up indi
 dd$Pop
 ```
 
-We can also use square bracket notation to call up individual rows and column. Using this notation, get R to print out:
+We can also use square bracket notation to call up individual rows and column. Using this notation, get R to print out (if you can't remember how to do this, use the internet):
 
 - the 45th row
 - the 2nd column
-- the value of *Allele_1* for the 22nd individual
+- the genotype for the 22nd individual
 
 ###Step two - define our genotypes
-In our dataset we have separate information for each of the two alleles found in each individual. For example, we can see from when we ran the `head()` function that the first individual in our dataset has an allele of length `r dd$Allele_1[1]` for its first allele, and an allele of length `r dd$Allele_2[1]` for its second allele. This individual is therefore a `r ifelse(dd$Allele_1[1] == dd$Allele_2[1],"homozygote","heterozygote")` at this microsatellite locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your terminal (I know we said not to do this, but it's ok here!):
+In our dataset we have separate information for each of the two alleles found in each individual. For example, we can see from when we ran the `head()` function that the first individual in our dataset has a "`r dd$Allele_1[1]`" for its first allele, and a "`r dd$Allele_2[1]`" for its second allele. This individual is therefore a `r ifelse(dd$Allele_1[1] == dd$Allele_2[1],"homozygote","heterozygote")` at this locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your terminal (I know we said not to do this, but it's ok here!):
 
 ```{r,eval = F}
 4 < 3
 4 > 3
 
-4 = 3
-4 == 3 #gives us an error. Why?
+4 = 3 #gives us an error. Why?
+4 == 3 
 
 x = 4
 x == 4
@@ -88,7 +87,7 @@ x == "cat"
 
 Hopefully you have figures out that a single equals sign and double equals sign mean very different things to R. A single equals sign generally works in the same way as the `<-` operator (with a few subtle differences), whereas a double equals sign asks a logical question, and returns a value of `TRUE` or `FALSE`.
 
-So coming back to our microsatellite data, we can use the `==` operator to ask whether an individual is a homozygote, by asking whether the variables `Allele_1` and `Allele_2` are the same.
+So coming back to our SNP data, we can use the `==` operator to ask whether an individual is a homozygote, by asking whether the variables `Allele_1` and `Allele_2` are the same.
 
 ```{r}
 # Get the data for the first individual and have a look at it
@@ -159,7 +158,7 @@ chisq.test(dd$Het,dd$Pop)
 What are you able to conclude from this? Is the effect significant? Is it in the expected direction? What is lacking from this data?
 
 ##Putting it all together
-How does your script look? Can you figure out which commands you need to perform all the above analysis? Your script should end up looking something like the *Microsat_analysis.R* script including in the *Intro_to_R* folder. Note how we end up doing quite a lot with just five lines of code!
+How does your script look? Can you figure out which commands you need to perform all the above analysis? Your script should end up looking something like the *Mainland_Island_SNP_analysis.R* script including in the *Intro_to_R* folder. Note how we end up doing quite a lot with just five lines of code!
 
 ## Finished? Some more challenging tasks
 
@@ -167,6 +166,6 @@ How does your script look? Can you figure out which commands you need to perform
 
 - Calculate expected genotype frequencies for each population, according to Hardy-Weinberg. Compare your observed and expected frequencies using chi-squared tests.
 
-- I simulated the microsatellite dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script "Microsat_data.R", figure out what is being done with each line of code, and annotate the script accordingly.
+- I simulated the dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script *Mainland_Island_SNP_data.R*, figure out what is being done with each line of code, and annotate the script accordingly.
 
-- Simulate your own microsatellite dataset, either based on my approach, or by developing your own code.
+- Simulate your own SNP dataset, either based on my approach, or by developing your own code.

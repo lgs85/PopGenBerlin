@@ -11,8 +11,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ##Outline
 - Historical overview
-- Measures of genetic diversity
-- Hardy-Weinberg
+- How much genetic variation exists in populations?
 - Genetic diversity in the genomic era
 - Software and tools
 
@@ -84,6 +83,246 @@ Gregor Mendel (1866): three“laws”
 
 
 ## The modern synthesis
+<div align = "center">
+<img src="Images/FoundingFathers.png" width=400>
+</div>
 
 
 
+
+
+
+## The modern synthesis
+
+<br>
+
+- Evolution can be defined as a change in allele frequencies within populations over generations
+- Evolution occurs as a result of mutation, drift, gene flow and selection
+
+
+
+
+
+## Population genetics
+
+<br> 
+
+- How much variation exists within and across populations?
+- What forces explain this variation?
+- These questions are addressed using mathematical models, natural population sampling and experiments
+
+
+
+
+
+
+
+# How much genetic variation exists in populations?
+
+
+
+
+
+
+## How much genetic variation exists in populations?
+
+<br>
+
+- How do we define and measure genetic variation?
+- How do we predict how much genetic variation should occur in populations?
+- How can we tell what evolutionary forces are acting on a gene? (later in the course)
+
+
+
+
+
+## How do we define genetic variation?
+
+<br>
+
+**How we calculate genetic diversity depends on:**
+
+- Our biological question
+- Our measurement method
+
+<br>
+
+**This is best illustrated using case studies**
+
+
+
+
+
+
+
+
+## Genetic variation in populations
+
+<div align = "left">
+<img src="Images/TigerMoth.png" width=650>
+</div>
+
+
+
+
+
+
+
+
+## Genetic variation in populations
+
+<div align = "center">
+<img src="Images/DobzhanskyHeader.png" width=200>
+</div>
+
+<div align = "center">
+<img src="Images/DobzhanskyTable.png" width=300>
+</div>
+
+
+
+
+
+
+
+
+## Genetic variation in populations
+
+<div align = "center">
+<img src="Images/LewontinHubby.png" width=550>
+</div>
+
+
+
+
+
+
+
+
+
+## Genetic variation in populations
+
+<div align = "center">
+<img src="Images/IslandMtDNA.png" width=650>
+</div>
+
+
+
+
+
+
+
+
+
+## Genetic variation in populations
+
+<br>
+
+<div align = "left">
+<img src="Images/GenomicVariation.png" width=700>
+</div>
+
+
+
+
+
+
+
+
+## Common measures of variation
+
+Proportion polymorphic loci ($P$)
+
+*The fraction of polymorphic loci in an individual or population*
+
+$$ P = x / m $$
+
+Where $x$ is the number of polymorphic sites in an individual/population of $m$ loci
+
+
+
+
+
+
+
+## Common measures of variation
+
+Observed heterozygosity ($H_{OBS}$)
+
+*Proportion of heterozygotes at a locus a population*
+
+$$ H_{OBS} = h/n $$
+
+Where $h$ is the number of heterozygotes in a population of $n$ individuals
+
+
+
+
+
+
+
+## Common measures of variation
+
+Expected heterozygosity ($H_{EXP}$)
+
+*The expected proportion of heterozygotes at a locus, given the allele frequencies*
+
+$$ H_{EXP} = 1 - \sum_{i = 1}^{n}p_{i^{2}} $$ 
+
+Where $p_i$ is the frequency of each allele $i$ in the population
+
+
+
+
+
+
+
+
+## Common measures of variation
+
+Nucleotide diversity ($\pi$)
+
+*The average proportion of nucleotides that differ between a randomly selected pair of sequences*
+
+$$ \pi = \sum_{i = 1}^{n}\sum_{j = 1}^{n}p_{i}p_{j}\pi_{ij} $$ 
+
+
+Where $p_{i}$ is the frequency of sequence $i$, $p_{j}$ is frequency of sequence $j$, and $pi_{ij}$ is the proportion of nucleotides that differ between the sequences $i$ and $j$.
+
+
+
+
+
+
+# Genetic variation in the genomic era
+
+
+
+
+## Many more loci
+
+Microsats     RAD-Seq       SNP arrays      Whole genomes
+-------       -------       -------         -------
+1 - 100       100 - 100000  1 - 1,000,000   1,000,000 +
+
+
+
+
+## What can we do with genomic data?
+
+- Estimate population genetic parameters much more accurately
+- Identify the genetic basis of adaptive evolution
+
+
+
+
+
+## What can we do with genomic data?
+
+- **Estimate population genetic parameters much more accurately**
+- Identify the genetic basis of adaptive evolution
+
+
+
+
+## More individuals or more loci?
