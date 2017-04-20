@@ -1,15 +1,53 @@
 ---
 title: 'Genetic diversity: practical'
 author: "Lewis Spurgin"
-date: "May 2017"
-output: html_document
+output:
+  html_document:
+    css: js/styles.css
 ---
+
+<script src="js/hide.js"></script>
 
 ## Introduction
 The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then use plink and vcftools to estimate some common measures of genetic diversity in individuals and populations. We will introduce the software *VCFanno*, and demonstrate some of the cool things you can do if you have a reference genome. Finally, we will develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.
 
 ## The data
-We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle *Tribolium castaneum*. The data file includes SNP information (in vcf format) from six resequenced genomes. Three of these individuals come from a population that gas been experimentally evolved under a regime male-biased sex ratios for ~80 generations, while the other three come from a population with a female-biased sex ratio (see Lumley et al. 2015, *Nature* for details of the experimental lines). We wish to know whether levels of genomic diversity differs between these two populations.
+We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle *Tribolium castaneum*. The data file includes SNP information (in vcf format) from six resequenced genomes. Three of these individuals come from a population that has been experimentally evolved under male-biased sex ratios for ~80 generations, while the other three come from a population with a female-biased sex ratio (see Lumley et al. 2015, *Nature* for details of the experimental lines). We wish to know whether levels of genomic diversity differs between these two populations as a result of differing patterns of sexual selection.
 
+Log onto the Amazon EC2 server and change your directory to the `Data/TriboliumSSGenomes` folder. You should see two files. `TriboliumSSGenomes.vcf` and  `Tribolium_sample_names.csv`. We can't open these files in the server, but we can explore their properties and look at them using the command line. Try to do the following:
 
+1. Find out the size of each of the two files
+2. Print the contents of `Tribolium_sample_names.csv` to the terminal
+3. Print the first 11 lines of `TriboliumSSGenomes.vcf` to the terminal
 
+<div class="fold s">
+```{r, eval = F}
+ls -l * #Get info for all file in directory, including file size
+cat Tribolium_sample_names.csv #Print file to console
+head -n 11 TriboliumSSGenomes.vcf #Get first 100 lines
+
+```
+</div>
+
+These files are in more or less exactly the same format as when received from a sequencing facility. The facility used their own sample names, and the file `Tribolium_sample_names.csv` lists our original sample names followed by the sample name used in the vcf file. This will become important later. Note for now that the sample names are coded with population and individual ID ("MA" for the male-biased population and "FB"" for the female-biased population, followed by "_", followed by the individual ID).
+
+Before calculating heterozygosity, we will first check that the file can be read into the program. Try reading in the data into vcftools without performing any additional operations.
+
+<div class="fold s">
+```{r, eval = F}
+vcftools --vcf TriboliumSSGenomes.vcf
+```
+</div>
+
+The two most basic ways that we can estimate genetic diversity using vcftools are i) by estimating the number of heterozygous sites (and an inbreeding coefficient) for each individual, and ii) by estimating observed and expected heterozygosity for each marker. Can you find the command for each of these and run them on the `TriboliumSSGenomes.vcf` dataset. Remember to specify a suitable output name.
+
+<div class="fold s">
+```{r, eval = F}
+vcftools --vcf TriboliumSSGenomes.vcf --het --out TriboliumSSGenomes
+vcftools --vcf TriboliumSSGenomes.vcf --hardy --out TriboliumSSGenomes
+```
+</div>
+
+Now use `ls -l`, `head` and/or `cat` as appropriate to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses hvae been performed.
+
+Hopefully you did noticed that the `.hwe` file was very large and didn't try to use `cat` to look at it! Using `head` we can see that the `--hardy` analysis has calculated observed and expected heterozygosity for every SNP. However, we it has averaged over our two populations for this, and we only have three individuals per population. **Before reading on**, try to figure out how you would perform this analysis separately for each population. Then discuss with a neighbour whether you think this analysis is appropriate for this dataset, and think of other appropriate analyses.

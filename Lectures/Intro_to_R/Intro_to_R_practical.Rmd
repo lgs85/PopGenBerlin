@@ -1,9 +1,13 @@
 ---
 title: 'Introduction to R: practical'
 author: "Lewis Spurgin"
-date: "May 2017"
-output: html_document
+output:
+  html_document:
+    css: js/styles.css
 ---
+
+<script src="js/hide.js"></script>
+
 
 ## Introduction
 The aim of this practical is to get you comfortable using R and R studio. By the end of this practical, you ahould be able to explore data frames, write a short program to perform some basic data processing, and plot and test some results. We will also have our first go at reading data into R. Some general tips:

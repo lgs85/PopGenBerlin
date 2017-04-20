@@ -67,6 +67,7 @@ h6 {
 }
 </style>
 
+<link href="data:text/css,%2Eshowopt%20%7B%0A%20%20background%2Dcolor%3A%20%23004c93%3B%0A%20%20color%3A%20%23FFFFFF%3B%20%0A%20%20width%3A%20100px%3B%0A%20%20height%3A%2020px%3B%0A%20%20text%2Dalign%3A%20center%3B%0A%20%20vertical%2Dalign%3A%20middle%20%21important%3B%0A%20%20float%3A%20right%3B%0A%20%20font%2Dfamily%3A%20sans%2Dserif%3B%0A%20%20border%2Dradius%3A%208px%3B%0A%7D%0A%0A%2Eshowopt%3Ahover%20%7B%0A%20%20%20%20background%2Dcolor%3A%20%23dfe4f2%3B%0A%20%20%20%20color%3A%20%23004c93%3B%0A%7D%0A%0Apre%2Eplot%20%7B%0A%20%20background%2Dcolor%3A%20white%20%21important%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -118,18 +119,41 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Genetic diversity: practical</h1>
 <h4 class="author"><em>Lewis Spurgin</em></h4>
-<h4 class="date"><em>May 2017</em></h4>
 
 </div>
 
 
+<script src="data:application/x-javascript,%24%28document%29%2Eready%28function%28%29%20%7B%0A%0A%20%20%24chunks%20%3D%20%24%28%27%2Efold%27%29%3B%0A%0A%20%20%24chunks%2Eeach%28function%20%28%29%20%7B%0A%0A%20%20%20%20%2F%2F%20add%20button%20to%20source%20code%20chunks%0A%20%20%20%20if%20%28%20%24%28this%29%2EhasClass%28%27s%27%29%20%29%20%7B%0A%20%20%20%20%20%20%24%28%27pre%2Er%27%2C%20this%29%2Eprepend%28%22%3Cdiv%20class%3D%5C%22showopt%5C%22%3EShow%20Answer%3C%2Fdiv%3E%3Cbr%20style%3D%5C%22line%2Dheight%3A22px%3B%5C%22%2F%3E%22%29%3B%0A%20%20%20%20%20%20%24%28%27pre%2Er%27%2C%20this%29%2Echildren%28%27code%27%29%2Eattr%28%27class%27%2C%20%27folded%27%29%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20%2F%2F%20add%20button%20to%20output%20chunks%0A%20%20%20%20if%20%28%20%24%28this%29%2EhasClass%28%27o%27%29%20%29%20%7B%0A%20%20%20%20%20%20%24%28%27pre%3Anot%28%2Er%29%27%2C%20this%29%2Ehas%28%27code%27%29%2Eprepend%28%22%3Cdiv%20class%3D%5C%22showopt%5C%22%3EShow%20Output%3C%2Fdiv%3E%3Cbr%20style%3D%5C%22line%2Dheight%3A22px%3B%5C%22%2F%3E%22%29%3B%0A%20%20%20%20%20%20%24%28%27pre%3Anot%28%2Er%29%27%2C%20this%29%2Echildren%28%27code%3Anot%28r%29%27%29%2EaddClass%28%27folded%27%29%3B%0A%0A%20%20%20%20%20%20%2F%2F%20add%20button%20to%20plots%0A%20%20%20%20%20%20%24%28this%29%2Efind%28%27img%27%29%2Ewrap%28%27%3Cpre%20class%3D%5C%22plot%5C%22%3E%3C%2Fpre%3E%27%29%3B%0A%20%20%20%20%20%20%24%28%27pre%2Eplot%27%2C%20this%29%2Eprepend%28%22%3Cdiv%20class%3D%5C%22showopt%5C%22%3EShow%20Plot%3C%2Fdiv%3E%3Cbr%20style%3D%5C%22line%2Dheight%3A22px%3B%5C%22%2F%3E%22%29%3B%0A%20%20%20%20%20%20%24%28%27pre%2Eplot%27%2C%20this%29%2Echildren%28%27img%27%29%2EaddClass%28%27folded%27%29%3B%0A%0A%20%20%20%20%7D%0A%20%20%7D%29%3B%0A%0A%20%20%2F%2F%20hide%20all%20chunks%20when%20document%20is%20loaded%0A%20%20%24%28%27%2Efolded%27%29%2Ecss%28%27display%27%2C%20%27none%27%29%0A%0A%20%20%2F%2F%20function%20to%20toggle%20the%20visibility%0A%20%20%24%28%27%2Eshowopt%27%29%2Eclick%28function%28%29%20%7B%0A%20%20%20%20var%20label%20%3D%20%24%28this%29%2Ehtml%28%29%3B%0A%20%20%20%20if%20%28label%2EindexOf%28%22Show%22%29%20%3E%3D%200%29%20%7B%0A%20%20%20%20%20%20%24%28this%29%2Ehtml%28label%2Ereplace%28%22Show%22%2C%20%22Hide%22%29%29%3B%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%24%28this%29%2Ehtml%28label%2Ereplace%28%22Hide%22%2C%20%22Show%22%29%29%3B%0A%20%20%20%20%7D%0A%20%20%20%20%24%28this%29%2Esiblings%28%27code%2C%20img%27%29%2EslideToggle%28%27fast%27%2C%20%27swing%27%29%3B%0A%20%20%7D%29%3B%0A%7D%29%3B"></script>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then use plink and vcftools to estimate some common measures of genetic diversity in individuals and populations. We will introduce the software <em>VCFanno</em>, and demonstrate some of the cool things you can do if you have a reference genome. Finally, we will develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.</p>
 </div>
 <div id="the-data" class="section level2">
 <h2>The data</h2>
-<p>We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle <em>Tribolium castaneum</em>. The data file includes SNP information (in vcf format) from four resequenced genomes. Two of these individuals come from a population that gas been experimentally evolved under a regime of high sexual selection for ~80 generations, while the other two come from a control population (see Lumley et al. 2015, <em>Nature</em> for details of the experimental lines).</p>
+<p>We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle <em>Tribolium castaneum</em>. The data file includes SNP information (in vcf format) from six resequenced genomes. Three of these individuals come from a population that has been experimentally evolved under male-biased sex ratios for ~80 generations, while the other three come from a population with a female-biased sex ratio (see Lumley et al. 2015, <em>Nature</em> for details of the experimental lines). We wish to know whether levels of genomic diversity differs between these two populations as a result of differing patterns of sexual selection.</p>
+<p>Log onto the Amazon EC2 server and change your directory to the <code>Data/TriboliumSSGenomes</code> folder. You should see two files. <code>TriboliumSSGenomes.vcf</code> and <code>Tribolium_sample_names.csv</code>. We can’t open these files in the server, but we can explore their properties and look at them using the command line. Try to do the following:</p>
+<ol style="list-style-type: decimal">
+<li>Find out the size of each of the two files</li>
+<li>Print the contents of <code>Tribolium_sample_names.csv</code> to the terminal</li>
+<li>Print the first 11 lines of <code>TriboliumSSGenomes.vcf</code> to the terminal</li>
+</ol>
+<div class="fold s">
+<pre class="r"><code>ls -l * #Get info for all file in directory, including file size
+cat Tribolium_sample_names.csv #Print file to console
+head -n 11 TriboliumSSGenomes.vcf #Get first 100 lines</code></pre>
+</div>
+<p>These files are in more or less exactly the same format as when received from a sequencing facility. The facility used their own sample names, and the file <code>Tribolium_sample_names.csv</code> lists our original sample names followed by the sample name used in the vcf file. This will become important later. Note for now that the sample names are coded with population and individual ID (“MA” for the male-biased population and “FB”&quot; for the female-biased population, followed by “_“, followed by the individual ID).</p>
+<p>Before calculating heterozygosity, we will first check that the file can be read into the program. Try reading in the data into vcftools without performing any additional operations.</p>
+<div class="fold s">
+<pre class="r"><code>vcftools --vcf TriboliumSSGenomes.vcf</code></pre>
+</div>
+<p>The two most basic ways that we can estimate genetic diversity using vcftools are i) by estimating the number of heterozygous sites (and an inbreeding coefficient) for each individual, and ii) by estimating observed and expected heterozygosity for each marker. Can you find the command for each of these and run them on the <code>TriboliumSSGenomes.vcf</code> dataset. Remember to specify a suitable output name.</p>
+<div class="fold s">
+<pre class="r"><code>vcftools --vcf TriboliumSSGenomes.vcf --het --out TriboliumSSGenomes
+vcftools --vcf TriboliumSSGenomes.vcf --hardy --out TriboliumSSGenomes</code></pre>
+</div>
+<p>Now use <code>ls -l</code>, <code>head</code> and/or <code>cat</code> as appropriate to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses hvae been performed.</p>
+<p>Hopefully you did noticed that the <code>.hwe</code> file was very large and didn’t try to use <code>cat</code> to look at it! Using <code>head</code> we can see that the <code>--hardy</code> analysis has calculated observed and expected heterozygosity for every SNP. However, we it has averaged over our two populations for this, and we only have three individuals per population. <strong>Before reading on</strong>, try to figure out how you would perform this analysis separately for each population. Then discuss with a neighbour whether you think this analysis is appropriate for this dataset, and think of other appropriate analyses.</p>
 </div>
 
 
