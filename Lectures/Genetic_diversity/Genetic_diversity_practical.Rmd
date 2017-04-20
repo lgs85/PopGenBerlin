@@ -9,4 +9,7 @@ output: html_document
 The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then use plink and vcftools to estimate some common measures of genetic diversity in individuals and populations. We will introduce the software *VCFanno*, and demonstrate some of the cool things you can do if you have a reference genome. Finally, we will develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.
 
 ## The data
-We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle *Tribolium castaneum*. The data file includes SNP information (in vcf format) from four resequenced genomes. Two of these individuals come from a population that gas been experimentally evolved under a regime of high sexual selection for ~80 generations, while the other two come from a control population (see Lumley et al. 2015, *Nature* for details of the experimental lines).
+We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle *Tribolium castaneum*. The data file includes SNP information (in vcf format) from six resequenced genomes. Three of these individuals come from a population that gas been experimentally evolved under a regime male-biased sex ratios for ~80 generations, while the other three come from a population with a female-biased sex ratio (see Lumley et al. 2015, *Nature* for details of the experimental lines). We wish to know whether levels of genomic diversity differs between these two populations.
+
+
+
