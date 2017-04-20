@@ -5,11 +5,6 @@ date: "May 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
 Most of the analysis that we carry out at the workshop will be done on an instance in the amazon cloud server (Ec2). We will show you how to connect to the server and run analyses remotely during the course. However, in order to connect to the server, and do some processing and plotting of data, you will need to install a few pieces of software.
 
 It is very important that you have the requisite software installed and working on your laptops *before* we start the course. We have a limited amount of time to cover alot of material, and we therefore want to spend as much time as possible doing population genomics!
