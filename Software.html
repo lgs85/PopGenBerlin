@@ -123,27 +123,36 @@ $(document).ready(function () {
 </div>
 
 
-<div id="the-following-will-be-installed-on-the-server" class="section level3">
-<h3>The following will be installed on the server</h3>
-<ul>
-<li>vcftools</li>
-<li>plink</li>
-<li>admixture</li>
-</ul>
+<p>Most of the analysis that we carry out at the workshop will be done on an instance in the amazon cloud server (Ec2). We will show you how to connect to the server and run analyses remotely during the course. However, in order to connect to the server, and do some processing and plotting of data, you will need to install a few pieces of software.</p>
+<p>It is very important that you have the requisite software installed and working on your laptops <em>before</em> we start the course. We have a limited amount of time to cover alot of material, and we therefore want to spend as much time as possible doing population genomics!</p>
+<p>You will need to install the following software on your computers.</p>
+<div id="r" class="section level4">
+<h4>R</h4>
+<p>Downloadable from <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a></p>
 </div>
-<div id="you-will-need-to-install-the-following-on-your-computers." class="section level3">
-<h3>You will need to install the following on your computers.</h3>
-<ul>
-<li>R</li>
-<li>R studio</li>
-<li>Sublime text</li>
-<li>putty (windows users only)</li>
-</ul>
+<div id="r-studio" class="section level4">
+<h4>R studio</h4>
+<p>Downloadable from <a href="https://www.rstudio.com/" class="uri">https://www.rstudio.com/</a></p>
 </div>
-<div id="in-addition-you-will-need-to-install-some-r-packages.-to-do-so-open-r-and-paste-the-following-code-into-the-console" class="section level3">
-<h3>In addition you will need to install some R packages. To do so, open R and paste the following code into the console:</h3>
+<div id="sublime-text" class="section level4">
+<h4>Sublime text</h4>
+<p>Downloadable from <a href="https://www.sublimetext.com/" class="uri">https://www.sublimetext.com/</a></p>
+</div>
+<div id="putty-windows-users-only" class="section level4">
+<h4>PuTTY (windows users only)</h4>
+<p>Downloadable from <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" class="uri">http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html</a></p>
+<p><br> In addition you will need to install some R packages. We will likely need to install R packages as we go along the course, especially during the latter sessions if you want to work with your own data. So you should check that you have permissions to do install R packages yourself if you are working on an institution-owned laptop. Here we provide the code to install most of the packages that you will need for the course. To run the code, open R (or R studio) and paste the following text into the console:</p>
 <pre class="r"><code>install.packages(&quot;ggplot2&quot;)
-install.packaged(&quot;plyr&quot;)</code></pre>
+install.packages(&quot;plyr&quot;)
+install.packages(&quot;data.table&quot;)
+install.packages(&quot;qqman&quot;)
+install.packages(&quot;adegenet&quot;)
+install.packages(&quot;PopGenome&quot;)
+install.packages(&quot;Rmisc&quot;)
+install.packages(&quot;magrittr&quot;)
+install.packages(&quot;GenABEL&quot;)
+install.packages(&quot;ggmap&quot;)
+install.packages(&quot;rworldmap&quot;)</code></pre>
 </div>
 
 
