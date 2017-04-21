@@ -9,7 +9,9 @@ output:
 <script src="js/hide.js"></script>
 
 ## Introduction
-The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then use plink and vcftools to estimate some common measures of genetic diversity in individuals and populations. We will introduce the software *VCFanno*, and demonstrate some of the cool things you can do if you have a reference genome. Finally, we will develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.
+The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then vcftools to estimate some common measures of genetic diversity in individuals and populations. We will introduce the software *VCFanno*, and demonstrate some of the cool things you can do if you have a reference genome. Finally, we will develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.
+
+Although we include most of the answers in thisdocument, you should try to figure things out for yourself before clicking on "show". To do this, uou will need the documentation for vcftools open. It can be found at https://vcftools.github.io/man_latest.html
 
 ## The data
 We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle *Tribolium castaneum*. The data file includes SNP information (in vcf format) from six resequenced genomes. Three of these individuals come from a population that has been experimentally evolved under male-biased sex ratios for ~80 generations, while the other three come from a population with a female-biased sex ratio (see Lumley et al. 2015, *Nature* for details of the experimental lines). We wish to know whether levels of genomic diversity differs between these two populations as a result of differing patterns of sexual selection.
@@ -22,7 +24,7 @@ Log onto the Amazon EC2 server and change your directory to the `Data/TriboliumS
 
 <div class="fold s">
 ```{r, eval = F}
-ls -l * #Get info for all file in directory, including file size
+ls -l * #Get info for all file in directory, including file size - could also use wc (word count)
 cat Tribolium_sample_names.csv #Print file to console
 head -n 11 TriboliumSSGenomes.vcf #Get first 100 lines
 
@@ -48,6 +50,136 @@ vcftools --vcf TriboliumSSGenomes.vcf --hardy --out TriboliumSSGenomes
 ```
 </div>
 
-Now use `ls -l`, `head` and/or `cat` as appropriate to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses hvae been performed.
+Now use `ls -l`, `head` and/or `cat` as appropriate to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses hvae been performed?
 
-Hopefully you did noticed that the `.hwe` file was very large and didn't try to use `cat` to look at it! Using `head` we can see that the `--hardy` analysis has calculated observed and expected heterozygosity for every SNP. However, we it has averaged over our two populations for this, and we only have three individuals per population. **Before reading on**, try to figure out how you would perform this analysis separately for each population. Then discuss with a neighbour whether you think this analysis is appropriate for this dataset, and think of other appropriate analyses.
+Hopefully you did noticed that the `.hwe` file was very large and didn't try to use `cat` to look at it! Using `head` we can see that the `--hardy` analysis has calculated observed and expected heterozygosity for every SNP. However, we it has averaged over our two populations for this. **Before reading on**, try to figure out how you would perform this analysis separately for each population. Then discuss with a neighbour whether you think this analysis is appropriate for this dataset (clue - think sample sizes), and think of other appropriate analyses.
+
+We are now going to perform some analyses of nucleotide diversity. If you look at the vcftools documentation you will see that there are two options for this. We can either calculate nucleotide diversity on a "per site" basis, or in "windows" of a defined size. With just three individuals per population, per-site based measures of diversity (including the `--hardy` analysis performed just now) are problematic as each site is extremely limited in the possible values that can be obtained. We can get around this using windows. Discuss with a neighbour what is meant by "windows" and why they might be preferable to per-site measured of diversity in this instance.
+
+We would like to calculate diversity in non-overlapping 200kb windows for each of our two populations. Can you figure out how to do this in vcftools?
+
+For a hint, see the box below.
+<div class="fold s">
+```{r, eval = F}
+#You will need the following commands, and to look at the Tribolium_sample_names.csv file
+--window-pi
+--indv
+```
+</div>
+
+
+For the answer, see here:
+<div class="fold s">
+```{r, eval = F}
+#For the male-biased population
+vcftools --vcf TriboliumSSGenomes.vcf --window-pi 200000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB
+
+#For the female-biased population
+vcftools --vcf TriboliumSSGenomes.vcf --window-pi 200000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA
+
+```
+</div>
+
+Use the command line to take a look at the format of the output files vcftools has returned. Does it makes sense?
+
+Before we have a go at plotting our data, we will first calculate one more measure of genetic diversity - linkage disequilibrium. Our aim is to look at how LD decays with physical distance between SNPs, and to see whether this relationship varies between our two populations. Lower levels of LD and faster rates of LD decay are typically found in large, outbred populations, whereas in small bottlenecked populations background levels of LD are higher and LD decays much more slowly.
+
+Because LD is calculated between *pairs* of markers, the number of calculations vcftools would have to perform for a whole genome dataset would be huge, and unnecessary for our purposes here. We will therefore restrict our analyses to i) a single chromosome (ChLG6), ii) pairs of markers within 100 kb of each other, and iii) pairs of markers with R2 values > 0.001. Using this information, can you calculate LD for both the MB and FA populations? Answer below.
+
+<div class="fold s">
+```{r eval = F}
+vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG6 --ld-window-bp 100000 --min-r2 0.001 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB
+
+vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG6 --ld-window-bp 100000 --min-r2 0.001 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA
+
+```
+</div>
+
+Use `ls - l` to look at the size of the output files. You will see that thety are *huge*. Even with our restrictions, we have more than 50 million rows in each of our files. So instead of downloading this onto our laptops for plotting, we will perform a bit of extra processing on the data in the server, using R. Open up a text editor (or R studio) and save an R script using a suitable name. Then, on the Amazon server, start up R. We are going to type our instructions into a script, so we have a record of what we've done, but at the same time we will use the console interactively. First, we need to load a library At the top of your script, add the following code, then copy and paste the command into your console:
+
+```{r eval = F}
+library(data.table)
+```
+
+The library `data.table` includes the very useful function `fread()`, which is designed to read in very large text files. Take a look at the help file for this function. Now use `fread()` to read in the two `.geno.ld` files you have created (one for each population), and assign each data frame to a different object name.
+
+<div class="fold s">
+```{r eval = F}
+MB <- fread("../../../PopGenBerlinData/TriboliumSSGenomesMB.geno.ld")
+FA <- fread("../../../PopGenBerlinData/TriboliumSSGenomesFA.geno.ld")
+```
+</div>
+
+Have a look at what's contained in these data files using `head()` and/or `str()`. You will see that they are very large indeed. Each row contains the LD statistic and other information for a pair of SNPs. There are five columns: the chromosome that the two SNPs are on, the positions (in bp) of the two SNPs, the number of individuals tested, and the R2 value. We want to plot how R2 declines with the physical distance between pairs of SNPs. However, we can't plot all of our data as i) there's too much, and ii) with three individuals the R2 values are two noisy. So as before, we are going to use windowed averages. This time we will use 1000bp windows, as the maximum distance between any pair of SNPs in our data is 100,000. Our aim is to reduce our two data files each containing millions of LD measures to a single data file with 100 averaged LD measures for each population.
+
+The first thing we wish to do is calculate the physical distance between each pair of SNPs. This can be obtained by subtracting the SNP positions.
+
+<div class="fold s">
+```{r eval = F}
+MB$dist <- MB$POS2 - MB$POS1
+FA$dist <- FA$POS2 - FA$POS1
+
+```
+</div>
+
+However, we do not actually want to know the exact distance between each pair of SNPs, but rather the distance rounded to the nearest 1000 bp. Rather than create an extra variable, we can modify our previous command to obtain the distance between each pair of SNPs rounded to the nearest base pair.
+
+For a hint of how to do this click here:
+<div class="fold s">
+```{r eval = F}
+x <- 550
+round(x,-2)
+```
+</div>
+
+For an answer click here:
+<div class="fold s">
+```{r eval = F}
+MB$dist <- round(MB$POS2 - MB$POS1,-3)
+FA$dist <- round(FA$POS2 - FA$POS1,-3)
+```
+</div>
+
+Now all we need to do is obtain the average R2 value for each 1000bp distance bin. For this we are going to use the `ddply()` function in the package `plyr`. With  `ddply()`, we can perform functions on variables data frames (e.g. calculate means), and return the output in a data frame. Have a look at the relevant help pages and try searching for help online. If you think you understand how it works, have a go at using `ddply()` to create a new data frame with averaged R2 values for each 1000bp window.
+
+```{r eval = F}
+MB2 <- ddply(MB,
+      .(diff),
+      summarise,
+      meanR2 = mean(`R^2`))
+
+FA2 <- ddply(FA,
+      .(diff),
+      summarise,
+      meanR2 = mean(`R^2`))
+```
+
+Have a look at one of your resulting outputs. We were expecting two data frames with 100 observations in each, but we have 101. Do you know what has happened here? ANy idea how to fix it?
+
+```{r eval = F}
+# The distance values from 1-500 have been rounded to zero, and the last 500 distance values have been rounded to 100,000
+# This creates an extra row
+# Can sort this by first subtracting adding 500 to the distance values
+
+MB$dist <- round(MB$POS2 - MB$POS1,-3) + 499
+FA$dist <- round(FA$POS2 - FA$POS1,-3) + 499
+
+MB2 <- ddply(MB,
+      .(diff),
+      summarise,
+      meanR2 = mean(`R^2`))
+
+FA2 <- ddply(FA,
+      .(diff),
+      summarise,
+      meanR2 = mean(`R^2`))
+```
+
+
+dd <- rbind(MB2,FA2)
+dd$pop <- c(rep("MB",nrow(MB2)),rep("FA",nrow(FA2)))
+
+```
+</div>
+
+
