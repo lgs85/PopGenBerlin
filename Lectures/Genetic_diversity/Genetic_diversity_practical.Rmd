@@ -9,7 +9,7 @@ output:
 <script src="js/hide.js"></script>
 
 ## Introduction
-The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then vcftools to estimate some common measures of genetic diversity in individuals and populations. We will introduce the software *VCFanno*, and demonstrate some of the cool things you can do if you have a reference genome. Finally, we will develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.
+The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then vcftools to estimate some common measures of genetic diversity in individuals and populations. We will then develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.
 
 Although we include most of the answers in thisdocument, you should try to figure things out for yourself before clicking on "show". To do this, uou will need the documentation for vcftools open. It can be found at https://vcftools.github.io/man_latest.html
 
@@ -84,13 +84,13 @@ Use the command line to take a look at the format of the output files vcftools h
 
 Before we have a go at plotting our data, we will first calculate one more measure of genetic diversity - linkage disequilibrium. Our aim is to look at how LD decays with physical distance between SNPs, and to see whether this relationship varies between our two populations. Lower levels of LD and faster rates of LD decay are typically found in large, outbred populations, whereas in small bottlenecked populations background levels of LD are higher and LD decays much more slowly.
 
-Because LD is calculated between *pairs* of markers, the number of calculations vcftools would have to perform for a whole genome dataset would be huge, and unnecessary for our purposes here. We will therefore restrict our analyses to i) a single chromosome (ChLG6), ii) pairs of markers within 100 kb of each other, and iii) pairs of markers with R2 values > 0.001. Using this information, can you calculate LD for both the MB and FA populations? Answer below.
+Because LD is calculated between *pairs* of markers, the number of calculations vcftools would have to perform for a whole genome dataset would be huge, and unnecessary for our purposes here. We will therefore restrict our analyses to i) the first million basepairs of a single chromosome (ChLG6), ii) pairs of markers within 100 kb of each other, and iii) pairs of markers with R2 values > 0.001. Using this information, can you calculate LD for both the MB and FA populations? Answer below.
 
 <div class="fold s">
 ```{r eval = F}
-vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG6 --ld-window-bp 100000 --min-r2 0.001 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB
+vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG6 --ld-window-bp 100000 --from-bp 0 --to-bp 1000000 --min-r2 0.001 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB
 
-vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG6 --ld-window-bp 100000 --min-r2 0.001 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA
+vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG6 --ld-window-bp 100000 --from-bp 0 --to-bp 1000000 --min-r2 0.001 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA
 
 ```
 </div>
@@ -142,6 +142,8 @@ FA$dist <- round(FA$POS2 - FA$POS1,-3)
 
 Now all we need to do is obtain the average R2 value for each 1000bp distance bin. For this we are going to use the `ddply()` function in the package `plyr`. With  `ddply()`, we can perform functions on variables data frames (e.g. calculate means), and return the output in a data frame. Have a look at the relevant help pages and try searching for help online. If you think you understand how it works, have a go at using `ddply()` to create a new data frame with averaged R2 values for each 1000bp window.
 
+
+<div class="fold s">
 ```{r eval = F}
 MB2 <- ddply(MB,
       .(diff),
@@ -153,33 +155,94 @@ FA2 <- ddply(FA,
       summarise,
       meanR2 = mean(`R^2`))
 ```
+</div>
 
-Have a look at one of your resulting outputs. We were expecting two data frames with 100 observations in each, but we have 101. Do you know what has happened here? ANy idea how to fix it?
+Have a look at one of your resulting outputs. We were expecting two data frames with 100 observations in each, but we have 101. Do you know what has happened here? Any idea how to fix it?
 
+<div class="fold s">
 ```{r eval = F}
 # The distance values from 1-500 have been rounded to zero, and the last 500 distance values have been rounded to 100,000
 # This creates an extra row
-# Can sort this by first subtracting adding 500 to the distance values
+# Can sort this by first adding 500 to the distance values
 
-MB$dist <- round(MB$POS2 - MB$POS1,-3) + 499
-FA$dist <- round(FA$POS2 - FA$POS1,-3) + 499
+MB$dist <- round(((MB$POS2 - MB$POS1)+500),-3)
+FA$dist <- round(((FA$POS2 - FA$POS1)+500),-3)
 
 MB2 <- ddply(MB,
-      .(diff),
+      .(dist),
       summarise,
       meanR2 = mean(`R^2`))
 
 FA2 <- ddply(FA,
-      .(diff),
+      .(dist),
       summarise,
       meanR2 = mean(`R^2`))
 ```
+</div>
 
+Finally, we need to combine the combine windowed data from the two populations, and add a population ID column. Once you have done this, write your output to a `.csv` file.
+
+<div class="fold s">
+```{r eval = F}
 
 dd <- rbind(MB2,FA2)
 dd$pop <- c(rep("MB",nrow(MB2)),rep("FA",nrow(FA2)))
+write.csv(dd,"TriboliumSSGenomes.windowed.ld.csv",row.names = F)
 
 ```
 </div>
+
+That's our analyses done! Now you can log out of the server, and use SCP to download the genetic results that you have just created. To recap, we are interested in individual heterozygosity (one file, one value per individual), windowed nucleotide diversity (two files - one per population), and windowed LD (one file). Download your four genetic diversity outputs using SCP. Once you have done this, open R studio on your laptop and use `read.csv()` and `read.table()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
+
+<div class="fold s">
+```{r}
+rm(list=ls()) #Clear your workspace
+
+het <- read.table("Data/TriboliumSSGenomes.het",header = T)
+pi_MB <- read.table("Data/TriboliumSSGenomesMB.windowed.pi", header = T)
+pi_FA <- read.table("Data/TriboliumSSGenomesFA.windowed.pi", header = T)
+ld <- read.csv("Data/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
+
+```
+</div>
+
+We are going to use the `ggplot2` library to make the following plot. If you think you can recreate this, please give it a shot. Otherwise, we will work through the plots step-by-step below.
+
+```{r echo = F,warning = F,message=F}
+library(Rmisc)
+library(plyr)
+library(magrittr)
+library(ggplot2)
+
+Fig1A <- mutate(het,Population = c(rep("MB",3),rep("FA",3)),Heterozygosity = 1-(O.HOM./N_SITES)) %>%
+  ggplot(aes(x = Population, y = Heterozygosity,col = Population))+
+  geom_jitter(width = 0.1)+
+  theme_bw()+
+  theme(legend.position = "none")+
+  xlab("")+
+  annotate("text",y = 0.24,x = 0.5,label = "A")
+
+Fig1B <- rbind(pi_MB,pi_FA) %>%
+  mutate(Population = c(rep("MB",nrow(pi_MB)),rep("FA",nrow(pi_FA)))) %>%
+    ggplot(aes(x = Population, y = PI,col = Population))+
+  geom_jitter(col = "grey",width = 0.1)+
+  geom_boxplot(notch = T,alpha = 0,lwd = 0.5,outlier.shape = NA)+
+  theme_bw()+
+  theme(legend.position = "none")+
+  xlab("")+
+  ylab(expression(pi))+
+  annotate("text",y = 0.013,x = 0.5,label = "B")
+
+Fig1C <-  mutate(ld,Population = pop,distkb = dist/1000) %>%   
+  ggplot(aes(x = distkb, y = meanR2,col = Population))+
+  geom_point()+
+  geom_line()+
+  theme_bw()+
+  xlab("Distance (kb)")+
+  ylab(expression("R"^2))+
+  annotate("text",y = 0.92,x = 0,label = "C")
+
+multiplot(Fig1A,Fig1B,Fig1C,layout = matrix(c(1,2,3,3),nrow = 2, byrow = T))
+```
 
 
