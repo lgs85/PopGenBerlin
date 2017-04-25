@@ -9,7 +9,7 @@ output:
 ##Outline
 
 - What is R and why is it so great?
-- What doe R do?
+- What does R do?
 - How does R work?
 
 

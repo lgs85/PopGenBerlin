@@ -80,17 +80,17 @@ vcftools --vcf TriboliumSSGenomes.vcf --window-pi 200000 --indv 2014_SOL_MG4972 
 ```
 </div>
 
-Use the command line to take a look at the format of the output files vcftools has returned. Does it makes sense?
+Hopefully you figured out that individuals 2014_SOL_MG4955, 2014_SOL_MG4956 and 2014_SOL_MG4957 are from the MB population, while the remaining individuals are from the FA population. Once you have run the above code, sse the command line to take a look at the format of the output files vcftools has returned. Does it makes sense?
 
 Before we have a go at plotting our data, we will first calculate one more measure of genetic diversity - linkage disequilibrium. Our aim is to look at how LD decays with physical distance between SNPs, and to see whether this relationship varies between our two populations. Lower levels of LD and faster rates of LD decay are typically found in large, outbred populations, whereas in small bottlenecked populations background levels of LD are higher and LD decays much more slowly.
 
-Because LD is calculated between *pairs* of markers, the number of calculations vcftools would have to perform for a whole genome dataset would be huge, and unnecessary for our purposes here. We will therefore restrict our analyses to i) the first million basepairs of a single chromosome (ChLG6), ii) pairs of markers within 100 kb of each other, and iii) pairs of markers with R2 values > 0.001. Using this information, can you calculate LD for both the MB and FA populations? Answer below.
+Because LD is calculated between *pairs* of markers, the number of calculations vcftools would have to perform for a whole genome dataset would be huge, and unnecessary for our purposes here. We will therefore restrict our analyses to i) a single chromosome (ChLG1), ii) pairs of markers within 100 kb of each other, and iii) pairs of markers with R2 values > 0.001. Using this information, can you calculate LD for both the MB and FA populations? Answer below.
 
 <div class="fold s">
 ```{r eval = F}
-vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG6 --ld-window-bp 100000 --from-bp 0 --to-bp 1000000 --min-r2 0.001 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB
+vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG1 --ld-window-bp 100000 --min-r2 0.001 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB
 
-vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG6 --ld-window-bp 100000 --from-bp 0 --to-bp 1000000 --min-r2 0.001 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA
+vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG1 --ld-window-bp 100000 --min-r2 0.001 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA
 
 ```
 </div>
@@ -145,13 +145,15 @@ Now all we need to do is obtain the average R2 value for each 1000bp distance bi
 
 <div class="fold s">
 ```{r eval = F}
+library(plyr)
+
 MB2 <- ddply(MB,
-      .(diff),
+      .(dist),
       summarise,
       meanR2 = mean(`R^2`))
 
 FA2 <- ddply(FA,
-      .(diff),
+      .(dist),
       summarise,
       meanR2 = mean(`R^2`))
 ```
@@ -198,17 +200,17 @@ That's our analyses done! Now you can log out of the server, and use SCP to down
 ```{r}
 rm(list=ls()) #Clear your workspace
 
-het <- read.table("Data/TriboliumSSGenomes.het",header = T)
-pi_MB <- read.table("Data/TriboliumSSGenomesMB.windowed.pi", header = T)
-pi_FA <- read.table("Data/TriboliumSSGenomesFA.windowed.pi", header = T)
-ld <- read.csv("Data/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
+het <- read.table("../Data/TriboliumSSGenomes.het",header = T)
+pi_MB <- read.table("../Data/TriboliumSSGenomesMB.windowed.pi", header = T)
+pi_FA <- read.table("../Data/TriboliumSSGenomesFA.windowed.pi", header = T)
+ld <- read.csv("../Data/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
 
 ```
 </div>
 
 We are going to use the `ggplot2` library to make the following plot. If you think you can recreate this, please give it a shot. Otherwise, we will work through the plots step-by-step below.
 
-```{r echo = F,warning = F,message=F}
+```{r echo = F,warning = F,message=F,fig.cap="**Figure 1** Genomic variation in two experimentally evolved red flour beetle populations. **A** Observed heterozygosity (proportion of heterozygous sites) in each individual. **B** Nucleotide diversity in each population, estimated from 200kb non-overlapping windows. **C** Linkage disequilibrium between marker pairs the first 1mb of chromosome 6. R^2^ values are means of marker-pairs within 1kb non-overlapping bins."}
 library(Rmisc)
 library(plyr)
 library(magrittr)
@@ -216,7 +218,7 @@ library(ggplot2)
 
 Fig1A <- mutate(het,Population = c(rep("MB",3),rep("FA",3)),Heterozygosity = 1-(O.HOM./N_SITES)) %>%
   ggplot(aes(x = Population, y = Heterozygosity,col = Population))+
-  geom_jitter(width = 0.1)+
+  geom_point()+
   theme_bw()+
   theme(legend.position = "none")+
   xlab("")+
@@ -246,3 +248,254 @@ multiplot(Fig1A,Fig1B,Fig1C,layout = matrix(c(1,2,3,3),nrow = 2, byrow = T))
 ```
 
 
+
+We will work through the figures one at a time. We will be using ggplot2 - if you have no experience using this package, take 5-10 minutes to familiarise yourself by searching for an online tutorial. <a href = "http://www.noamross.net/blog/2012/10/5/ggplot-introduction.html"> This </a> is a good one. We will start with panel **A**. Let's first take a look at our data:
+
+```{r}
+head(het)
+```
+
+As we have already seen, the `--het` function in vcftools gives us, for each individual, the number of homozygous sites, the number of heterozygous sites, the total number of sites and the inbreeding coefficient F. In panel **A** you can see that I have plotted the *proportion* of heterozygous sites per individual. Can you calculate this in R, and assign individual heterozygosity to a new column? You will also notice that ther is no "population" column, and we will need one. Can you use the the available information (hint: see previous code) to assign a population column?
+
+<div class="fold s">
+```{r}
+het$Heterozygosity <- 1-(het$O.HOM./het$N_SITES)
+het$Population <- c(rep("MB",3),rep("FA",3)) #Know from previously that the first three individuals are from MB
+```
+</div>
+
+Now we can use ggplot2 to plot heterozygosity against population. We will start off by using the function `geom_point`.
+
+<div class="fold s">
+```{r}
+A <- ggplot(het,aes(x = Population, y = Heterozygosity)) +
+  geom_point()
+
+A
+```
+</div>
+
+This is already pretty close to what we are after. We just need to colour the points by population:
+
+<div class="fold s">
+```{r}
+A <- ggplot(het,aes(x = Population, y = Heterozygosity, col = Population)) +
+  geom_point()
+
+A
+```
+</div>
+
+Now we need to change the background colout. I did this using `theme_bw()`:
+
+<div class="fold s">
+```{r}
+A <- ggplot(het,aes(x = Population, y = Heterozygosity, col = Population)) +
+  geom_point()+
+  theme_bw()
+
+A
+```
+</div>
+
+Remove the x axis and the legend:
+
+<div class="fold s">
+```{r}
+A <- ggplot(het,aes(x = Population, y = Heterozygosity, col = Population)) +
+  geom_point()+
+  theme_bw()+
+  theme(legend.position = "none")+
+  xlab("")
+
+A
+```
+</div>
+
+Add the panel label:
+
+<div class="fold s">
+```{r}
+A <- ggplot(het,aes(x = Population, y = Heterozygosity, col = Population)) +
+  geom_point()+
+  theme_bw()+
+  theme(legend.position = "none")+
+  xlab("")+
+  annotate("text",y = 0.24,x = 0.5,label = "A")
+
+A
+```
+</div>
+
+And we're there! Now let's move onto panel B, which is slightly more complicated. Again, we first look at the data. Remember we have two data frames for the nucleotide diversity data - one for each population:
+
+```{r}
+str(pi_MB)
+str(pi_FA)
+```
+
+Because ggplot likes to work from a single data frame, we first need to combine our data from the two populations and add a population ID column:
+
+```{r}
+pi_both <- rbind(pi_MB,pi_FA)
+pi_both$Population <- c(rep("MB",nrow(pi_MB)),rep("FA",nrow(pi_FA)))
+```
+
+Now we are ready to make a plot. We will start with the boxplot. Remember that we can use a lot of the same arguments from our previous plot.
+
+<div class="fold s">
+```{r}
+B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population)) +
+      geom_boxplot()+
+      theme_bw()+
+      theme(legend.position = "none")+
+      xlab("")
+B
+```
+</div>
+
+We can add a notch to the boxplot easily:
+
+<div class="fold s">
+```{r}
+B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population)) +
+      geom_boxplot(notch = T)+
+      theme_bw()+
+      theme(legend.position = "none")+
+      xlab("")
+B
+```
+</div>
+
+
+To add the points behind the boxplot we will use the function `geom_jitter`:
+
+<div class="fold s">
+```{r}
+B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population)) +
+      geom_boxplot(notch = T)+
+      theme_bw()+
+      theme(legend.position = "none")+
+      xlab("")+
+      geom_jitter()
+B
+```
+</div>
+
+There are two problems here. First, the points are getting in the was of the boxplots. Second, they have been coloured by population whereas we would like them to be grey. Any idea how we fix these things?
+
+<div class="fold s">
+```{r}
+B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population))+
+      geom_jitter(col = "grey")+ #Add this before the geom_boxplot() to put the points behind the boxes
+      geom_boxplot(notch = T, alpha = 0)+ #alpha makes the background seethrough
+      theme_bw()+
+      theme(legend.position = "none")+
+      xlab("")
+
+B
+```
+</div>
+
+Getting there... the points in this plot are spread more widely here than in the plot above though. Do you know how we can pack them in more?
+
+<div class="fold s">
+```{r}
+B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population))+
+      geom_jitter(col = "grey",width = 0.1)+ #Add this before the geom_boxplot() to put the points behind the boxes
+      geom_boxplot(notch = T, alpha = 0)+ #alpha makes the background seethrough
+      theme_bw()+
+      theme(legend.position = "none")+
+      xlab("")
+
+B
+```
+</div>
+
+Finally, we just need to add the panel label and sort out our y axis. How can we add a symbol? (Hint - look up `expression()`):
+
+<div class="fold s">
+```{r}
+B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population))+
+      geom_jitter(col = "grey",width = 0.1)+ #Add this before the geom_boxplot() to put the points behind the boxes
+      geom_boxplot(notch = T, alpha = 0)+ #alpha makes the background seethrough
+      theme_bw()+
+      theme(legend.position = "none")+
+      xlab("")+
+      ylab(expression(pi))+
+      annotate("text",y = 0.013,x = 0.5,label = "B")
+B
+```
+</div>
+
+Done! Now we just need to make the LD plot and stick them all together. Lety's take another look at the LD data:
+```{r}
+head(ld)
+```
+This should be relatively simple by now, as we can use the other two plots as templates, and our data is already conveniently formatted in the right way. Let's start by plotting the points, with distance between marker pairs on the x axis, R2 on the y axis, with colours corresponding to populations.
+
+<div class="fold s">
+```{r}
+C <- ggplot(ld,aes(x = dist, y = meanR2, col = pop)) +
+      geom_point()+
+      theme_bw()
+C
+```
+</div>
+
+Notice that distance is in bp, whereas we would like it in kb. We can also add the lines very easily:
+
+<div class="fold s">
+```{r}
+C <- ggplot(ld,aes(x = dist/1000, y = meanR2, col = pop)) +
+      geom_point()+
+      geom_line()+
+      theme_bw()
+C
+```
+</div>
+
+All we need to do now is add the panel label, sort out the x axis and y axis labels (hint: you will need `expression()` again for the y axis), and change the legend title. See if you can figure out how to do the the latter on your own (there are multiple ways).
+
+<div class="fold s">
+```{r}
+C <- ggplot(ld,aes(x = dist/1000, y = meanR2, col = pop)) +
+      geom_point()+
+      geom_line()+
+      theme_bw()+
+      xlab("Distance (kb)")+
+      ylab(expression(R^2))+
+      scale_colour_discrete(name = "Population")+ #An alternative would be to just rename to pop column to Population.
+      annotate("text",y = 0.92,x = 0,label = "C")
+C
+```
+</div>
+
+Ok, we have done our plots! We now just need to make a single, mutipanel plot. Again, there are lots of ways we can do thism and this is definitely something you should explore. For now we will use the `multiplot()` function from the `Rmisc` library. We can just list the plots without specifying anything to do with the layout:
+
+```{r}
+multiplot(A,B,C)
+```
+However, this stacks the plots one on top of the other. We can alter the layout in an enormous number of ways using the argument `layout` and the function `matrix()`. Can you figure out what is going on here? If not, try looking up the `layout()` function and seeing how this works.
+
+```{r}
+multiplot(A,B,C,layout = matrix(c(1,2,3,3),nrow = 2,byrow = T))
+```
+
+##If you've finished
+- Use multiplot to crease a multipanelled plot with i) the LD plot on the top, and ii) the heterozygosity plot stretched along the left-hand side, with the pi and LD plots both on the right hand side.
+- Plot and test whether nucleotide diversity in each 200kb window is correlated between the two populations. What might explain such a pattern?
+- Recreate this plot of nucleotide diversity (200kb windows) for each chromosome, as precisely as you can: 
+
+```{r, echo = F,fig.width = 9,fig.height = 5}
+
+pi_both$CHROM <- factor(pi_both$CHROM,levels = paste0("ChLG",c(1:10)))
+
+X <- ggplot(pi_both,aes(x = CHROM, y = PI, col = Population,fill = Population))+
+      geom_jitter(position = position_jitterdodge(jitter.width = 0.1))+ #Add this before the geom_boxplot() to put the points behind the boxes
+      geom_boxplot(notch = T, alpha = 0.2,col = "black",outlier.shape = NA)+ #alpha makes the background seethrough
+      theme_bw()+
+      xlab("")+
+      ylab(expression(pi))
+X
+```
