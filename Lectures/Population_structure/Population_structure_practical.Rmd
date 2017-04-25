@@ -9,32 +9,12 @@ output:
 <script src="js/hide.js"></script>
 
 ## Introduction
-In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, DAPC) to detect and quantify population structure. We will also continue to developing our plotting skills in R.
+In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, MDS) to detect and quantify population structure. We will also continue to developing our plotting skills in R.
 
 ## The data
+Great tit data on server
 
-```{R}
-
-Mariola_Spain
-Pirio_Muro_Corsica
-Vienna_Austria
-Loch_Lomond_Scotland
-Oulu_Finland
-Vlieland_NL
-Montpellier_France
-Zurich_Switzerland
-Zvenigorod_Russia
-
-plink2 --bfile ../../Research/Great_tit_hapmap/PlinkFiles/HapMapMajorPruned --keep-fam ~/Desktop/berlinpops --autosome-num 37 --recodeA --out GreatTits
-
-
-library(adegenet)
-
-dd <- read.PLINK("../../../PopGenBerlinData/GreatTits.raw")
-dd
-
-p1 <- glPca(dd)
-
-
-
+Start by running python script to calculate pairwise fst
+```{R,eval = FALSE}
+python pairwise_fst_plink.py
 ```
