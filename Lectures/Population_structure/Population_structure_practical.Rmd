@@ -102,10 +102,76 @@ plink --bfile GreatTitsFilteredPrunedUnrel --pca 4 --out GreatTitsFilteredPruned
 Have a look at the output files and check you are happy with what you have got (hint - use the plink manual). Again, we will download our file for plotting soon.
 
 ##Admixture
-Finally, we are going to run Admixture on our dataset. Look up the admixture manual online. The software has been installed on the server, and can be called up by typing `admixture`. If you do this, you will see that at its most basic level you just need an input file and a value of K. We will stick with the program defaults for now. Try running admixture at k = 2 for your cleaned great tit dataset. To speed the algorith up, you should tell it to run across 
+Finally, we are going to run Admixture on our dataset. But first we need to do one more piece of cleaning. We still have a very large number of SNPs in our great tit dataset, and with this many individuals and SNPs it would take Admixture several hours to run. So we aree going to thin our markers substantially for the purpose of this practical. Can you figure out, using plink, how to randomly select 1% of your markers and write them to a new file?
 
 <div class="fold s">
 ```{R,eval = FALSE}
-admixture GreatTitsFilteredPrunedUnrel.bed 2
+plink --bfile GreatTitsFilteredPrunedUnrel --thin 0.01 --make-bed --out GreatTitsThinned
 ```
 </div>
+
+Now look up the admixture manual online. The software has been installed on the server, and can be called up by typing `admixture`. If you do this, you will see that at its most basic level you just need an input file and a value of K. We will stick with the program defaults for now, except that we will ask the program to use 16 threads, with the command `-j16`. Try running admixture at k = 2 for your cleaned great tit dataset, using the following code.
+
+```{R,eval = FALSE}
+mkdir admixture #So current directory doesn't get too messy
+cd admixture
+admixture ../GreatTitsThinned.bed -j16 2
+```
+
+Have a look at your outputs - you should see a file ending in ".P", and one ending in ".Q". Explore these files and see if you can figure out what each one is.
+
+Typically with software like STRUCTURE or admixture, we wish to compare how genetic variation is structured across multiple values of *k* - usually from *k* = 2 to *k* = $N_{populations}$. We could do this by repeating the above command 8 times, with *k* ranging from 2 to 9. But a more efficient way would be to create a for loop in bash. Can you figure out how to do this?
+
+<div class="fold s">
+```{R,eval = FALSE}
+for K in `seq 2 9`;
+do
+  admixture ../GreatTitsThinned.bed -j16 $K;
+done
+```
+</div>
+
+Done! Now we can download all of our results and do some plots. You will need to download:
+- The pairwise FST output from the python script
+- The file LatLong.txt
+- The output from your plink PCA (the ".eigenvec" file)
+- All of your admixture ".Q" files
+- The file "GreatTitsThinned.fam"
+
+##Putting it all together
+
+Once again, we will start be giving you the end product of this practical.
+
+This is what you should be aiming for
+
+install.packages("geosphere")
+
+```{r echo = F}
+library(geosphere)
+
+ll <- read.table("../PopGenBerlinData/population_structure/LatLongAllPops.txt",header = F,as.is = T)  
+pd <- read.table("../PopGenBerlinData/population_structure/pairwise_fst.txt",as.is = T)
+
+colnames(pd) <- c("p1","p2","FST")
+pd$dist <- NA
+
+for(i in 1:nrow(pd))
+{
+  d1 <- subset(ll,V1 == pd$p1[i])
+  d2 <- subset(ll,V1 == pd$p2[i])
+  pd$dist[i] <- distGeo(c(d1$V3,d1$V2),c(d2$V3,d2$V2))
+}
+
+pd$island <- ifelse(pd$p1 == "Pirio_Muro_Corsica" | pd$p2 == "Pirio_Muro_Corsica", "I","NI")
+
+library(ggplot2)
+
+A <- ggplot(pd,aes(x = dist/1000,y = FST,col = island))+
+  geom_point()
+
+
+
+```
+  
+  
+  
