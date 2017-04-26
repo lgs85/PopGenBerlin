@@ -14,7 +14,98 @@ In this practical we will be analysing population structure in a genomic dataset
 ## The data
 Great tit data on server
 
-Start by running python script to calculate pairwise fst
+
+## Data cleaning in plink
+
+In the genomic diversity practical we assumed that our data was cleaned and ready to go. However, this is usually not the case! We may have markers that are not in Hardy-Weinberg equilibrium in our datset, markers that are in high LD, or highly related individuals. These may invalidate the assumptions of some of our analyses. It is important that, for each analysis, we check our assumtpions ensure that our data does not violate them. Plink has lots of great functions that enable us to clean our datasets. Before looking at population structure, we are going to do some data cleaning.
+
+You will remember from the last practical that we calculated heterozygosity and HWE for every locus in our flour beetle data. We can do the same thing in plink. Further, we can get plink to automatically generate a list of markers that are exceed a given Hardy-Weinberg P value threshold, and then filter our dataset to either exclude or include these loci. Let's aim to exclude loci with a Hardy-Weinberg p value < 0.01. Can you figure out from the plink manual how we might do this on our GreatTits .ped file?
+
+<div class="fold s">
+```{r eval = F}
+plink --file GreatTits --hwe 0.01 --make-bed --out GreatTitsFiltered 
+```
+</div>
+
+Have a look at this output - how many individuals and loci went into the analysis? How many were written to the output file? Note the use of the option `--make-bed` at the end. This option generates a binary plink file, which is smaller than the standard .ped files. Because we are going to be generating multiple files for analysis in plink, we don't want to be using up too much space on our hard disks/servers.
+
+We will also filter based on minor allele frequencies. Can you find the command to exclude all loci with a minor allele frequency < 0.05? Why might we want to do this?
+
+<div class="fold s">
+```{r eval = F}
+plink --file GreatTits --hwe 0.01 --maf 0.05 --make-bed --out GreatTitsFiltered 
+```
+</div>
+
+Note how we can add both `--hwe` and `--maf` options to a single command and used the same output name. This is more efficient and saces us space.
+
+We will now "prune" our markers based on LD. Check out the options that plink has for this. See if you can figure out how to prune markers, using appropriate thresholds. You should perform this on the "GreatTitsFiltered" binary plink files you have just created. Then take a look what I have chosen below:
+
+<div class="fold s">
+```{r eval = F}
+plink --bfile GreatTitsFiltered --indep-pairwise 50 10 0.05 --make-bed --out GreatTitsFiltered
+```
+</div>
+
+I have chosen to prune in windows of 50 markers, shifting this window along 10 markers at a time. This is called a *sliding window*, and is somethig we will cover in more detail later in the course. The final argument (0.05) is the R^2 threshold of I chosen to prune with.Note that you can also use the Variance Inflation Factor (VIF), using the argument `--indep`.  If you have chosen different thresholds that's fine, but for now run the code with mine so we're all working from the same data. This argument has written two lists of SNPs as output files - one list of SNPs in linkage equilibrium with one another, and one list of SNPs to be excluded. We can use either of these to filter our binary plink file to create a new dataset only containing markers in linkage equilibrium.
+
+<div class="fold s">
+```{r eval = F}
+plink --bfile GreatTitsFiltered --extract GreatTitsFiltered.prune.in --make-bed --out GreatTitsFilteredPruned
+```
+</div>
+
+Finally, we can filter based on individual relatedness. This is best done by expecting patterns of pairwise relatedness on your dataset, but for the sake of time we will pick a cut-off of 0.4, in order to remove full sibs (why not 0.5?).
+
+<div class="fold s">
+```{r eval = F}
+plink --bfile GreatTitsFiltered --rel-cutoff 0.4 --out GreatTitsFilteredPruned
+plink --bfile GreatTitsFiltered --keep GreatTitsFilteredPruned.rel.id --make-bed --out GreatTitsFilteredPrunedUnrel
+
+```
+</div>
+
+We have rushed through this a little, but you should now have an idea about some of the processes that you can use to tidy your SNP data. 
+
+
+## Pairwise FST
+
+Let's now focus on looking at population structure. In the "population_structure" folder, you should be able to find a file called "pairwise_fst_plink.py" Take a look at this file using `nano`. 
+
+<div class="fold s">
+```{R,eval = FALSE}
+nano pairwise_fst_plink.py
+```
+</div>
+
+Can you work out what this python script is doing? Take a few minutes to go through each line and try to understand what it is achieving. Discuss with a colleague. 
+
+We are now going to run this script on our pruned and cleaned dataset to calculate pairwise FST for each of our population pairs. But first we need to edit the python script. At the moment it is is set up to run on "GreatTits.ped", whereas we want it to run on the "GreatTits.ped" file, where as we want to run it on "GreatTitsFilteredPrunedUnrel". Edit the second line of the python script accordingly, the exit nano by pressing ctrl+X. enter `Y` when asked to save, and then press enter to keep the same name for the python script. You should now be able to run the script.
+
+<div class="fold s">
 ```{R,eval = FALSE}
 python pairwise_fst_plink.py
 ```
+</div>
+
+Take a look at the output from the python script(either using `cat` or `nano`), and make sure you understand the format of the output. We will later use this output to create an isolation by distance plot, but for now we will run some extra population structure analyses on the server.
+
+## PCA
+We can also use plink to generate a PCA of our genetic data. Again, we will use the pruned and cleaned dataset we generated earlier. Can you figure out how to run a PCA on this data, in which you keep the first four principal components?
+
+<div class="fold s">
+```{R,eval = FALSE}
+plink --bfile GreatTitsFilteredPrunedUnrel --pca 4 --out GreatTitsFilteredPrunedUnrel
+```
+</div>
+
+Have a look at the output files and check you are happy with what you have got (hint - use the plink manual). Again, we will download our file for plotting soon.
+
+##Admixture
+Finally, we are going to run Admixture on our dataset. Look up the admixture manual online. The software has been installed on the server, and can be called up by typing `admixture`. If you do this, you will see that at its most basic level you just need an input file and a value of K. We will stick with the program defaults for now. Try running admixture at k = 2 for your cleaned great tit dataset. To speed the algorith up, you should tell it to run across 
+
+<div class="fold s">
+```{R,eval = FALSE}
+admixture GreatTitsFilteredPrunedUnrel.bed 2
+```
+</div>
