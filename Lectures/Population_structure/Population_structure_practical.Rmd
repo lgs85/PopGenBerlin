@@ -9,10 +9,10 @@ output:
 <script src="js/hide.js"></script>
 
 ## Introduction
-In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, MDS) to detect and quantify population structure. We will also continue to developing our plotting skills in R.
+In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, PCA) to detect and quantify population structure. We will also continue to developing our plotting skills in R.
 
 ## The data
-Great tit data on server
+We will be using a large SNP dataset from nine European great tit populations to explore continental-scale genomic structure. The data are stored as plink files on the "population_structure" on the server. Log onto the server and copy the directory to your working folder. Then use the command line to explore the files to try to figure out how many individuals and SNP markers have been typed.
 
 
 ## Data cleaning in plink
@@ -80,7 +80,7 @@ nano pairwise_fst_plink.py
 
 Can you work out what this python script is doing? Take a few minutes to go through each line and try to understand what it is achieving. Discuss with a colleague. 
 
-We are now going to run this script on our pruned and cleaned dataset to calculate pairwise FST for each of our population pairs. But first we need to edit the python script. At the moment it is is set up to run on "GreatTits.ped", whereas we want it to run on the "GreatTits.ped" file, where as we want to run it on "GreatTitsFilteredPrunedUnrel". Edit the second line of the python script accordingly, the exit nano by pressing ctrl+X. enter `Y` when asked to save, and then press enter to keep the same name for the python script. You should now be able to run the script.
+We are now going to run this script on our pruned and cleaned dataset to calculate pairwise FST for each of our population pairs. But you need to check that the name of your plink file (the bit before the ".bed" extension) *exactly* matches the string defined in the second line of the python script. If it does, either edit your file name or the script accordingly. Exit nano by pressing ctrl+X, enter `Y` when asked to save and then press enter, if you have made any edits to the script. You should now be able to run the script.
 
 <div class="fold s">
 ```{R,eval = FALSE}
@@ -88,7 +88,7 @@ python pairwise_fst_plink.py
 ```
 </div>
 
-Take a look at the output from the python script(either using `cat` or `nano`), and make sure you understand the format of the output. We will later use this output to create an isolation by distance plot, but for now we will run some extra population structure analyses on the server.
+Take a look at the output from the python script(either using `cat` or `nano`), and make sure you understand the format of the output (hint - explore the python script and discuss with your colleagues). We will later use this output to create an isolation by distance plot, but for now we will run some extra population structure analyses on the server.
 
 ## PCA
 We can also use plink to generate a PCA of our genetic data. Again, we will use the pruned and cleaned dataset we generated earlier. Can you figure out how to run a PCA on this data, in which you keep the first four principal components?
@@ -110,12 +110,12 @@ plink --bfile GreatTitsFilteredPrunedUnrel --thin 0.01 --make-bed --out GreatTit
 ```
 </div>
 
-Now look up the admixture manual online. The software has been installed on the server, and can be called up by typing `admixture`. If you do this, you will see that at its most basic level you just need an input file and a value of K. We will stick with the program defaults for now, except that we will ask the program to use 16 threads, with the command `-j16`. Try running admixture at k = 2 for your cleaned great tit dataset, using the following code.
+Now look up the admixture manual online. The software has been installed on the server, and can be called up by typing `admixture`. If you do this, you will see that at its most basic level you just need an input file and a value of K. We will stick with the program defaults for now. Try running admixture at k = 2 for your cleaned great tit dataset, using the following code.
 
 ```{R,eval = FALSE}
 mkdir admixture #So current directory doesn't get too messy
 cd admixture
-admixture ../GreatTitsThinned.bed -j16 2
+admixture ../GreatTitsThinned.bed 2
 ```
 
 Have a look at your outputs - you should see a file ending in ".P", and one ending in ".Q". Explore these files and see if you can figure out what each one is.
@@ -126,7 +126,7 @@ Typically with software like STRUCTURE or admixture, we wish to compare how gene
 ```{R,eval = FALSE}
 for K in `seq 2 9`;
 do
-  admixture ../GreatTitsThinned.bed -j16 $K;
+  admixture ../GreatTitsThinned.bed $K;
 done
 ```
 </div>
@@ -137,41 +137,346 @@ Done! Now we can download all of our results and do some plots. You will need to
 - The output from your plink PCA (the ".eigenvec" file)
 - All of your admixture ".Q" files
 - The file "GreatTitsThinned.fam"
+- The R script "Admixture_plot.R"
 
 ##Putting it all together
 
-Once again, we will start be giving you the end product of this practical.
+Once again, we will start be giving you the end product of this practical. The plot below is what you should be aiming for. Hopefully you can see that we have an IBD plot on the top left, a PCA on the bottom-left, then on the right we have three structure-type bar plots with K ranging from 2-4. If you feel as though you can have a go at this without step-by-step instruction, please go ahead now. Otherwise, full instructions are given below.
 
-This is what you should be aiming for
-
-install.packages("geosphere")
-
-```{r echo = F}
+```{r echo = F,fig.width=10, message  = F,warning = F}
 library(geosphere)
+library(ggplot2)
+library(Rmisc)
 
-ll <- read.table("../PopGenBerlinData/population_structure/LatLongAllPops.txt",header = F,as.is = T)  
-pd <- read.table("../PopGenBerlinData/population_structure/pairwise_fst.txt",as.is = T)
+setwd("~/Documents/Teaching/PopGenBerlinLGS/population_structure/")
+ll <- read.table("LatLong.txt",header = T,as.is = T)  
+pd <- read.table("pairwise_fst.txt",as.is = T)
 
 colnames(pd) <- c("p1","p2","FST")
 pd$dist <- NA
 
 for(i in 1:nrow(pd))
 {
-  d1 <- subset(ll,V1 == pd$p1[i])
-  d2 <- subset(ll,V1 == pd$p2[i])
-  pd$dist[i] <- distGeo(c(d1$V3,d1$V2),c(d2$V3,d2$V2))
+  d1 <- subset(ll,Pop == pd$p1[i])
+  d2 <- subset(ll,Pop == pd$p2[i])
+  pd$dist[i] <- distGeo(c(d1$Long,d1$Lat),c(d2$Long,d2$Lat))
 }
 
-pd$island <- ifelse(pd$p1 == "Pirio_Muro_Corsica" | pd$p2 == "Pirio_Muro_Corsica", "I","NI")
-
-library(ggplot2)
-
-A <- ggplot(pd,aes(x = dist/1000,y = FST,col = island))+
-  geom_point()
+pd$Comparison <- ifelse(pd$p1 == "Pirio_Muro_Corsica" | pd$p2 == "Pirio_Muro_Corsica", "Mainland-Island","Mainland-Mainland")
 
 
+
+A <- ggplot(pd,aes(x = dist/1000,y = FST,col = Comparison))+
+  geom_point()+
+  theme_bw()+
+  xlab("Distance (km)")+
+  ylab(expression("F"[ST]))+
+  scale_colour_manual(values = c("black","grey"))
+
+
+pc1 <- read.table("GreatTitsFilteredPrunedUnrel.eigenvec")
+  mycols <- c("#a6cee3",
+              "#1f78b4",
+              "#b2df8a",
+              "#33a02c",
+              "#fb9a99",
+              "#e31a1c",
+              "#fdbf6f",
+              "#ff7f00",
+              "#cab2d6",
+              "#6a3d9a")[1:9]
+
+colnames(pc1) <- c("Population","Individual",paste0("PC",c(1:4)))
+B <- ggplot(pc1,aes(x = PC1,y = PC2,col = Population))+
+  geom_point()+
+  theme_bw()+
+  scale_colour_manual(values = mycols)
+
+
+source("Admixture_plot.R")
+
+K2 <- read.table("admixture/GreatTitsThinned.2.Q")
+mypops <- read.table("GreatTitsThinned.fam")
+C <- admixtureplot(str_out = K2,k = 2, pops = mypops,xaxis = F)
+
+K3 <- read.table("admixture/GreatTitsThinned.3.Q")
+D <- admixtureplot(str_out = K3,k = 3, pops = mypops,xaxis = F)
+
+K4 <- read.table("admixture/GreatTitsThinned.4.Q")
+E <- admixtureplot(str_out = K4,k = 4, pops = mypops,xaxis = T)
+
+
+multiplot(A,B,C,D,E,layout = matrix(c(1,1,2,2,3,4,5,5),ncol = 2))
 
 ```
   
-  
-  
+We will begin with the IBD plot. Hopefully it is clear that to reproduce this we need pairwise FST values, and corresponding geographic distances between populations. We calculated pairwise FST values using our python scripts. Let's read that output in.
+
+<div class="fold s">
+```{R}
+pd <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/pairwise_fst.txt",as.is = T) #Or wherever you have put this
+head(pd)
+```
+</div>
+
+Note the argument `as.is = T` - what do you think this does? As we go through, see if you can figure out why we might have done this. 
+
+As we did not give this table column names in our python script, R has generated some automatically. Let's give our data frame some names that make more sense.
+<div class="fold s">
+```{R}
+colnames(pd) <- c("p1","p2","FST")
+```
+</div>
+
+Our next task is to calculate pairwise distance between each of our populations. We could go to Google maps and do this manually, but thankfully we can do it in R! Have a look at the `distGeo()` function in the `geosphere` library:
+
+<div class="fold s">
+```{R,eval = F}
+library(geosphere)
+?distGeo
+```
+</div>
+
+`distGeo()` calculates the pairwise distance between two points - all you need to do is give it the longitude and latitude of the two points. We have longitude and latitude information in the file "LatLong.txt". Read this file into R and take a look at it.
+
+<div class="fold s">
+```{R}
+ll <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/LatLong.txt", header = T,as.is = T) #Or wherever you have put this
+ll
+```
+</div>
+
+
+Let's try calculating the distance in metres between the first pair of populations in our `pd` data frame, `r pd$p1[1]` and `r pd$p2[1]`. We will first extract the latitude and longitude information for each of these populations, then use the `distGeo()` function to calculate the distance between them.
+
+<div class="fold s">
+```{R}
+
+#Extract population names from pd data frame
+pop1 <- pd$p1[1] #First element of p1 column
+pop2 <- pd$p2[1] #First element of p2 column
+
+#Get lat and log information
+l1 <- subset(ll,Pop == pop1)
+l2 <- subset(ll,Pop == pop2)
+
+#Now calculate distance
+distGeo(p1 = c(l1$Long,l1$Lat),p2 = c(l2$Long,l2$Lat))
+```
+</div>
+
+That looks about right! Now we need to calculate the distance between all of the population pairs in our data frame. Below I provide one ways that you can do this - using a `for` loop (DISCLAIMER - this is not the most efficient way of doing this, but it works). Discuss with your colleagues how you think the code is working.
+
+<div class="fold s">
+```{R}
+
+#Create an empty distance column
+pd$dist <- NA
+
+#Loop over the pd data frame
+for(i in 1:nrow(pd))
+{
+
+#Extract population names from pd data frame
+pop1 <- pd$p1[i] #First element of p1 column
+pop2 <- pd$p2[i] #First element of p2 column
+
+#Get lat and log information
+l1 <- subset(ll,Pop == pop1)
+l2 <- subset(ll,Pop == pop2)
+
+#Now calculate distance
+pd$dist[i] <- distGeo(p1 = c(l1$Long,l1$Lat),p2 = c(l2$Long,l2$Lat))
+
+}
+
+#Check that it's worked
+head(pd)
+
+```
+</div>
+
+Now we have a distance column we can plot FST against distance, using wour `ggplot2` skills from the last practical.
+
+<div class="fold s">
+```{R}
+
+A <- ggplot(pd,aes(x = dist/1000,y = FST))+ #divide by 1000 to get distance in km
+  geom_point()+
+  theme_bw()+
+  xlab("Distance (km)")+
+  ylab(expression("F"[ST]))
+
+A
+```
+</div>
+
+The only difference between the plot above and the one I maid earlier is that we would like the points to be coloured by a factor called "Island". On taking a look at the dataset, I noticed that the highest FST values were all from pairwise comparisons involving the Corsica population. Can you think of a good way to use R to show you this?
+
+<div class="fold s">
+```{R}
+pd[order(pd$FST,decreasing = T),]
+```
+</div>
+
+So bearing this in mind I though it would be good to show this group effect in my plot. Can you make a column in pd that tells us whether *either* of your populations is "Pirio_Muro_Corsica"?
+
+<div class="fold s">
+```{R}
+pd$Comparison <- ifelse(pd$p1 == "Pirio_Muro_Corsica" | pd$p2 == "Pirio_Muro_Corsica", "Mainland-Island","Mainland-Mainland")
+```
+</div>
+
+Now we can make the full plot. Note the use of `scale_colour_manual()` to change the colours we use in ggplot.
+
+<div class="fold s">
+```{R}
+
+A <- ggplot(pd,aes(x = dist/1000,y = FST,col = Comparison))+ #divide by 1000 to get distance in km
+      geom_point()+
+      theme_bw()+
+      xlab("Distance (km)")+
+      ylab(expression("F"[ST]))+
+      scale_colour_manual(values = c("black","grey"))
+
+A
+```
+</div>
+
+Now we can move onto our PCA plot. Load the PCA output into R.
+
+<div class="fold s">
+```{R}
+pca1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsFilteredPrunedUnrel.eigenvec") #Or wherever you have put this
+head(pca1)
+```
+</div>
+
+Once again we do not have sensible column names, so let's create these ourselves.
+
+<div class="fold s">
+```{R}
+colnames(pca1) <- c("Population","Individual",paste0("PC",c(1:4)))
+head(pca1)
+```
+</div>
+
+What is the function `paste0()` doing there? (hint: try running the function on its own).
+
+Now we are ready to make the plot. By now, you should be able to do this yourselves.
+<div class="fold s">
+```{R}
+
+B <- ggplot(pc1,aes(x = PC1,y = PC2,col = Population))+
+      geom_point()+
+      theme_bw()
+B
+```
+</div>
+
+Perfect - all we need to do now is cosmetics. To change the colours you need to specify nine different colours. Have a play about with this, or use mine:
+
+```{R}
+  mycols <- c("#a6cee3",
+              "#1f78b4",
+              "#b2df8a",
+              "#33a02c",
+              "#fb9a99",
+              "#e31a1c",
+              "#fdbf6f",
+              "#ff7f00",
+              "#cab2d6")
+
+B <- ggplot(pc1,aes(x = PC1,y = PC2,col = Population))+
+      geom_point()+
+      theme_bw()+
+      scale_colour_manual(values = mycols)
+B
+```
+
+Now we are onto the tricky part - the admixture plots. Rather than take you through this step by step I have provided a function that I have written myself. This is in the "Admixture_plot.R" script that you downloaded. Open the script up and take a look at the code. We will not go into writing functions here, but essentially this script contains the code to create a function called `admixtureplot()`. After you have run the code in the script you will then be able to use the function. Running the code manually would work, but you would need to do this every time you ran the script you are currently working on. You could copy and paste the function code into your current script, but that would be rather unwieldy. We will use the following code:
+
+```{r}
+source("~/Documents/Teaching/PopGenBerlinLGS/population_structure/Admixture_plot.R") #Or whatever the path to this script is
+```
+
+If you look in the "environment" tab in the top right of R studio, you should see that the `admixtureplot()` function has been loaded. You can call up the code by typing `admixtureplot` (without brackets) into the console.
+
+Now we are ready to try running the function. `admixtureplot` has 4 arguments, three of which are mandatory. `str_out` is your ".Q" file from admixture, loaded into R as a data frame, "pops" is the ".fam" plink file associated with the ".bed" file used to run admixture. `k` is simply the value of k for the run, and `xaxis` is an optional argument with which we can tell the funciton whether or not to plot x axis labels.
+
+Adapt the following code (depending on your working directory) to run the function for your K = 2 admixture output.
+
+```{r,fig.height = 3}
+K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/admixture/GreatTitsThinned.2.Q")
+mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
+C <- admixtureplot(str_out = K2,k = 2, pops = mypops)
+
+C
+```
+
+Now it should be fairly clear how we can do the same thing for K = 3 and 4, and thus create the plots in our original figure. Remember that we only want x axis labels for the K = 4 plot.
+
+<div class="fold s">
+```{r}
+K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/admixture/GreatTitsThinned.2.Q")
+mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
+C <- admixtureplot(str_out = K2,k = 2, pops = mypops, xaxis = F)
+
+K3 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/admixture/GreatTitsThinned.3.Q")
+mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
+D <- admixtureplot(str_out = K3,k = 3, pops = mypops, xaxis = F)
+
+K4 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/admixture/GreatTitsThinned.4.Q")
+mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
+E <- admixtureplot(str_out = K4,k = 4, pops = mypops, xaxis = T)
+```
+</div>
+
+Now all we need to do is put our five plots together, using `multiplot()`. This is a bit more tricky is we have two plots on the left and three on the right. I will demonstrate how we will do this using `layout()`. To make a matrix for a 6-panel plot, we would do the following:
+
+```{R}
+layout(matrix(1:6,ncol = 2))
+layout.show(6)
+```
+
+A key feature or `layout()` is that plots can take up more than one panel. So, for example, if the three left-hand panels into a single plot, we could do the following:
+
+```{R}
+layout(matrix(c(1,1,1,2:4),ncol = 2))
+layout.show(4)
+```
+
+Bearing this in mind, see if you can figure out how to use `layout()` and `layout.show()` to produce a template for our 5-panelled figure, with two plots on the left and two on the right.
+
+<div class="fold s">
+```{R}
+layout(matrix(c(1,1,1,2,2,2,3,3,4,4,5,5),ncol = 2))
+layout.show(5)
+```
+</div>
+
+What the above basically does is creates a matrix with six rows and two columns - the left-hand panels are given three rows, while the right=hand panels are given two.
+
+This is almost there, but because only one of our three admixturew plots (the one due to go in panel 5) has x axis labels, we need to ascribe more space to this panel. Can you figure out a way to do this, and produce the layout shown below?
+
+<div class="fold s">
+```{R}
+
+#12-row matrix
+layout(matrix(c(1,1,2,2,3,4,5,5),ncol = 2))
+layout.show(5)
+```
+</div>
+
+Now we can use this layout within the `multiplot()` function to make our final figure:
+<div class="fold s">
+```{R,fig.width = 10}
+library(Rmisc)
+multiplot(A,B,C,D,E,layout = matrix(c(1,1,2,2,3,4,5,5),ncol = 2))
+```
+</div>
+
+##If you've finished
+- Load the `ecodist` library and test whether FST and distance are correlated using a Mantel test, and a partial Mantel test including the "Comparison" variable.
+- Plot PC3 and PC4 from the PCA
+- Log back onto the server and try to estimate the CV error for each of your admixture analyses. Extract this information and plot CV error versus K (look up online if you don't know what CV error is)

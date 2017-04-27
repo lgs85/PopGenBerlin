@@ -1,0 +1,36 @@
+---
+title: 'Selection: practical 1'
+author: "Lewis Spurgin"
+output:
+  html_document:
+    css: js/styles.css
+---
+
+<script src="js/hide.js"></script>
+
+
+## Introduction
+We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. FInally, we will learn how to annotate a vcf file and look at some of the cool things we can do if we have a reference genome.
+
+## The data
+We will be using the Tribolium data from the genomic diversity practical. Make a new folder for the selection practical, and copy the file TriboliumSSGenomes.vcf to this folder
+
+```{r}
+
+library(qqman)
+
+
+MB <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB.Tajima.D",header = T)
+MB <- subset(MB,N_SNPS > 5)
+MB$chr <- as.numeric(MB$CHROM)
+manhattan(MB,chr = "chr",bp = "BIN_START",p = "TajimaD",logp = F,ylim = c(-3,3),type = "l")
+
+FA <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA.Tajima.D",header = T)
+FA <- subset(FA,N_SNPS > 5)
+FA$chr <- as.numeric(FA$CHROM)
+manhattan(FA,chr = "chr",bp = "BIN_START",p = "TajimaD",logp = F,ylim = c(-8,8),type = "l")
+
+plot(MB$TajimaD~FA$TajimaD)
+summary(lm(MB$TajimaD~FA$TajimaD))
+
+```

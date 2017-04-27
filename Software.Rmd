@@ -5,9 +5,9 @@ date: "May 2017"
 output: html_document
 ---
 
-Most of the analysis that we carry out at the workshop will be done on an instance in the amazon cloud server (Ec2). We will show you how to connect to the server and run analyses remotely during the course. However, in order to connect to the server, and do some processing and plotting of data, you will need to install a few pieces of software.
+Most of the analysis that we carry out at the workshop will be performed on an instance in the amazon cloud server (Ec2). We will show you how to connect to the server and run analyses remotely during the course. However, in order to connect to the server, and do some processing and plotting of data, you will need to install a few pieces of software on your own machines.
 
-It is very important that you have the requisite software installed and working on your laptops *before* we start the course. We have a limited amount of time to cover alot of material, and we therefore want to spend as much time as possible doing population genomics!
+It is very important that you have the requisite software installed and working on your laptops *before* we start the course. We have a limited amount of time during the week to cover a lot of material, and we therefore want to spend as much time as possible doing population genomics!
 
 You will need to install the following software on your computers.
 
@@ -24,7 +24,7 @@ Downloadable from https://www.sublimetext.com/
 Downloadable from http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
 
 <br>
-In addition you will need to install some R packages. We will likely need to install R packages as we go along the course, especially during the latter sessions if you want to work with your own data. So you should check that you have permissions to do install R packages yourself if you are working on an institution-owned laptop. Here we provide the code to install most of the packages that you will need for the course. To run the code, open R (or R studio) and paste the following text into the console:
+In addition you will need to install some R packages. We will likely need to install R packages as we go along the course, especially during the latter sessions if you want to work with your own data. So you should check that you have permissions to install R packages yourself if you are working on an institution-owned laptop (i.e. you need Administrator rights). Here we provide the code to install most of the packages that you will need for the course. To run the code, open R (or R studio) and paste the following text into the console:
 
 ```{r, eval = FALSE}
 install.packages("ggplot2")
@@ -38,4 +38,10 @@ install.packages("magrittr")
 install.packages("GenABEL")
 install.packages("ggmap")
 install.packages("rworldmap")
+install.packages("maps")
+install.packages("maptools")
+install.packages("HIest")
+install.packages("reshape")
+install.packages("geosphere")
+install.packages("ecodist")
 ```
