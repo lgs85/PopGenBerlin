@@ -1,10 +1,16 @@
 ---
-title: "Population Genomics 2017: software installation"
+title: "Population Genomics 2017: data and software installation"
 author: "Lewis Spurgin and Martin Taylor"
 date: "May 2017"
 output: html_document
 ---
 
+##Data
+The bulk of the course will be structured around practical sessions in which we work on example datasets that we provide - these are mostly real datasets from our own research. Working from example datasets allows us to provide specific, tailored practical sessions on datasets that we know work, and minimises the issues caused by individual (upstream) data problems.
+
+That being said, the last session of the course will be an opportunity to either apply what you have learned to your own data, or to explore further analyses yourself using the example datasets. If you wish to bring your own dataset for this session, we recommend that you bring it in VCF or PLINK format. As stated in the course outline, we will not be covering SNP calling in the course. We (the instructors) will spend this session trying to help you with any questions or issues you may have, and/or help you troubleshoot your own datasets. You do not need to filter your SNP data (based on Hardy-Weinberg, MAF), as we will cover this in the course, although you can if you want.
+
+##Software
 Most of the analysis that we carry out at the workshop will be performed on an instance in the amazon cloud server (Ec2). We will show you how to connect to the server and run analyses remotely during the course. However, in order to connect to the server, and do some processing and plotting of data, you will need to install a few pieces of software on your own machines.
 
 It is very important that you have the requisite software installed and working on your laptops *before* we start the course. We have a limited amount of time during the week to cover a lot of material, and we therefore want to spend as much time as possible doing population genomics!

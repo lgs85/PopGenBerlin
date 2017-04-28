@@ -10,27 +10,106 @@ output:
 
 
 ## Introduction
-We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. FInally, we will learn how to annotate a vcf file and look at some of the cool things we can do if we have a reference genome.
+We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. Finally, we will learn how to annotate a vcf file and look at some of the cool things we can do if we have a reference genome.
 
 ## The data
-We will be using the Tribolium data from the genomic diversity practical. Make a new folder for the selection practical, and copy the file TriboliumSSGenomes.vcf to this folder
+We will be using the Tribolium sexual selection data from the genomic diversity practical. Log into your working folder on the Amazon server, and make a new folder for the selection practical, and copy the file TriboliumSSGenomes.vcf to this folder.
 
-```{r}
+## Site and window nucleotide diversity
+In the genetic diversity practical we calculated $\pi$ in non-overlapping 200kb windows, and compared distributions of windowed-averages across experimental populations. For visualisation of how variation occurs along genomes, we sometimes wish to calculate statistics in *sliding* windows. This is done very simply using vcftools - here is the code to calculate.
 
-library(qqman)
+```{r eval = F}
 
-
-MB <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB.Tajima.D",header = T)
-MB <- subset(MB,N_SNPS > 5)
-MB$chr <- as.numeric(MB$CHROM)
-manhattan(MB,chr = "chr",bp = "BIN_START",p = "TajimaD",logp = F,ylim = c(-3,3),type = "l")
-
-FA <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA.Tajima.D",header = T)
-FA <- subset(FA,N_SNPS > 5)
-FA$chr <- as.numeric(FA$CHROM)
-manhattan(FA,chr = "chr",bp = "BIN_START",p = "TajimaD",logp = F,ylim = c(-8,8),type = "l")
-
-plot(MB$TajimaD~FA$TajimaD)
-summary(lm(MB$TajimaD~FA$TajimaD))
+vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 10000 --window-pi-step 2000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB10k
+vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 10000 --window-pi-step 2000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA10k
 
 ```
+
+The above calculates $\pi$ on chromosome 2 in 10kb windows, with the window moving along in 2kb steps - separately for each population. Based on the above, can you repeat this analysis and calculate $\pi$ in:
+
+- 50kb windows with 10kb steps
+- 200kb windows with 50kb steps.
+
+<div class="fold s">
+```{r eval = F}
+#50kb windows
+vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 50000 --window-pi-step 10000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB50k
+vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 50000 --window-pi-step 10000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA50k
+
+
+#200kb windows
+vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 200000 --window-pi-step 50000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB200k
+vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 200000 --window-pi-step 50000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA200k
+
+```
+</div>
+
+And that's it! Explore your outputs using the command line and check that everything makes sense. We will look at how to plot this data later.
+
+## Tajima's D
+
+We can also use VCFtools to calculate Tajima's *D*. Can you calculate this statistic for chromosome ChLG2 in 200kb windows? 
+
+<div class="fold s">
+```{r eval = F}
+
+#200kb windows
+vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD 200000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB200k
+vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD 200000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA200k
+
+```
+</div>
+
+What is the difference between the way we have constructed the windows between this analysis and the sliding window analysis of $\pi$? Do you think this will cause any problems?
+
+## SnpEff
+We will now use this very cool piece of software to annotate the SNPs in out VCF file, using the Tribolium reference genome. To run SnpEff we need woprk within the direcotry in which the program is contained. So please now use `cp -r` to copy the `SnpEff` directory (found in `PopGenBerlin/Software`) to your current working directory. Then use `cd` to navigate to your own copy of the `SnpEff` directory. SnpEff takes a VCF file, and compares the positions against a reference genome database. It then extracts lots of information from the genome database (whether the SNP is in an intron, exon etc., whether it is a zero-fold/four-fold site). The program comes with lots of pre-loaded genome databases, or we can generate ourselves. So our first task is to find out if they have a *Tribolium castaneum* genome. Go the help page for SnpEff, here:
+
+http://snpeff.sourceforge.net/SnpEff_manual.html
+
+Now see if you can figure out how to use the command line to i) get the software to print out the help message, ii) print out a list of all available databses, iii) View the first 10 rows of the table of databases, and iv) search the database table for "Tribolium":
+
+<div class="fold s">
+```{r eval = F}
+#Get help
+java -jar snpEff.jar
+
+#Get list of databases
+java -jar snpEff.jar databases #Lots!
+
+#Get first few rows
+java -jar snpEff.jar databases | head -n 10
+
+#Search for tribolium
+java -jar snpEff.jar databases | grep -i Tribolium
+
+```
+</div>
+
+Hopefully you have found that there is a *Tribolium castaneum* database, and that it is simply called "Tribolium_castaneum". Now that we have this information, we can annotate our VCF files, using the following command:
+
+```{r eval = F}
+java -Xmx4g -jar snpEff.jar -v Tribolium_castaneum ../TriboliumSSGenomes.vcf > Tribolium.ann.vcf
+```
+
+We will take you through each argument here separately - all this information can be obtained from the SnpEff help page.
+
+- java *calls up java!*
+- -Xmx4g *allocates 4gb memory to java*
+- -jar snpEff.jar *specifies the java file to be run*
+- -v *verbose mode, so you can see what the software is doing*
+- Tribolium_castaneum *the genome database*
+- ../TriboliumSSGenomes.vcf *your vcf file (not in this directory, hence "..")*
+- Tribolium.ann.vcf *the output name I have specified - this can be whatever you like*
+
+
+
+## Make some plots
+
+## Explore the genome browser
+
+library(qqman)
+manhattan
+
+ggplot
+
