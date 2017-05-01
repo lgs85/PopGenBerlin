@@ -102,7 +102,24 @@ We will take you through each argument here separately - all this information ca
 - ../TriboliumSSGenomes.vcf *your vcf file (not in this directory, hence "..")*
 - Tribolium.ann.vcf *the output name I have specified - this can be whatever you like*
 
+Once the program has run, we can use the associated software SnpSift to filter our annotated VCF file based on a range of criteria. Take a look at the SnpSift manual:
 
+http://snpeff.sourceforge.net/SnpSift.html
+
+Can you use SnpSift to write separate VCF files containing:
+
+- Only synonymous SNPs
+- Only non-synonymous (missense) SNPs
+- Only SNPs in the BRCA1 gene
+
+```{r eval = FALSE}
+java -jar SnpSift.jar filter "( ANN[*].EFFECT has 'synonymous_variant' )"   Tribolium.ann.vcf > Tribolium.ann.syn.vcf
+
+java -jar SnpSift.jar filter "ANN[*].EFFECT has 'missense_variant'" Tribolium.ann.vcf > Tribolium.ann.nonsyn.vcf
+
+java -jar SnpSift.jar filter "ANN[*].GENE = 'TC004535'" Tribolium.ann.vcf > Tribolium.ann.brca1.vcf
+
+```
 
 ## Make some plots
 
