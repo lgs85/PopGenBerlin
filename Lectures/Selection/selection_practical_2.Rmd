@@ -32,15 +32,6 @@ plink --bfile GreatTitsUnrel --family --fst --out GreatTitsUnrel
 ```
 </div>
 
-However, for the purposes of plotting we may prefer to plot FST in sliding windows. Plink does not have this capacity, but VCFtools does. Convert your binary plink file to VCF.
-
-<div class="fold s">
-```{R, eval = F}
-plink --bfile GreatTitsUnrel --family --fst --out GreatTitsUnrel
-```
-</div>
-
-
 But is this the best way to define our populations? What did our Admixture results show? We will now try to use our Admixture results from the K = 4 analysis to assign each individual to an "admixture population", then run a locus-based FST analyses across the Admixture populations. If you think you can do thi, go for it! Otherwise, step-by-step instructions below.
 
 First copy your Admixture results to your current directory.
@@ -111,61 +102,38 @@ plink --bfile GreatTitsUnrel --within K4pops.txt --fst --out GreatTitsK4
 ```
 </div>
 
-
 ##EigenGWAS
 
-##qqman
+Have a read of the EigenGWAS documentation here. This approach, along with a few other closely related approaches uses a GWAS on eigenvectors from a PCA to detect loci under divergent selection.
+
+Navigate into the EigenGWAS folder. Now try to figure out how to run EigenGWAS on the first four eigenvectors from a PCA.
+
+<div class="fold s">
+```{r eval = F}
+java -jar gear.jar eigengwas --bfile ../GreatTitsUnrel --ev 4 --out null
+```
+</div>
+
+And that's it! This analysis will take a little while to run - while it's running, you can start downloading your other files - a list of what you need to download is below.
+
+##Making plots
+In a new window, use SCP to download the following files to your laptop (these should all be in your "selection" folder on the server:
+
+- FST between your geographic populations (first plink analysis, ending in .fst)
+- FST between your admixture populations (second plink analysis, ending in .fst)
+- Your Eigenvectors from the EigenGWAS analysis (ending in .eigenvec)
+- Your EigenGWAS results (four files, all ending in .egwas)
 
 
+
+##Sliding window analysis
 ```{r}
-chrom = "CHR"
-pos = "POS"
-stat = "FST"
-windowsize = 2e05
-windowstep = 5e04
-i = 1
-x = dd
-
-sliding.window <- function(x,chrom = "CHR",pos = "POS",stat = "FST",windowsize = 2e05,windowstep = 5e04)
-{
-  chroms <- unique(x[,chrom])
-      sw2 <- function(wstart,data,chrom2 = chrom,pos2 = pos,stat2 = stat,wsize = windowsize)
-      {
-
-            wstop <- wstart+wsize
-            cd <- subset(subset(data,get(pos2) > wstart),get(pos2) < wstop)
-            return(c(wstart,wstop,nrow(cd),mean(cd[,stat2])))
-      }
-  
-  for(i in 1:length(chroms))
-  {
-    print(paste("starting chromosome",i))
-    cd <- subset(x,get(chrom) == chroms[i])
-    lastwindow <- floor(max(cd[,pos])/windowsize)*windowsize
-    cseq <- seq(0,lastwindow,windowstep)
-    cout <- t(sapply(cseq,sw2,data = cd))
-    if(i == 1)
-    {
-      output <- cout
-    } else
-    {
-      output <- rbind(output,cout)
-    }
-    
-    print(paste("done chromosome",i)) 
-  }
-  output <- data.frame(output)
-  colnames(output) <- c("BIN.START","BIN.STOP","N.SNPS",paste0("MEAN.",stat))
-  return(output)
-  
-}
-
 
 library(data.table)
+source("~/Documents/Teaching/PopGenBerlinLGS/sliding_window.r")
 dd <- fread("~/Documents/PopGenBerlinData/GreatTitsUnrel.fst",data.table = F,header = T)
+
 head(dd)
-str(x)
-str(chroms)
 sw <- sliding.window(dd)
 head(sw)
 plot(sw$MEAN.FST)
