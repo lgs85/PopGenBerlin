@@ -1,0 +1,108 @@
+---
+title: 'Selection: practical 2'
+author: "Lewis Spurgin"
+output:
+  html_document:
+    css: js/styles.css
+---
+
+<script src="js/hide.js"></script>
+
+## Introduction
+In this practical we will look at two approaches for detecting *recent* selection among populations - one that requires discrete, predefined populations, and one that does not
+
+## The data
+We will be using the great tits data set from the population structure practical. Within your own copy of the selection folder, make a directory called "selection_2", and set your working directory to this folder. Now copy the files GreatTits.bed and GreatTits.bim and GreatTits.fam to your current folder.
+
+Because in this session we are looking for loci under selection, we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can do this using info from your population structure session, and a single line of plink code.
+
+<div class="fold s">
+```{R, eval = F}
+plink --bfile GreatTits --keep ../../population_structure/GreatTitsFilteredPruned.rel.id --make-bed --out GreatTitsUnrel
+```
+</div>
+
+
+## Locus and sliding window FST
+We can calculate FST very easily within plink - in fact we have already done this in the population structure practical, using a python script. But in that instance we were only interested in average FST across pairs of populations. We are now interested in the FST for each marker across all of our populations. Can you figure out how to calculate this?
+
+<div class="fold s">
+```{R, eval = F}
+plink --bfile GreatTitsUnrel --family --fst --out GreatTitsUnrel
+```
+</div>
+
+But is this the best way to define our populations? What did our Admixture results show? We will now try to use our Admixture results from the K = 4 analysis to assign each individual to an "admixture population", then run a locus-based FST analyses across the Admixture populations. If you think you can do thi, go for it! Otherwise, step-by-step instructions below.
+
+First copy your Admixture results to your current directory.
+
+<div class="fold s">
+```{R, eval = F}
+cp ../../population_structure/admixture/GreatTitsThinned.4.Q .
+```
+</div>
+
+Remember that this file has one line per individual, with individuals in the same order as in your plink file. It then has the proportion of each cluster assigned to each individual as a separate column. What we need to do is determine, for each individual, which is the 'largest' of the four clusters. We can do this in R. Start up R in your server console, then load your admixture into a data frame.
+
+<div class="fold s">
+```{R, eval = F}
+R
+
+dd <- read.table("GreatTitsThinned.4.Q",header = F)
+```
+</div>
+
+Change the column names to "K1" to "K4".
+
+<div class="fold s">
+```{R, eval = F}
+colnames(dd) <- paste0("K",c(1:4))
+```
+</div>
+
+We now wish to generate a vector that tells us, for each individual, which of K1 to K4 is largest. Can you figure out how to do this, either using a `for` loop, or using `apply()`?
+
+<div class="fold s">
+```{R, eval = F}
+#Using a for loop
+output <- rep(NA,nrow(dd))
+for(i in 1:nrow(dd))
+{
+  output[i] <- names(which.max(dd[i,]))
+}
+
+#Using apply - faster and neater
+output <- apply(dd,1,function(x) names(which.max(x)))
+
+```
+</div>
+
+To define populations in plink, we are going to need to give it a file with our original population IDs in the first column, individual IDs in the second, and new population IDs in the third. We can create this using our output, and our.fam file. Load the .fam file into R
+
+<div class="fold s">
+```{r, eval = F}
+pops <- read.table("GreatTitsUnrel.fam")
+```
+</div>
+
+Now write an output file.
+
+<div class="fold s">
+```{r, eval = F}
+towrite <- data.frame(oldpop = pops$V1,ind = pops$V2,newpop = output)
+write.table(towrite,"K4pops.txt",quote = F,col.names = F, row.names = F)
+```
+</div>
+
+Now we can quit R, and use plink to calculate FST based on our admixture proportions.
+
+<div class="fold s">
+```{r, eval = F}
+plink --bfile GreatTitsUnrel --within K4pops.txt --fst --out GreatTitsK4
+```
+</div>
+
+
+##EigenGWAS
+
+##qqman

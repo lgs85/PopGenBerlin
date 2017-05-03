@@ -12,22 +12,24 @@ output:
 In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, PCA) to detect and quantify population structure. We will also continue to developing our plotting skills in R.
 
 ## The data
-We will be using a large SNP dataset from nine European great tit populations to explore continental-scale genomic structure. The data are stored as plink files on the "population_structure" on the server. Log onto the server and copy the directory to your working folder. Then use the command line to explore the files to try to figure out how many individuals and SNP markers have been typed.
+We will be using a large SNP dataset from nine European great tit populations to explore continental-scale genomic structure. The data are stored as binary plink files in the "population_structure" folder. 
 
 
-## Data cleaning in plink
+## Data exploration and cleaning in plink
 
 In the genomic diversity practical we assumed that our data was cleaned and ready to go. However, this is usually not the case! We may have markers that are not in Hardy-Weinberg equilibrium in our datset, markers that are in high LD, or highly related individuals. These may invalidate the assumptions of some of our analyses. It is important that, for each analysis, we check our assumtpions ensure that our data does not violate them. Plink has lots of great functions that enable us to clean our datasets. Before looking at population structure, we are going to do some data cleaning.
 
-You will remember from the last practical that we calculated heterozygosity and HWE for every locus in our flour beetle data. We can do the same thing in plink. Further, we can get plink to automatically generate a list of markers that are exceed a given Hardy-Weinberg P value threshold, and then filter our dataset to either exclude or include these loci. Let's aim to exclude loci with a Hardy-Weinberg p value < 0.01. Can you figure out from the plink manual how we might do this on our GreatTits .ped file?
+Before we clean our data, ese the command line to explore .bed, .bim and .fam files to try to figure out how many individuals and SNP markers have been typed.
+
+You will remember from the last practical that we calculated heterozygosity and HWE for every locus in our flour beetle data. We can do the same thing in plink. Further, we can get plink to automatically generate a list of markers that are exceed a given Hardy-Weinberg P value threshold, and then filter our dataset to either exclude or include these loci. Let's aim to exclude loci with a Hardy-Weinberg p value < 0.01. Can you figure out from the plink manual how we might do this on our GreatTits .bed file?
 
 <div class="fold s">
 ```{r eval = F}
-plink --file GreatTits --hwe 0.01 --make-bed --out GreatTitsFiltered 
+plink --bfile GreatTits --hwe 0.01 --make-bed --out GreatTitsFiltered 
 ```
 </div>
 
-Have a look at this output - how many individuals and loci went into the analysis? How many were written to the output file? Note the use of the option `--make-bed` at the end. This option generates a binary plink file, which is smaller than the standard .ped files. Because we are going to be generating multiple files for analysis in plink, we don't want to be using up too much space on our hard disks/servers.
+Have a look at this output - how many individuals and loci went into the analysis? How many were written to the output file? Note the use of the option `--make-bed` at the end. This option generates a binary plink file as its output.
 
 We will also filter based on minor allele frequencies. Can you find the command to exclude all loci with a minor allele frequency < 0.05? Why might we want to do this?
 

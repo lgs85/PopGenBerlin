@@ -13,7 +13,7 @@ output:
 We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. Finally, we will learn how to annotate a vcf file and look at some of the cool things we can do if we have a reference genome.
 
 ## The data
-We will be using the Tribolium sexual selection data from the genomic diversity practical. Log into your working folder on the Amazon server, and make a new folder for the selection practical, and copy the file TriboliumSSGenomes.vcf to this folder.
+We will be using the Tribolium sexual selection data from the genomic diversity practical. Log into your working folder on the Amazon server, and within your Data folder, copy TriboliumSSGenomes.vcf from the genetic diversity folder into the selection folder. Now change your working directory to the selection folder.
 
 ## Site and window nucleotide diversity
 In the genetic diversity practical we calculated $\pi$ in non-overlapping 200kb windows, and compared distributions of windowed-averages across experimental populations. For visualisation of how variation occurs along genomes, we sometimes wish to calculate statistics in *sliding* windows. This is done very simply using vcftools - here is the code to calculate.
@@ -63,7 +63,9 @@ vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD 50000 --indv 2014_SO
 What is the difference between the way we have constructed the windows between this analysis and the sliding window analysis of $\pi$? Do you think this will cause any problems?
 
 ## SnpEff
-We will now use this very cool piece of software to annotate the SNPs in out VCF file, using the Tribolium reference genome. To run SnpEff we need woprk within the direcotry in which the program is contained. So please now use `cp -r` to copy the `SnpEff` directory (found in `PopGenBerlin/Software`) to your current working directory. Then use `cd` to navigate to your own copy of the `SnpEff` directory. SnpEff takes a VCF file, and compares the positions against a reference genome database. It then extracts lots of information from the genome database (whether the SNP is in an intron, exon etc., whether it is a zero-fold/four-fold site). The program comes with lots of pre-loaded genome databases, or we can generate ourselves. So our first task is to find out if they have a *Tribolium castaneum* genome. Go the help page for SnpEff, here:
+We will now use this very cool piece of software to annotate the SNPs in out VCF file, using the Tribolium reference genome. To run SnpEff we need woprk within the direcotry in which the program is contained. Use `cd` to navigate to your own copy of the `SnpEff` directory, which is within the `selection` directory.
+
+SnpEff takes a VCF file, and compares the positions against a reference genome database. It then extracts lots of information from the genome database (whether the SNP is in an intron, exon etc., whether it is a zero-fold/four-fold site). The program comes with lots of pre-loaded genome databases, or we can generate ourselves. So our first task is to find out if they have a *Tribolium castaneum* genome. Go the help page for SnpEff, here:
 
 http://snpeff.sourceforge.net/SnpEff_manual.html
 
@@ -279,6 +281,7 @@ str(nonsyn)
 </div>
 
 Our aim here is to plot synonymous and non-synonymous diversity *from the same windows*. So what we need is a single data frame with non-synonymous and synonymous nucleotide diversity as separate columns. However, we can see that we have different numbers of windows in the two sets of results Can you figure out where and why the two data frames differ? Use R to do this.
+
 <div class="fold s">
 ```{R}
 #Identify which rows are in syn but not in non-syn
@@ -400,7 +403,7 @@ Discuss the figure with some colleagues. How do you interpret the findings? Do y
 If you do identify regions showing unusual patterns of diversity, it is generally a good idea to follow them up a bit further. Let's take a closer look at the region with highest $\pi$ in our dataset, found at around position 8MB. One thing we can do is zoom in on the region, using smaller sliding windows. Let's take a look with the 50kb window data. 
 
 <div class="fold s">
-```{R}
+```{R, warning = F}
 
 #Read in data
 temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB50k.windowed.pi",header = T)
@@ -417,15 +420,13 @@ FigA <- ggplot(pi50,aes(x = BIN_START/1000, y = PI,col = Pop))+
 
 FigA
 
-
-(pi50[order(pi50$PI,decreasing = T),])
 ```
 </div>
 
 The region of high diversity in the FA population is still there. How about using 10kb windows?
 
 <div class="fold s">
-```{R}
+```{R, warning = F}
 
 #Read in data
 temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB10k.windowed.pi",header = T)
@@ -449,7 +450,7 @@ There is still something going on, but the pattern is much less clear - any idea
 
 Another thing we can do is look at a range of statistics in our region of interest. We can take a look at Tajima's D for the FA population.
 <div class="fold s">
-```{R}
+```{R, warning = F}
 
 #Read in data
 dd <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA50k.Tajima.D",header = T)
@@ -459,40 +460,21 @@ dd$Region <- ifelse(dd$BIN_START %in% seq(8e06,9e06,5e04),"HD region","Not HD re
 
 #Make the plot
 Fig <- ggplot(dd,aes(x = BIN_START/1000, y = TajimaD,col = Region))+
-  geom_point()
+  geom_point()+
+  scale_colour_manual(values = c("black","grey"))
 
 Fig
 
 ```
 </div>
 
-We can see that the region has fairly high Tajima's D. Check what's going on with Tajima's D in the MB population:
-
-<div class="fold s">
-```{R}
-
-#Read in data
-dd <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB50k.Tajima.D",header = T)
-
-#Make a variable to colour the region of interest
-dd$Region <- ifelse(dd$BIN_START %in% seq(8e06,9e06,5e04),"HD region","Not HD region")
-
-#Make the plot
-Fig <- ggplot(dd,aes(x = BIN_START/1000, y = TajimaD,col = Region))+
-  geom_point()
-
-Fig
-
-```
-</div>
-
-Nothing going on in this region in the MB population. So this regions is characterised by high diversity and high Takima's D in the FA, but not MB, population. What be the explanation for this? What are the problems with the approach we have taken?
+So this region is characterised by high diversity and high Tajima's D in the FA, but not MB, population. What is the explanation for this? What are the problems with the approach we have taken?
 
 Finally, we can take a look at what genes are in this region of the genome. Go to the Tribolium genome browser here:
 
-https://www.ncbi.nlm.nih.gov/projects/mapview/map_search.cgi?taxid=7070&build=102.0
+https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?context=genome&acc=GCF_000002335.3
 
-Use the genome browser to zoom into the relevant region on chromosome Lg2. What genes are there? Are there good candidates? Is looking for genes in this way a good idea?
+Use the genome data viewer to zoom into the relevant region on chromosome Lg2. What genes are there? Are there good candidates? Is looking for genes in this way a good idea?
 
 ##If you are finished
 Download the table of gene locations for Tribolium LG2, here:
@@ -502,7 +484,8 @@ https://www.ncbi.nlm.nih.gov/genome/proteins/216?genome_assembly_id=271841
 Read this table into R, and use R to:
 
 - pull out a list of genes within a region of high genomic diversity
-- plot genomic diversity for a region, and map on some gene names - like this:
+- plot genomic diversity for a region, and map on some gene locations - like this:
+
 
 ```{R,echo = F,warning = F,message = F}
 #Read in data
@@ -515,12 +498,19 @@ pi10$Pop <- c(rep("MB",nrow(temp1)),rep("FA",nrow(temp2)))
 
 #Make the plot
 Fig <- ggplot(pi10,aes(x = BIN_START/1000, y = PI,col = Pop))+
-  geom_point()+
+  geom_line()+
   theme_bw()+
-  xlim(8000,9000)
+  xlim(8000,9000)+
+  xlab("Genomic position (KB)")
 
 genes <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/LG2genes.txt",header = T)
 genes <- subset(genes,Start %in% (8.4e06:8.6e06))
 genes <- subset(genes,!duplicated(GeneID))
+genes$y1 <- rep(0.022,nrow(genes))
+
+Fig +
+  xlim(8400,8600)+
+  geom_segment(data = genes,aes(x = Start/1000,xend = Stop/1000,y = y1,yend = y1,col = NULL),lwd = 2)
+
 ```
 
