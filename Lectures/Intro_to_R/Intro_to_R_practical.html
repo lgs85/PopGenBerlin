@@ -67,6 +67,7 @@ h6 {
 }
 </style>
 
+<link href="data:text/css,%2Eshowopt%20%7B%0A%20%20background%2Dcolor%3A%20%23004c93%3B%0A%20%20color%3A%20%23FFFFFF%3B%20%0A%20%20width%3A%20100px%3B%0A%20%20height%3A%2020px%3B%0A%20%20text%2Dalign%3A%20center%3B%0A%20%20vertical%2Dalign%3A%20middle%20%21important%3B%0A%20%20float%3A%20right%3B%0A%20%20font%2Dfamily%3A%20sans%2Dserif%3B%0A%20%20border%2Dradius%3A%208px%3B%0A%7D%0A%0A%2Eshowopt%3Ahover%20%7B%0A%20%20%20%20background%2Dcolor%3A%20%23dfe4f2%3B%0A%20%20%20%20color%3A%20%23004c93%3B%0A%7D%0A%0Apre%2Eplot%20%7B%0A%20%20background%2Dcolor%3A%20white%20%21important%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -118,38 +119,38 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Introduction to R: practical</h1>
 <h4 class="author"><em>Lewis Spurgin</em></h4>
-<h4 class="date"><em>May 2017</em></h4>
 
 </div>
 
 
+<script src="data:application/x-javascript,%24%28document%29%2Eready%28function%28%29%20%7B%0A%0A%20%20%24chunks%20%3D%20%24%28%27%2Efold%27%29%3B%0A%0A%20%20%24chunks%2Eeach%28function%20%28%29%20%7B%0A%0A%20%20%20%20%2F%2F%20add%20button%20to%20source%20code%20chunks%0A%20%20%20%20if%20%28%20%24%28this%29%2EhasClass%28%27s%27%29%20%29%20%7B%0A%20%20%20%20%20%20%24%28%27pre%2Er%27%2C%20this%29%2Eprepend%28%22%3Cdiv%20class%3D%5C%22showopt%5C%22%3EShow%20Answer%3C%2Fdiv%3E%3Cbr%20style%3D%5C%22line%2Dheight%3A22px%3B%5C%22%2F%3E%22%29%3B%0A%20%20%20%20%20%20%24%28%27pre%2Er%27%2C%20this%29%2Echildren%28%27code%27%29%2Eattr%28%27class%27%2C%20%27folded%27%29%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20%2F%2F%20add%20button%20to%20output%20chunks%0A%20%20%20%20if%20%28%20%24%28this%29%2EhasClass%28%27o%27%29%20%29%20%7B%0A%20%20%20%20%20%20%24%28%27pre%3Anot%28%2Er%29%27%2C%20this%29%2Ehas%28%27code%27%29%2Eprepend%28%22%3Cdiv%20class%3D%5C%22showopt%5C%22%3EShow%20Output%3C%2Fdiv%3E%3Cbr%20style%3D%5C%22line%2Dheight%3A22px%3B%5C%22%2F%3E%22%29%3B%0A%20%20%20%20%20%20%24%28%27pre%3Anot%28%2Er%29%27%2C%20this%29%2Echildren%28%27code%3Anot%28r%29%27%29%2EaddClass%28%27folded%27%29%3B%0A%0A%20%20%20%20%20%20%2F%2F%20add%20button%20to%20plots%0A%20%20%20%20%20%20%24%28this%29%2Efind%28%27img%27%29%2Ewrap%28%27%3Cpre%20class%3D%5C%22plot%5C%22%3E%3C%2Fpre%3E%27%29%3B%0A%20%20%20%20%20%20%24%28%27pre%2Eplot%27%2C%20this%29%2Eprepend%28%22%3Cdiv%20class%3D%5C%22showopt%5C%22%3EShow%20Plot%3C%2Fdiv%3E%3Cbr%20style%3D%5C%22line%2Dheight%3A22px%3B%5C%22%2F%3E%22%29%3B%0A%20%20%20%20%20%20%24%28%27pre%2Eplot%27%2C%20this%29%2Echildren%28%27img%27%29%2EaddClass%28%27folded%27%29%3B%0A%0A%20%20%20%20%7D%0A%20%20%7D%29%3B%0A%0A%20%20%2F%2F%20hide%20all%20chunks%20when%20document%20is%20loaded%0A%20%20%24%28%27%2Efolded%27%29%2Ecss%28%27display%27%2C%20%27none%27%29%0A%0A%20%20%2F%2F%20function%20to%20toggle%20the%20visibility%0A%20%20%24%28%27%2Eshowopt%27%29%2Eclick%28function%28%29%20%7B%0A%20%20%20%20var%20label%20%3D%20%24%28this%29%2Ehtml%28%29%3B%0A%20%20%20%20if%20%28label%2EindexOf%28%22Show%22%29%20%3E%3D%200%29%20%7B%0A%20%20%20%20%20%20%24%28this%29%2Ehtml%28label%2Ereplace%28%22Show%22%2C%20%22Hide%22%29%29%3B%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%24%28this%29%2Ehtml%28label%2Ereplace%28%22Hide%22%2C%20%22Show%22%29%29%3B%0A%20%20%20%20%7D%0A%20%20%20%20%24%28this%29%2Esiblings%28%27code%2C%20img%27%29%2EslideToggle%28%27fast%27%2C%20%27swing%27%29%3B%0A%20%20%7D%29%3B%0A%7D%29%3B"></script>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>The aim of this practical is to get you comfortable using R and R studio. By the end of this practical, you ahould be able to explore data frames, write a short program to perform some basic data processing, and plot and test some results. We will also have our first go at reading data into R. Some general tips:</p>
+<p>The aim of this practical is to get you comfortable using R and R studio. By the end of this practical, you should be able to explore data frames, write a short program to perform some basic data processing, and plot and test some results. We will also have our first go at reading data into R. Some general tips:</p>
 <ul>
-<li>Write all your commands in a script and run them from there.</li>
+<li>Write all your commands in a script and run them from there</li>
 <li>Remove commands from your script that are not a useful part of your analysis</li>
-<li>Annotate your script well (using <code>#</code>). No amount of annotation is too much if it helps you understand what you’re doing.</li>
+<li>Annotate your script well (using <code>#</code>). No amount of annotation is too much if it helps you understand what you’re doing</li>
 <li>Use R’s help (e.g. <code>?mean</code>) if you are not sure what a function does</li>
 <li>Google is your friend</li>
 </ul>
+<p>All the code you will need for this practical is included in this handout. However, you should try to figure things out for yourself before clicking on “show”.</p>
 </div>
 <div id="the-data" class="section level2">
 <h2>The data</h2>
-<p>Scientists have taken blood samples from a rare passerine bird species captured from mainland and island populations. They have genotyped all the samples at a single nucleotide polymorphism (SNP), at which they found two alleles (A and C). They wish to know whether, at this locus, the mainland and island populations have different levels of genetic diversity.</p>
+<p>I have simulated some genetic data from a bird species captured from mainland and island populations. All simulated samples have been genotyped at a single nucleotide polymorphism (SNP), at which two alleles (A and C) are found. We wish to know whether, at this locus, the mainland and island populations have different levels of genetic diversity.</p>
 </div>
 <div id="instructions" class="section level2">
 <h2>Instructions</h2>
 <p>Our aim is to calculate <em>observed heterozygosity</em> (i.e. the proportion of heterozygotes) in each of the populations in our dataset. We will plot these proportions, and test whether levels of heterozygosity differ between the two populations.</p>
 <p><em>If you think you can do this without guidance, please go ahead and do so</em>. Otherwise, step-by-step instructions are provided below.</p>
-<div id="step-1.-set-the-working-directory-read-in-and-explore-the-data." class="section level3">
-<h3>Step 1. Set the working directory, read in and explore the data.</h3>
-<p>Open R studio. Either by typing in the console, or using the menu, set your working directory to the <em>Intro_to_R</em> folder. You will need to change the command below, depending on where the folder is stored on your computer. Also note how the command for changing the working directory in R differs to the corresponding command in bash and python.</p>
-<pre class="r"><code>getwd
-setwd(&quot;path-to-your-folder/Intro_to_R&quot;)</code></pre>
-<p>Minimise R studio for a moment, and open up your file explorer. Find the <em>Intro_to_R/Data</em> folder for this lecture, and open the file <em>Microsat_data.csv</em>. You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see tht the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.</p>
-<p>We are now going to data read this data into R using the function <code>read.csv()</code>, and assign it to an object name. We will use the name <code>dd</code>. Go back to R studio, and create a new R script. Save it using a sensible name in the <em>Intro_to_R</em> folder. At the top of your new R script, type the following:</p>
-<pre class="r"><code>dd &lt;- read.csv(&quot;../Data/Mainland_Island_SNP_data.csv&quot;)</code></pre>
+<div id="download-read-in-and-explore-the-data." class="section level3">
+<h3>Download, read in and explore the data.</h3>
+<p>Using the <code>scp -r</code> command, download the “intro_to_r” folder from the amazon server to your laptop.</p>
+<p>Now open up your file explorer. Find the <em>Intro_to_R/Data</em> folder for this lecture, and open the file <em>Microsat_data.csv</em>. You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.</p>
+<p>Now open R studio. Either by typing in the console, or using the menu, set your working directory to the <em>Intro_to_R</em> folder. You will need to change the command below, depending on where the folder is stored on your computer. Also note how the command for changing the working directory in R differs to the corresponding command in bash and python. We are then going to data read this data into R using the function <code>read.csv()</code>, and assign it to an object name. We will use the name <code>dd</code>. Go back to R studio, and create a new R script. Save it using a sensible name in the <em>Intro_to_R</em> folder. At the top of your new R script, type the following:</p>
+<pre class="r"><code>setwd(&quot;~/Documents/Teaching/PopGenBerlinLGS/intro_to_r&quot;)
+dd &lt;- read.csv(&quot;Mainland_Island_SNP_data.csv&quot;)</code></pre>
 <p>Make sure that you understand what this command is doing, including what is happening with the “..” part of the file path. Run the code, then click on the “environment” tab in the top-right pane of R studio. The object <code>dd</code> should now be listed. If so, the data has been successfully loaded into R.</p>
 <p>We can explore our data by typing some functions into our script and running them. We will use the functions <code>head()</code> and <code>str()</code>.</p>
 <pre class="r"><code>head(dd)</code></pre>
@@ -211,15 +212,69 @@ setwd(&quot;path-to-your-folder/Intro_to_R&quot;)</code></pre>
 ## [239] Island   Island   Island   Island   Island   Island   Island  
 ## [246] Island   Island   Island   Island   Island  
 ## Levels: Island Mainland</code></pre>
-<p>We can also use square bracket notation to call up individual rows and column. Using this notation, get R to print out (if you can’t remember how to do this, use the internet):</p>
-<ul>
-<li>the 45th row</li>
-<li>the 2nd column</li>
-<li>the genotype for the 22nd individual</li>
-</ul>
+<p>We can also use square bracket notation to call up individual rows and columns. Using this notation, get R to print out (if you can’t remember how to do this, use the internet):</p>
+<ol style="list-style-type: decimal">
+<li>The 45th row</li>
+</ol>
+<div class="fold s">
+<pre class="r"><code>dd[45,]</code></pre>
+<pre><code>##    Ind_ID      Pop Allele_1 Allele_2
+## 45 Ind_45 Mainland        A        C</code></pre>
 </div>
-<div id="step-two---define-our-genotypes" class="section level3">
-<h3>Step two - define our genotypes</h3>
+<ol start="2" style="list-style-type: decimal">
+<li>The 2nd column</li>
+</ol>
+<div class="fold s">
+<pre class="r"><code>dd[,2]</code></pre>
+<pre><code>##   [1] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##   [8] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [15] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [22] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [29] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [36] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [43] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [50] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [57] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [64] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [71] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [78] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [85] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [92] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+##  [99] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+## [106] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+## [113] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+## [120] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+## [127] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+## [134] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+## [141] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+## [148] Mainland Mainland Mainland Mainland Mainland Mainland Mainland
+## [155] Mainland Mainland Mainland Island   Island   Island   Island  
+## [162] Island   Island   Island   Island   Island   Island   Island  
+## [169] Island   Island   Island   Island   Island   Island   Island  
+## [176] Island   Island   Island   Island   Island   Island   Island  
+## [183] Island   Island   Island   Island   Island   Island   Island  
+## [190] Island   Island   Island   Island   Island   Island   Island  
+## [197] Island   Island   Island   Island   Island   Island   Island  
+## [204] Island   Island   Island   Island   Island   Island   Island  
+## [211] Island   Island   Island   Island   Island   Island   Island  
+## [218] Island   Island   Island   Island   Island   Island   Island  
+## [225] Island   Island   Island   Island   Island   Island   Island  
+## [232] Island   Island   Island   Island   Island   Island   Island  
+## [239] Island   Island   Island   Island   Island   Island   Island  
+## [246] Island   Island   Island   Island   Island  
+## Levels: Island Mainland</code></pre>
+</div>
+<ol start="3" style="list-style-type: decimal">
+<li>The genotype for the 22nd individual</li>
+</ol>
+<div class="fold s">
+<pre class="r"><code>dd[22,c(&quot;Allele_1&quot;,&quot;Allele_2&quot;)]</code></pre>
+<pre><code>##    Allele_1 Allele_2
+## 22        A        C</code></pre>
+</div>
+</div>
+<div id="define-our-genotypes" class="section level3">
+<h3>Define our genotypes</h3>
 <p>In our dataset we have separate information for each of the two alleles found in each individual. For example, we can see from when we ran the <code>head()</code> function that the first individual in our dataset has a “C” for its first allele, and a “C” for its second allele. This individual is therefore a homozygote at this locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your terminal (I know we said not to do this, but it’s ok here!):</p>
 <pre class="r"><code>4 &lt; 3
 4 &gt; 3
@@ -234,17 +289,18 @@ x == 4
 
 x &lt;- &quot;cat&quot;
 x == &quot;cat&quot;</code></pre>
-<p>Hopefully you have figures out that a single equals sign and double equals sign mean very different things to R. A single equals sign generally works in the same way as the <code>&lt;-</code> operator (with a few subtle differences), whereas a double equals sign asks a logical question, and returns a value of <code>TRUE</code> or <code>FALSE</code>.</p>
-<p>So coming back to our SNP data, we can use the <code>==</code> operator to ask whether an individual is a homozygote, by asking whether the variables <code>Allele_1</code> and <code>Allele_2</code> are the same.</p>
-<pre class="r"><code># Get the data for the first individual and have a look at it
+<p>Hopefully you have figured out that a single equals sign and double equals sign mean very different things to R. A single equals sign generally works in the same way as the <code>&lt;-</code> operator (with a few subtle differences), whereas a double equals sign asks a logical question, and returns a value of <code>TRUE</code> or <code>FALSE</code>.</p>
+<p>So coming back to our SNP data, we can use the <code>==</code> operator to ask whether the first individual in our dataset is a homozygote, by asking whether the variables <code>Allele_1</code> and <code>Allele_2</code> for this individual are the same.</p>
+<div class="fold s">
+<pre class="r"><code># Get the data for the first individual
 ind1 &lt;- dd[1,]
-ind1</code></pre>
-<pre><code>##   Ind_ID      Pop Allele_1 Allele_2
-## 1  Ind_1 Mainland        C        C</code></pre>
-<pre class="r"><code># Now ask whether Allele 1 and Allele 2 are identical
+
+# Now ask whether Allele 1 and Allele 2 are identical
 ind1$Allele_1 == ind1$Allele_2</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>Because R works so nicely with vectors, we can do this for every individual in our dataset, as follows:</p>
+</div>
+<p>Because R works so nicely with vectors, we can do this for every individual in our dataset. Can you generate a list of <code>TRUE</code> and <code>FALSE</code> values telling you whether each individual is a homozygote?</p>
+<div class="fold s">
 <pre class="r"><code>dd$Allele_1 == dd$Allele_2</code></pre>
 <pre><code>##   [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE
 ##  [12] FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE
@@ -269,7 +325,9 @@ ind1$Allele_1 == ind1$Allele_2</code></pre>
 ## [221]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
 ## [232]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE
 ## [243] FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE</code></pre>
-<p>This gives us 250 <code>TRUE</code> or <code>FALSE</code> values, and tells us whether each individual in our dataset is a homozygote or not. Now all we need to do is turn this into a column of our data frame, indicating whether each individual is a homozygote or a heterozygote. We can do this using the <code>ifelse()</code> function. Check out what this function does using <code>?ifelse</code>. Add the following to your R script.</p>
+</div>
+<p>This gives us 250 <code>TRUE</code> or <code>FALSE</code> values, and tells us whether each individual in our dataset is a homozygote or not. Now all we need to do is turn this into a column of our data frame, indicating whether each individual is a homozygote or a heterozygote. We can do this using the <code>ifelse()</code> function. Check out what this function does using <code>?ifelse</code>. Can you generate a column saying whether each individual in your dataset is a homozygote or heterozygote? You should end up with something like this:</p>
+<div class="fold s">
 <pre class="r"><code>#Add a Heterozygosity column
 dd$Het &lt;- ifelse(dd$Allele_1 == dd$Allele_2,&quot;Homozygote&quot;,&quot;Heterozygote&quot;)
 
@@ -282,6 +340,7 @@ head(dd)</code></pre>
 ## 4  Ind_4 Mainland        A        A   Homozygote
 ## 5  Ind_5 Mainland        A        C Heterozygote
 ## 6  Ind_6 Mainland        A        C Heterozygote</code></pre>
+</div>
 <p>We can see that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot.</p>
 </div>
 <div id="step-three---calculate-and-plot-genotype-frequencies" class="section level3">
@@ -328,12 +387,12 @@ het_freqs</code></pre>
 <h2>Putting it all together</h2>
 <p>How does your script look? Can you figure out which commands you need to perform all the above analysis? Your script should end up looking something like the <em>Mainland_Island_SNP_analysis.R</em> script including in the <em>Intro_to_R</em> folder. Note how we end up doing quite a lot with just five lines of code!</p>
 </div>
-<div id="finished-some-more-challenging-tasks" class="section level2">
-<h2>Finished? Some more challenging tasks</h2>
+<div id="if-youve-finished" class="section level2">
+<h2>If you’ve finished</h2>
 <ul>
 <li><p>Calculate and plot the frequency of the two alleles in each population.</p></li>
 <li><p>Calculate expected genotype frequencies for each population, according to Hardy-Weinberg. Compare your observed and expected frequencies using chi-squared tests.</p></li>
-<li><p>I simulated the dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script <em>Mainland_Island_SNP_data.R</em>, figure out what is being done with each line of code, and annotate the script accordingly.</p></li>
+<li><p>I simulated the dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script “Mainland_Island_SNP_data.R”, figure out what is being done with each line of code, and annotate the script accordingly.</p></li>
 <li><p>Simulate your own SNP dataset, either based on my approach, or by developing your own code.</p></li>
 </ul>
 </div>

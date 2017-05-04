@@ -11,12 +11,12 @@ output:
 ## Introduction
 The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then vcftools to estimate some common measures of genetic diversity in individuals and populations. We will then develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.
 
-Although we include most of the answers in thisdocument, you should try to figure things out for yourself before clicking on "show". To do this, uou will need the documentation for vcftools open. It can be found at https://vcftools.github.io/man_latest.html
+Once again, you should try to figure things out for yourself before clicking on "show". To do this, you will need the documentation for vcftools open. It can be found at https://vcftools.github.io/man_latest.html
 
 ## The data
 We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle *Tribolium castaneum*. The data file includes SNP information (in vcf format) from six resequenced genomes. Three of these individuals come from a population that has been experimentally evolved under male-biased sex ratios for ~80 generations, while the other three come from a population with a female-biased sex ratio (see Lumley et al. 2015, *Nature* for details of the experimental lines). We wish to know whether levels of genomic diversity differs between these two populations as a result of differing patterns of sexual selection.
 
-Log onto the Amazon EC2 server and change your directory to the `Data/TriboliumSSGenomes` folder. You should see two files. `TriboliumSSGenomes.vcf` and  `Tribolium_sample_names.csv`. We can't open these files in the server, but we can explore their properties and look at them using the command line. Try to do the following:
+Log onto the Amazon EC2 server and change your directory to the `genetic_diversity` folder within your own set of files. You should see two files. `TriboliumSSGenomes.vcf` and  `Tribolium_sample_names.csv`. We can't open these files in the server, but we can explore their properties and look at them using the command line. Try to do the following:
 
 1. Find out the size of each of the two files
 2. Print the contents of `Tribolium_sample_names.csv` to the terminal
@@ -33,7 +33,7 @@ head -n 11 TriboliumSSGenomes.vcf #Get first 100 lines
 
 These files are in more or less exactly the same format as when received from a sequencing facility. The facility used their own sample names, and the file `Tribolium_sample_names.csv` lists our original sample names followed by the sample name used in the vcf file. This will become important later. Note for now that the sample names are coded with population and individual ID ("MA" for the male-biased population and "FB"" for the female-biased population, followed by "_", followed by the individual ID).
 
-Before calculating heterozygosity, we will first check that the file can be read into the program. Try reading in the data into vcftools without performing any additional operations.
+Before calculating heterozygosity, we will first check that the file can be read into the program. Try reading in the data into VCFtools without performing any additional operations.
 
 <div class="fold s">
 ```{r, eval = F}
@@ -41,7 +41,9 @@ vcftools --vcf TriboliumSSGenomes.vcf
 ```
 </div>
 
-The two most basic ways that we can estimate genetic diversity using vcftools are i) by estimating the number of heterozygous sites (and an inbreeding coefficient) for each individual, and ii) by estimating observed and expected heterozygosity for each marker. Can you find the command for each of these and run them on the `TriboliumSSGenomes.vcf` dataset. Remember to specify a suitable output name.
+What does VCFtools give you? What do you now know about the dataset?
+
+The two most basic ways that we can estimate genetic diversity using vcftools are i) by estimating the number of heterozygous sites (and an inbreeding coefficient) for each individual, and ii) by estimating observed and expected heterozygosity for each marker. Can you find the command for each of these and run them on the "TriboliumSSGenomes.vcf" dataset. Remember to specify a suitable output name.
 
 <div class="fold s">
 ```{r, eval = F}
@@ -84,7 +86,7 @@ Hopefully you figured out that individuals 2014_SOL_MG4955, 2014_SOL_MG4956 and 
 
 Before we have a go at plotting our data, we will first calculate one more measure of genetic diversity - linkage disequilibrium. Our aim is to look at how LD decays with physical distance between SNPs, and to see whether this relationship varies between our two populations. Lower levels of LD and faster rates of LD decay are typically found in large, outbred populations, whereas in small bottlenecked populations background levels of LD are higher and LD decays much more slowly.
 
-Because LD is calculated between *pairs* of markers, the number of calculations vcftools would have to perform for a whole genome dataset would be huge, and unnecessary for our purposes here. We will therefore restrict our analyses to i) a single chromosome (ChLG1), ii) pairs of markers within 100 kb of each other, and iii) pairs of markers with R2 values > 0.001. Using this information, can you calculate LD for both the MB and FA populations? Answer below.
+Because LD is calculated between *pairs* of markers, the number of calculations VCFtools would have to perform for a whole genome dataset would be huge, and unnecessary for our purposes here. We will therefore restrict our analyses to i) a single chromosome (ChLG1), ii) pairs of markers within 100 kb of each other, and iii) pairs of markers with R2 values > 0.001. Using this information, can you calculate LD for both the MB and FA populations? Answer below.
 
 <div class="fold s">
 ```{r eval = F}
@@ -95,9 +97,10 @@ vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG1 --ld-window-bp 10000
 ```
 </div>
 
-Use `ls - l` to look at the size of the output files. You will see that thety are *huge*. Even with our restrictions, we have more than 50 million rows in each of our files. So instead of downloading this onto our laptops for plotting, we will perform a bit of extra processing on the data in the server, using R. Open up a text editor (or R studio) and save an R script using a suitable name. Then, on the Amazon server, start up R. We are going to type our instructions into a script, so we have a record of what we've done, but at the same time we will use the console interactively. First, we need to load a library At the top of your script, add the following code, then copy and paste the command into your console:
+Use `ls - l` to look at the size of the output files. You will see that thety are *huge*. Even with our restrictions, we have more than 50 million rows in each of our files. So instead of downloading this onto our laptops for plotting, we will perform a bit of extra processing on the data in the server, using R. Open up a text editor (or R studio) and save an R script using a suitable name. Then, on the Amazon server, start up R. We are going to type our instructions into a script, so we have a record of what we've done, but at the same time we will use the console interactively. First, we need to load a library. At the top of your script, add the following code, then copy and paste the command into your console:
 
 ```{r eval = F}
+R
 library(data.table)
 ```
 
@@ -105,8 +108,8 @@ The library `data.table` includes the very useful function `fread()`, which is d
 
 <div class="fold s">
 ```{r eval = F}
-MB <- fread("../../../PopGenBerlinData/TriboliumSSGenomesMB.geno.ld")
-FA <- fread("../../../PopGenBerlinData/TriboliumSSGenomesFA.geno.ld")
+MB <- fread("TriboliumSSGenomesMB.geno.ld")
+FA <- fread("TriboliumSSGenomesFA.geno.ld")
 ```
 </div>
 
@@ -122,21 +125,21 @@ FA$dist <- FA$POS2 - FA$POS1
 ```
 </div>
 
-However, we do not actually want to know the exact distance between each pair of SNPs, but rather the distance rounded to the nearest 1000 bp. Rather than create an extra variable, we can modify our previous command to obtain the distance between each pair of SNPs rounded to the nearest base pair.
+However, we do not actually want to know the exact distance between each pair of SNPs, but rather the distance rounded *up* to the nearest 1000 bp. Rather than create an extra variable, we can modify our previous command to obtain the distance between each pair of SNPs rounded up to the nearest 1kb.
 
 For a hint of how to do this click here:
 <div class="fold s">
 ```{r eval = F}
-x <- 550
-round(x,-2)
+x <- 1550
+ceiling(x/1000)*1000
 ```
 </div>
 
 For an answer click here:
 <div class="fold s">
 ```{r eval = F}
-MB$dist <- round(MB$POS2 - MB$POS1,-3)
-FA$dist <- round(FA$POS2 - FA$POS1,-3)
+MB$dist <- ceiling((MB$POS2 - MB$POS1)/1000)*1000
+FA$dist <- ceiling((FA$POS2 - FA$POS1)/1000)*1000
 ```
 </div>
 
@@ -156,61 +159,43 @@ FA2 <- ddply(FA,
       .(dist),
       summarise,
       meanR2 = mean(`R^2`))
-```
-</div>
 
-Have a look at one of your resulting outputs. We were expecting two data frames with 100 observations in each, but we have 101. Do you know what has happened here? Any idea how to fix it?
-
-<div class="fold s">
-```{r eval = F}
-# The distance values from 1-500 have been rounded to zero, and the last 500 distance values have been rounded to 100,000
-# This creates an extra row
-# Can sort this by first adding 500 to the distance values
-
-MB$dist <- round(((MB$POS2 - MB$POS1)+500),-3)
-FA$dist <- round(((FA$POS2 - FA$POS1)+500),-3)
-
-MB2 <- ddply(MB,
-      .(dist),
-      summarise,
-      meanR2 = mean(`R^2`))
-
-FA2 <- ddply(FA,
-      .(dist),
-      summarise,
-      meanR2 = mean(`R^2`))
-```
-</div>
-
-Finally, we need to combine the combine windowed data from the two populations, and add a population ID column. Once you have done this, write your output to a `.csv` file.
-
-<div class="fold s">
-```{r eval = F}
-
+#Combine
 dd <- rbind(MB2,FA2)
-dd$pop <- c(rep("MB",nrow(MB2)),rep("FA",nrow(FA2)))
+
+#Add a population column
+dd$pop <- rep(c("MB","FA"),c(nrow(MB2),nrow(FA2)))
+
 write.csv(dd,"TriboliumSSGenomes.windowed.ld.csv",row.names = F)
 
 ```
 </div>
 
-That's our analyses done! Now you can log out of the server, and use SCP to download the genetic results that you have just created. To recap, we are interested in individual heterozygosity (one file, one value per individual), windowed nucleotide diversity (two files - one per population), and windowed LD (one file). Download your four genetic diversity outputs using SCP. Once you have done this, open R studio on your laptop and use `read.csv()` and `read.table()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
+Have a look at one of your resulting outputs. Does it all make sense?
+
+That's our analyses done! Now you can log out of the server, and use SCP to download the genetic results that you have just created. To recap, you should download the files for:
+
+- individual heterozygosity (one file, one value per individual), 
+- windowed nucleotide diversity (two files - one per population), 
+- windowed LD (one file). 
+
+Download your four genetic diversity outputs using SCP. Once you have done this, open R studio on your laptop and use `read.csv()` and `read.table()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
 
 <div class="fold s">
 ```{r}
 rm(list=ls()) #Clear your workspace
 
-het <- read.table("../Data/TriboliumSSGenomes.het",header = T)
-pi_MB <- read.table("../Data/TriboliumSSGenomesMB.windowed.pi", header = T)
-pi_FA <- read.table("../Data/TriboliumSSGenomesFA.windowed.pi", header = T)
-ld <- read.csv("../Data/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
+het <- read.table("~/Documents/Teaching/PopGenBerlinLGS/genetic_diversity/TriboliumSSGenomes.het",header = T)
+pi_MB <- read.table("~/Documents/Teaching/PopGenBerlinLGS/genetic_diversity//TriboliumSSGenomesMB.windowed.pi", header = T)
+pi_FA <- read.table("~/Documents/Teaching/PopGenBerlinLGS/genetic_diversity//TriboliumSSGenomesFA.windowed.pi", header = T)
+ld <- read.csv("~/Documents/Teaching/PopGenBerlinLGS/genetic_diversity//TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
 
 ```
 </div>
 
 We are going to use the `ggplot2` library to make the following plot. If you think you can recreate this, please give it a shot. Otherwise, we will work through the plots step-by-step below.
 
-```{r echo = F,warning = F,message=F,fig.cap="**Figure 1** Genomic variation in two experimentally evolved red flour beetle populations. **A** Observed heterozygosity (proportion of heterozygous sites) in each individual. **B** Nucleotide diversity in each population, estimated from 200kb non-overlapping windows. **C** Linkage disequilibrium between marker pairs the first 1mb of chromosome 6. R^2^ values are means of marker-pairs within 1kb non-overlapping bins."}
+```{r echo = F,warning = F,message=F}
 library(Rmisc)
 library(plyr)
 library(magrittr)
@@ -246,8 +231,7 @@ Fig1C <-  mutate(ld,Population = pop,distkb = dist/1000) %>%
 
 multiplot(Fig1A,Fig1B,Fig1C,layout = matrix(c(1,2,3,3),nrow = 2, byrow = T))
 ```
-
-
+**Figure 1** Genomic variation in two experimentally evolved red flour beetle populations. **A** Observed heterozygosity (proportion of heterozygous sites) in each individual. **B** Nucleotide diversity in each population, estimated from 200kb non-overlapping windows. **C** Linkage disequilibrium between marker pairs the first 1mb of chromosome 6. R^2^ values are means of marker-pairs within 1kb non-overlapping bins.
 
 We will work through the figures one at a time. We will be using ggplot2 - if you have no experience using this package, take 5-10 minutes to familiarise yourself by searching for an online tutorial. <a href = "http://www.noamross.net/blog/2012/10/5/ggplot-introduction.html"> This </a> is a good one. We will start with panel **A**. Let's first take a look at our data:
 

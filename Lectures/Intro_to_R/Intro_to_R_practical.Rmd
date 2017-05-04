@@ -10,40 +10,39 @@ output:
 
 
 ## Introduction
-The aim of this practical is to get you comfortable using R and R studio. By the end of this practical, you ahould be able to explore data frames, write a short program to perform some basic data processing, and plot and test some results. We will also have our first go at reading data into R. Some general tips:
+The aim of this practical is to get you comfortable using R and R studio. By the end of this practical, you should be able to explore data frames, write a short program to perform some basic data processing, and plot and test some results. We will also have our first go at reading data into R. Some general tips:
 
-- Write all your commands in a script and run them from there.
+- Write all your commands in a script and run them from there
 - Remove commands from your script that are not a useful part of your analysis
-- Annotate your script well (using `#`). No amount of annotation is too much if it helps you understand what you're doing.
+- Annotate your script well (using `#`). No amount of annotation is too much if it helps you understand what you're doing
 - Use R's help (e.g. `?mean`) if you are not sure what a function does
 - Google is your friend
 
+All the code you will need for this practical is included in this handout. However, you should try to figure things out for yourself before clicking on "show".
+
 ## The data
-Scientists have taken blood samples from a rare passerine bird species captured from mainland and island populations. They have genotyped all the samples at a single nucleotide polymorphism (SNP), at which they found two alleles (A and C). They wish to know whether, at this locus, the mainland and island populations have different levels of genetic diversity.
+I have simulated some genetic data from a bird species captured from mainland and island populations. All simulated samples have been genotyped at a single nucleotide polymorphism (SNP), at which two alleles (A and C) are found. We wish to know whether, at this locus, the mainland and island populations have different levels of genetic diversity.
 
 ## Instructions
 Our aim is to calculate *observed heterozygosity* (i.e. the proportion of heterozygotes) in each of the populations in our dataset. We will plot these proportions, and test whether levels of heterozygosity differ between the two populations. 
 
 *If you think you can do this without guidance, please go ahead and do so*. Otherwise, step-by-step instructions are provided below.
 
-###Step 1. Set the working directory, read in and explore the data.
+### Download, read in and explore the data.
+Using the `scp -r` command, download the "intro_to_r" folder from the amazon server to your laptop.
 
-Open R studio. Either by typing in the console, or using the menu, set your working directory to the *Intro_to_R* folder. You will need to change the command below, depending on where the folder is stored on your computer. Also note how the command for changing the working directory in R differs to the corresponding command in bash and python.
+Now open up your file explorer. Find the "intro_to_r" folder you have just downloaded, and open the file "Mainland_Island_SNP_data.csv". You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.
 
-```{r eval=FALSE}
-getwd
-setwd("path-to-your-folder/Intro_to_R")
-```
-
-Minimise R studio for a moment, and open up your file explorer. Find the *Intro_to_R/Data* folder for this lecture, and open the file *Microsat_data.csv*. You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see tht the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.
-
-We are now going to data read this data into R using the function `read.csv()`, and assign it to an object name. We will use the name `dd`. Go back to R studio, and create a new R script. Save it using a sensible name in the *Intro_to_R* folder. At the top of your new R script, type the following:
+Now open R studio. Either by typing in the console, or using the menu, set your working directory to the "intro_to_r" folder. Now, in your script, type in the commands ro read in the "Mainland_Island_SNP_data.csv" file, and assign the dataframe to a suitable object name. You can do this using something like the following code:
 
 ```{r}
-dd <- read.csv("../Data/Mainland_Island_SNP_data.csv")
+setwd("~/Documents/Teaching/PopGenBerlinLGS/intro_to_r")
+dd <- read.csv("Mainland_Island_SNP_data.csv")
 ```
 
-Make sure that you understand what this command is doing, including what is happening with the ".." part of the file path. Run the code, then click on the "environment" tab in the top-right pane of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
+You will need to change the command above, depending on where the folder is stored on your computer. Also note how the command for changing the working directory in R differs to the corresponding command in bash and python.
+
+Once you are happy, run the commands. Make sure that you understand what this commands are doing. Click on the "environment" tab in the top-right pane of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
 
 We can explore our data by typing some functions into our script and running them. We will use the functions `head()` and `str()`.
 
@@ -64,13 +63,34 @@ Note also the `$` symbols before each of the variable names. We can call up indi
 dd$Pop
 ```
 
-We can also use square bracket notation to call up individual rows and column. Using this notation, get R to print out (if you can't remember how to do this, use the internet):
+We can also use square bracket notation to call up individual rows and columns. Using this notation, get R to print out (if you can't remember how to do this, use the internet):
 
-- the 45th row
-- the 2nd column
-- the genotype for the 22nd individual
+1. The 45th row
 
-###Step two - define our genotypes
+<div class="fold s">
+```{r}
+dd[45,]
+```
+</div>
+
+2. The 2nd column
+
+<div class="fold s">
+```{r}
+dd[,2]
+```
+</div>
+
+3. The genotype for the 22nd individual
+
+<div class="fold s">
+```{r}
+dd[22,c("Allele_1","Allele_2")]
+```
+</div>
+
+
+###Define our genotypes
 In our dataset we have separate information for each of the two alleles found in each individual. For example, we can see from when we ran the `head()` function that the first individual in our dataset has a "`r dd$Allele_1[1]`" for its first allele, and a "`r dd$Allele_2[1]`" for its second allele. This individual is therefore a `r ifelse(dd$Allele_1[1] == dd$Allele_2[1],"homozygote","heterozygote")` at this locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your terminal (I know we said not to do this, but it's ok here!):
 
 ```{r,eval = F}
@@ -89,30 +109,34 @@ x <- "cat"
 x == "cat"
 ```
 
-Hopefully you have figures out that a single equals sign and double equals sign mean very different things to R. A single equals sign generally works in the same way as the `<-` operator (with a few subtle differences), whereas a double equals sign asks a logical question, and returns a value of `TRUE` or `FALSE`.
+Hopefully you have figured out that a single equals sign and double equals sign mean very different things to R. A single equals sign generally works in the same way as the `<-` operator (with a few subtle differences), whereas a double equals sign asks a logical question, and returns a value of `TRUE` or `FALSE`.
 
-So coming back to our SNP data, we can use the `==` operator to ask whether an individual is a homozygote, by asking whether the variables `Allele_1` and `Allele_2` are the same.
+So coming back to our SNP data, we can use the `==` operator to ask whether the first individual in our dataset is a homozygote, by asking whether the variables `Allele_1` and `Allele_2` for this individual are the same.
 
+<div class="fold s">
 ```{r}
-# Get the data for the first individual and have a look at it
+# Get the data for the first individual
 ind1 <- dd[1,]
-ind1
 
 # Now ask whether Allele 1 and Allele 2 are identical
 ind1$Allele_1 == ind1$Allele_2
 
 ```
+</div>
 
-Because R works so nicely with vectors, we can do this for every individual in our dataset, as follows:
+Because R works so nicely with vectors, we can do this for every individual in our dataset. Can you generate a list of `TRUE` and `FALSE` values telling you whether each individual is a homozygote?
 
+<div class="fold s">
 ```{r}
 
 dd$Allele_1 == dd$Allele_2
 
 ```
+</div>
 
-This gives us `r nrow(dd)` `TRUE` or `FALSE` values, and tells us whether each individual in our dataset is a homozygote or not. Now all we need to do is turn this into a column of our data frame, indicating whether each individual is a homozygote or a heterozygote. We can do this using the `ifelse()` function. Check out what this function does using `?ifelse`. Add the following to your R script.
+This gives us `r nrow(dd)` `TRUE` or `FALSE` values, and tells us whether each individual in our dataset is a homozygote or not. Now all we need to do is turn this into a column of our data frame, indicating whether each individual is a homozygote or a heterozygote. We can do this using the `ifelse()` function. Check out what this function does using `?ifelse`. Can you generate a column saying whether each individual in your dataset is a homozygote or heterozygote? You should end up with something like this:
 
+<div class="fold s">
 ```{r}
 
 #Add a Heterozygosity column
@@ -122,6 +146,8 @@ dd$Het <- ifelse(dd$Allele_1 == dd$Allele_2,"Homozygote","Heterozygote")
 head(dd)
 
 ```
+
+</div>
 
 We can see that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot.
 
@@ -164,12 +190,14 @@ What are you able to conclude from this? Is the effect significant? Is it in the
 ##Putting it all together
 How does your script look? Can you figure out which commands you need to perform all the above analysis? Your script should end up looking something like the *Mainland_Island_SNP_analysis.R* script including in the *Intro_to_R* folder. Note how we end up doing quite a lot with just five lines of code!
 
-## Finished? Some more challenging tasks
+
+
+##If you've finished
 
 - Calculate and plot the frequency of the two alleles in each population.
 
 - Calculate expected genotype frequencies for each population, according to Hardy-Weinberg. Compare your observed and expected frequencies using chi-squared tests.
 
-- I simulated the dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script *Mainland_Island_SNP_data.R*, figure out what is being done with each line of code, and annotate the script accordingly.
+- I simulated the dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script "Mainland_Island_SNP_data.R", figure out what is being done with each line of code, and annotate the script accordingly.
 
 - Simulate your own SNP dataset, either based on my approach, or by developing your own code.
