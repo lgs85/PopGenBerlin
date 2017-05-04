@@ -12,18 +12,18 @@ output:
 In this practical we will look at two approaches for detecting *recent* selection among populations - one that requires discrete, predefined populations, and one that does not
 
 ## The data
-We will be using the great tits data set from the population structure practical. Within your own copy of the selection folder, make a directory called "selection_2", and set your working directory to this folder. Now copy the files GreatTits.bed and GreatTits.bim and GreatTits.fam to your current folder.
+We will be using the great tits data set from the population structure practical.
 
-Because in this session we are looking for loci under selection, we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can do this using info from your population structure session, and a single line of plink code.
+Because in this session we are looking for loci under selection, we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can create such a file directly from the population_structure folder using a single line of plink code.
 
 <div class="fold s">
 ```{R, eval = F}
-plink --bfile GreatTits --keep ../../population_structure/GreatTitsFilteredPruned.rel.id --make-bed --out GreatTitsUnrel
+plink --bfile ../population_structure/GreatTits --keep ../population_structure/GreatTitsFilteredPruned.rel.id --make-bed --out GreatTitsUnrel
 ```
 </div>
 
 
-## Locus and sliding window FST
+## Locus FST
 We can calculate FST very easily within plink - in fact we have already done this in the population structure practical, using a python script. But in that instance we were only interested in average FST across pairs of populations. We are now interested in the FST for each marker across all of our populations. Can you figure out how to calculate this?
 
 <div class="fold s">
@@ -32,15 +32,7 @@ plink --bfile GreatTitsUnrel --family --fst --out GreatTitsUnrel
 ```
 </div>
 
-But is this the best way to define our populations? What did our Admixture results show? We will now try to use our Admixture results from the K = 4 analysis to assign each individual to an "admixture population", then run a locus-based FST analyses across the Admixture populations. If you think you can do thi, go for it! Otherwise, step-by-step instructions below.
-
-First copy your Admixture results to your current directory.
-
-<div class="fold s">
-```{R, eval = F}
-cp ../../population_structure/admixture/GreatTitsThinned.4.Q .
-```
-</div>
+But is this the best way to define our populations? What did our Admixture results show? We will now try to use our Admixture results from the K = 4 analysis to assign each individual to an "admixture population", then run a locus-based FST analyses across the Admixture populations. If you think you can do this, go for it! Otherwise, step-by-step instructions below.
 
 Remember that this file has one line per individual, with individuals in the same order as in your plink file. It then has the proportion of each cluster assigned to each individual as a separate column. What we need to do is determine, for each individual, which is the 'largest' of the four clusters. We can do this in R. Start up R in your server console, then load your admixture into a data frame.
 
@@ -48,7 +40,7 @@ Remember that this file has one line per individual, with individuals in the sam
 ```{R, eval = F}
 R
 
-dd <- read.table("GreatTitsThinned.4.Q",header = F)
+dd <- read.table("../population_structure/admixture/GreatTitsThinned.4.Q",header = F)
 ```
 </div>
 
@@ -110,11 +102,17 @@ Navigate into the EigenGWAS folder. Now try to figure out how to run EigenGWAS o
 
 <div class="fold s">
 ```{r eval = F}
-java -jar gear.jar eigengwas --bfile ../GreatTitsUnrel --ev 4 --out null
+java -jar gear.jar eigengwas --bfile ../GreatTitsUnrel --ev 4 --out GreatTitsUnrel #Doesn't work - seems to want the output to be called "null"!
+
+java -jar gear.jar eigengwas --bfile ../GreatTitsUnrel --ev 4 --out null #works
 ```
 </div>
 
-And that's it! This analysis will take a little while to run - while it's running, you can start downloading your other files - a list of what you need to download is below.
+This is a new piece of software. As far as I am able to see there is a bug in the command meaning that it doesn't run unless you specify the output name like this. You can always change the names of these output files using $\mv$.
+
+This analysis will take a little while to run - while it's running, you can start downloading your other files - a list of what you need to download is below.
+
+Given the bug we found, it would be sensible to check the output files from the EigenGWAS *very carefully*. Indeed, there are problems with some of the output files, which we will come to later. But see if you can spot and correct these problems now!
 
 ##Making plots
 In a new window, use SCP to download the following files to your laptop (these should all be in your "selection" folder on the server:
@@ -123,21 +121,161 @@ In a new window, use SCP to download the following files to your laptop (these s
 - FST between your admixture populations (second plink analysis, ending in .fst)
 - Your Eigenvectors from the EigenGWAS analysis (ending in .eigenvec)
 - Your EigenGWAS results (four files, all ending in .egwas)
+- The R script sliding_window.r
 
+We are going to do the plotting slightly differently this time. I will introduce you to some of the plots and functions you can run, then it is up to you to make a publication quality figure from our selection analyses.
 
+Let's first explore our FST analyses. These are large files, with FST values calculated for all 250,000 or so markers. So rather than using `read.table()` we will use `fread()` from the `data.table` library.
 
-##Sliding window analysis
+<div class="fold s">
 ```{r}
-
 library(data.table)
-source("~/Documents/Teaching/PopGenBerlinLGS/sliding_window.r")
-dd <- fread("~/Documents/PopGenBerlinData/GreatTitsUnrel.fst",data.table = F,header = T)
+pop_fst <- fread("~/Documents/Teaching/PopGenBerlinLGS/selection/GreatTitsUnrel.fst")
 
-head(dd)
-sw <- sliding.window(dd)
-head(sw)
-plot(sw$MEAN.FST)
+head(pop_fst)
+```
+</div>
+
+We can explore the distribution of FST values using `geom_histogram()` or `geom_density()`.
+<div class="fold s">
+```{r,fig.width=7,fig.height=3,warning = F,message = F}
+library(ggplot2)
+library(Rmisc)
+
+h1 <- ggplot(pop_fst,aes(x = FST))+
+  geom_histogram()
+d1 <- ggplot(pop_fst,aes(x = FST))+
+  geom_density()
+
+multiplot(h1,d1,cols = 2)
+```
+</div>
+
+What do these distributions tell you about drift and selection in this system?
+
+We can also read in our FST values from our admixture populations, and compare marker-based FST values. Rather than plot all 250,0000 points. Think of a good way of plotting the two sets of FST values against one another in a way that summarises the data.
+
+
+<div class="fold s">
+```{r,fig.width=6,fig.height=5,warning = F,message = F,cache = T}
+ad_fst <- fread("~/Documents/Teaching/PopGenBerlinLGS/selection/GreatTitsK4.fst")
+
+pop_fst$ADFST <- ad_fst$FST
+
+ggplot(pop_fst,aes(x = FST,y = ADFST))+
+  stat_density2d(aes(alpha=..level..), geom="polygon") +
+  theme_bw()
 
 ```
+</div>
 
+
+Check the correlation coefficient between the two measures...
+<div class="fold s">
+```{r}
+cor(pop_fst$FST,pop_fst$ADFST)
+
+#Need to remove NAs and try again
+pop_fst <- subset(subset(pop_fst,!is.na(FST)),!(is.na(ADFST)))
+cor(pop_fst$FST,pop_fst$ADFST)
+```
+</div>
+
+Let's now take a look at the EigenGWAS data. First at the eigenvector file.
+<div class="fold s">
+```{r}
+ev <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/null.eigenvec")
+head(ev)
+```
+</div>
+
+This conveniently has the population and individual IDs as the first two columns. Define come column names.
+
+<div class="fold s">
+```{r}
+colnames(ev) <- c("Population","Individual",paste0("PC",c(1:4)))
+```
+</div>
+
+Now make some PCA plots
+
+<div class="fold s">
+```{r,fig.width=10,fig.height=3,warning = F,message = F,cache = T}
+F1 <- ggplot(ev,aes(x = PC1,y = PC2,col = Population))+
+  geom_point()
+
+F2 <- ggplot(ev,aes(x = PC3,y = PC4,col = Population))+
+  geom_point()
+
+multiplot(F1,F2,cols = 2)
+```
+</div>
+
+EigenGWAS runs a GWAS on each of these four Eigenvectors. What do these four analyses tell us about selection?
+
+Let's load in the analysis from the first Eigenvector and take a look at the results. As you will see there are some issues with the results files EigenGWAS has given us.
+
+```{r, message = F, warning = F,cache = T}
+eg1 <- fread("~/Documents/Teaching/PopGenBerlinLGS/selection/null.1.egwas",data.table = F) #some issues with this text file - use read.table as it's simpler
+
+eg1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/null.1.egwas", header = T,stringsAsFactors = F) #Slower but works
+str(eg1)
+
+#Some variables read in as character - read as numeric
+eg1[,c("Beta","SE","Chi","P","PGC","Fst")] <- apply(eg1[,c("Beta","SE","Chi","P","PGC","Fst")],2,as.numeric)
+
+#Some check which rows have been converted to NAs 
+head(eg1[is.na(eg1$Beta),])
+
+#these are loci in which there is no variation in these populations. Fine to exclude them
+
+eg1 <- eg1[complete.cases(eg1),]
+
+head(eg1)
+```
+
+Can you figure out from the above, and from using the command line, what was wrong with the output from EigenGWAS? Is it ok now? We have to bear in mind that most pieces of pop gen software are made by scientists like us, so are not perfectly coded!
+
+Let's see how well out EigenGWAS p value and FST are correlated
+```{r}
+cor(eg1$PGC,eg1$Fst)
+```
+
+They are strongly negatively correlated. Is that what we expect?
+
+Finally, we will use the `manhattan()` function in the qqman to produce a Manhattan plot of the corrected EigenGWAS p-values. Try to reproduce the plot below, using help that you can find online. Then see if your code matches mine.
+
+<div class="fold s">
+```{r,warning = F, message = F, fig.width=10,fig.height = 4,cache = T}
+
+library(qqman)
+manhattan(eg1,chr = "CHR",p = "PGC",bp = "BP")
+```
+</div>
+
+Now use the `qq()` function to produce a qq plot of the corrected and uncorrected p values.
+
+<div class="fold s">
+```{r,warning = F, message = F, cache = T}
+#Uncorrected
+qq(eg1$P)
+
+#Corrected
+qq(eg1$PGC)
+```
+</div>
+
+How do you interpret these plots? Do we have to worry about fasle positives in our data? Which points are "significant"? Is the correction working?
+
+
+##Over to you
+Make a publication quality figure summarising the selection analyses you have done. You can adapt figures we have already made or (better still) make completely new ones. For example, you may want to consider:
+
+- Manhattan plots for the other eigenvectors
+- Manhattan plots of sliding window FST (see the "sliding_window.r" script - can you get this working?)
+- Going to the great tit reference genome (link below) and finding whether SNPs under divergent selection are in genes
+  https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?context=genome&acc=GCF_001522545.2
+- Commbining your selection and population structure plots into a single figure.
+
+Be creative!
 
