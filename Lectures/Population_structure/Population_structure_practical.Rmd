@@ -197,14 +197,14 @@ B <- ggplot(pc1,aes(x = PC1,y = PC2,col = Population))+
 
 source("Admixture_plot.R")
 
-K2 <- read.table("admixture/GreatTitsThinned.2.Q")
+K2 <- read.table("GreatTitsThinned.2.Q")
 mypops <- read.table("GreatTitsThinned.fam")
 C <- admixtureplot(str_out = K2,k = 2, pops = mypops,xaxis = F)
 
-K3 <- read.table("admixture/GreatTitsThinned.3.Q")
+K3 <- read.table("GreatTitsThinned.3.Q")
 D <- admixtureplot(str_out = K3,k = 3, pops = mypops,xaxis = F)
 
-K4 <- read.table("admixture/GreatTitsThinned.4.Q")
+K4 <- read.table("GreatTitsThinned.4.Q")
 E <- admixtureplot(str_out = K4,k = 4, pops = mypops,xaxis = T)
 
 
@@ -409,7 +409,7 @@ Now we are ready to try running the function. `admixtureplot` has 4 arguments, t
 Adapt the following code (depending on your working directory) to run the function for your K = 2 admixture output.
 
 ```{r,fig.height = 3}
-K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/admixture/GreatTitsThinned.2.Q")
+K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.2.Q")
 mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
 C <- admixtureplot(str_out = K2,k = 2, pops = mypops)
 
@@ -420,15 +420,15 @@ Now it should be fairly clear how we can do the same thing for K = 3 and 4, and 
 
 <div class="fold s">
 ```{r}
-K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/admixture/GreatTitsThinned.2.Q")
+K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.2.Q")
 mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
 C <- admixtureplot(str_out = K2,k = 2, pops = mypops, xaxis = F)
 
-K3 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/admixture/GreatTitsThinned.3.Q")
+K3 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.3.Q")
 mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
 D <- admixtureplot(str_out = K3,k = 3, pops = mypops, xaxis = F)
 
-K4 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/admixture/GreatTitsThinned.4.Q")
+K4 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.4.Q")
 mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
 E <- admixtureplot(str_out = K4,k = 4, pops = mypops, xaxis = T)
 ```
