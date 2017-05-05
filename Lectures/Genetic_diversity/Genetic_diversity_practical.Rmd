@@ -9,9 +9,9 @@ output:
 <script src="js/hide.js"></script>
 
 ## Introduction
-The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then vcftools to estimate some common measures of genetic diversity in individuals and populations. We will then develop our skills in R to manipulate our output files from plink and vcftools, and produce publication quality figures of our data.
+The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then VCFtools to estimate some common measures of genetic diversity in individuals and populations. We will then develop our skills in R to manipulate our output files from plink and VCFtools, and produce publication quality figures of our data.
 
-Once again, you should try to figure things out for yourself before clicking on "show". To do this, you will need the documentation for vcftools open. It can be found at https://vcftools.github.io/man_latest.html
+Once again, you should try to figure things out for yourself before clicking on "show". To do this, you will need the documentation for VCFtools open. It can be found at https://vcftools.github.io/man_latest.html
 
 ## The data
 We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle *Tribolium castaneum*. The data file includes SNP information (in vcf format) from six resequenced genomes. Three of these individuals come from a population that has been experimentally evolved under male-biased sex ratios for ~80 generations, while the other three come from a population with a female-biased sex ratio (see Lumley et al. 2015, *Nature* for details of the experimental lines). We wish to know whether levels of genomic diversity differs between these two populations as a result of differing patterns of sexual selection.
@@ -52,7 +52,7 @@ vcftools --vcf TriboliumSSGenomes.vcf --hardy --out TriboliumSSGenomes
 ```
 </div>
 
-Now use `ls -l`, `head` and/or `cat` as appropriate to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses hvae been performed?
+Now use `ls -l`, `head` and/or `cat` as appropriate to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses have been performed?
 
 Hopefully you did noticed that the `.hwe` file was very large and didn't try to use `cat` to look at it! Using `head` we can see that the `--hardy` analysis has calculated observed and expected heterozygosity for every SNP. However, we it has averaged over our two populations for this. **Before reading on**, try to figure out how you would perform this analysis separately for each population. Then discuss with a neighbour whether you think this analysis is appropriate for this dataset (clue - think sample sizes), and think of other appropriate analyses.
 
@@ -82,7 +82,7 @@ vcftools --vcf TriboliumSSGenomes.vcf --window-pi 200000 --indv 2014_SOL_MG4972 
 ```
 </div>
 
-Hopefully you figured out that individuals 2014_SOL_MG4955, 2014_SOL_MG4956 and 2014_SOL_MG4957 are from the MB population, while the remaining individuals are from the FA population. Once you have run the above code, sse the command line to take a look at the format of the output files vcftools has returned. Does it makes sense?
+Hopefully you figured out that individuals 2014_SOL_MG4955, 2014_SOL_MG4956 and 2014_SOL_MG4957 are from the MB population, while the remaining individuals are from the FA population. Once you have run the above code, use the command line to take a look at the format of the output files vcftools has returned. Does it makes sense?
 
 Before we have a go at plotting our data, we will first calculate one more measure of genetic diversity - linkage disequilibrium. Our aim is to look at how LD decays with physical distance between SNPs, and to see whether this relationship varies between our two populations. Lower levels of LD and faster rates of LD decay are typically found in large, outbred populations, whereas in small bottlenecked populations background levels of LD are higher and LD decays much more slowly.
 
@@ -97,7 +97,7 @@ vcftools --vcf TriboliumSSGenomes.vcf --geno-r2 --chr ChLG1 --ld-window-bp 10000
 ```
 </div>
 
-Use `ls - l` to look at the size of the output files. You will see that thety are *huge*. Even with our restrictions, we have more than 50 million rows in each of our files. So instead of downloading this onto our laptops for plotting, we will perform a bit of extra processing on the data in the server, using R. Open up a text editor (or R studio) and save an R script using a suitable name. Then, on the Amazon server, start up R. We are going to type our instructions into a script, so we have a record of what we've done, but at the same time we will use the console interactively. First, we need to load a library. At the top of your script, add the following code, then copy and paste the command into your console:
+Use `ls - l` to look at the size of the output files. You will see that they are *huge*. Even with our restrictions, we have more than 50 million rows in each of our files. So instead of downloading this onto our laptops for plotting, we will perform a bit of extra processing on the data in the server, using R. Open up a text editor (or R studio) and save an R script using a suitable name. Then, on the Amazon server, start up R. We are going to type our instructions into a script, so we have a record of what we've done, but at the same time we will use the console interactively. First, we need to load a library. At the top of your script, add the following code, then copy and paste the command into your console:
 
 ```{r eval = F}
 R
@@ -239,7 +239,7 @@ We will work through the figures one at a time. We will be using ggplot2 - if yo
 head(het)
 ```
 
-As we have already seen, the `--het` function in vcftools gives us, for each individual, the number of homozygous sites, the number of heterozygous sites, the total number of sites and the inbreeding coefficient F. In panel **A** you can see that I have plotted the *proportion* of heterozygous sites per individual. Can you calculate this in R, and assign individual heterozygosity to a new column? You will also notice that ther is no "population" column, and we will need one. Can you use the the available information (hint: see previous code) to assign a population column?
+As we have already seen, the `--het` function in vcftools gives us, for each individual, the number of homozygous sites, the number of heterozygous sites, the total number of sites and the inbreeding coefficient F. In panel **A** you can see that I have plotted the *proportion* of heterozygous sites per individual. Can you calculate this in R, and assign individual heterozygosity to a new column? You will also notice that there is no "population" column, and we will need one. Can you use the the available information (hint: see previous code) to assign a population column?
 
 <div class="fold s">
 ```{r}
@@ -270,7 +270,7 @@ A
 ```
 </div>
 
-Now we need to change the background colout. I did this using `theme_bw()`:
+Now we need to change the background colour. I did this using `theme_bw()`:
 
 <div class="fold s">
 ```{r}
@@ -325,7 +325,7 @@ pi_both <- rbind(pi_MB,pi_FA)
 pi_both$Population <- c(rep("MB",nrow(pi_MB)),rep("FA",nrow(pi_FA)))
 ```
 
-Now we are ready to make a plot. We will start with the boxplot. Remember that we can use a lot of the same arguments from our previous plot.
+Now we are ready to make a plot. We will start with the box plot. Remember that we can use a lot of the same arguments from our previous plot.
 
 <div class="fold s">
 ```{r}
@@ -338,7 +338,7 @@ B
 ```
 </div>
 
-We can add a notch to the boxplot easily:
+We can add a notch to the box plot easily:
 
 <div class="fold s">
 ```{r}
@@ -352,7 +352,7 @@ B
 </div>
 
 
-To add the points behind the boxplot we will use the function `geom_jitter`:
+To add the points behind the box plot we will use the function `geom_jitter`:
 
 <div class="fold s">
 ```{r}
@@ -366,7 +366,7 @@ B
 ```
 </div>
 
-There are two problems here. First, the points are getting in the was of the boxplots. Second, they have been coloured by population whereas we would like them to be grey. Any idea how we fix these things?
+There are two problems here. First, the points are getting in the was of the box plots. Second, they have been coloured by population whereas we would like them to be grey. Any idea how we fix these things?
 
 <div class="fold s">
 ```{r}
@@ -412,7 +412,7 @@ B
 ```
 </div>
 
-Done! Now we just need to make the LD plot and stick them all together. Lety's take another look at the LD data:
+Done! Now we just need to make the LD plot and stick them all together. Let's take another look at the LD data:
 ```{r}
 head(ld)
 ```
@@ -455,7 +455,7 @@ C
 ```
 </div>
 
-Ok, we have done our plots! We now just need to make a single, mutipanel plot. Again, there are lots of ways we can do thism and this is definitely something you should explore. For now we will use the `multiplot()` function from the `Rmisc` library. We can just list the plots without specifying anything to do with the layout:
+Ok, we have done our plots! We now just need to make a single, muti-panel plot. Again, there are lots of ways we can do this and this is definitely something you should explore. For now we will use the `multiplot()` function from the `Rmisc` library. We can just list the plots without specifying anything to do with the layout:
 
 ```{r}
 multiplot(A,B,C)
@@ -467,7 +467,7 @@ multiplot(A,B,C,layout = matrix(c(1,2,3,3),nrow = 2,byrow = T))
 ```
 
 ##If you've finished
-- Use multiplot to crease a multipanelled plot with i) the LD plot on the top, and ii) the heterozygosity plot stretched along the left-hand side, with the pi and LD plots both on the right hand side.
+- Use `multiplot()` to crease a multi-panelled plot with i) the LD plot on the top, and ii) the heterozygosity plot stretched along the left-hand side, with the pi and LD plots both on the right hand side.
 - Plot and test whether nucleotide diversity in each 200kb window is correlated between the two populations. What might explain such a pattern?
 - Recreate this plot of nucleotide diversity (200kb windows) for each chromosome, as precisely as you can: 
 

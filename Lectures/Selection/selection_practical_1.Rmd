@@ -10,18 +10,18 @@ output:
 
 
 ## Introduction
-We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. Finally, we will learn how to annotate a vcf file and look at some of the cool things we can do if we have a reference genome.
+We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. Finally, we will learn how to annotate a VCF file and look at some of the cool things we can do if we have a reference genome.
 
 ## The data
-We will be using the Tribolium sexual selection data from the genomic diversity practical. Log into your working folder on the Amazon server, and within your Data folder, copy TriboliumSSGenomes.vcf from the genetic diversity folder into the selection folder. Now change your working directory to the selection folder.
+We will be using the *Tribolium castaneum* genomes from the genetic diversity practical. Change your working directory to the selection folder.
 
 ## Site and window nucleotide diversity
-In the genetic diversity practical we calculated $\pi$ in non-overlapping 200kb windows, and compared distributions of windowed-averages across experimental populations. For visualisation of how variation occurs along genomes, we sometimes wish to calculate statistics in *sliding* windows. This is done very simply using vcftools - here is the code to calculate.
+In the genetic diversity practical we calculated $\pi$ in non-overlapping 200kb windows, and compared distributions of windowed-averages across experimental populations. For visualisation of how variation occurs along genomes, we sometimes wish to calculate statistics in *sliding* windows. This is done very simply using VCFtools - here is the code to calculate.
 
 ```{r eval = F}
 
-vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 10000 --window-pi-step 2000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB10k
-vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 10000 --window-pi-step 2000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA10k
+vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 10000 --window-pi-step 2000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB10k
+vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 10000 --window-pi-step 2000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA10k
 
 ```
 
@@ -33,13 +33,13 @@ The above calculates $\pi$ on chromosome 2 in 10kb windows, with the window movi
 <div class="fold s">
 ```{r eval = F}
 #50kb windows
-vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 50000 --window-pi-step 10000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB50k
-vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 50000 --window-pi-step 10000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA50k
+vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 50000 --window-pi-step 10000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB50k
+vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 50000 --window-pi-step 10000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA50k
 
 
 #200kb windows
-vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 200000 --window-pi-step 50000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB200k
-vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 200000 --window-pi-step 50000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA200k
+vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 200000 --window-pi-step 50000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB200k
+vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --window-pi 200000 --window-pi-step 50000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA200k
 
 ```
 </div>
@@ -54,8 +54,8 @@ We can also use VCFtools to calculate Tajima's *D*. Can you calculate this stati
 ```{r eval = F}
 
 #200kb windows
-vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD 50000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB50k
-vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD 50000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA50k
+vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD 50000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out TriboliumSSGenomesMB50k
+vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD 50000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out TriboliumSSGenomesFA50k
 
 ```
 </div>
@@ -63,13 +63,13 @@ vcftools --vcf TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD 50000 --indv 2014_SO
 What is the difference between the way we have constructed the windows between this analysis and the sliding window analysis of $\pi$? Do you think this will cause any problems?
 
 ## SnpEff
-We will now use this very cool piece of software to annotate the SNPs in out VCF file, using the Tribolium reference genome. To run SnpEff we need woprk within the direcotry in which the program is contained. Use `cd` to navigate to your own copy of the `SnpEff` directory, which is within the `selection` directory.
+We will now use this very cool piece of software to annotate the SNPs in out VCF file, using the *Tribolium* reference genome. To run SnpEff we need work within the directory in which the program is contained. Use `cd` to navigate to your own copy of the `SnpEff` directory, which is within the `selection` directory.
 
 SnpEff takes a VCF file, and compares the positions against a reference genome database. It then extracts lots of information from the genome database (whether the SNP is in an intron, exon etc., whether it is a zero-fold/four-fold site). The program comes with lots of pre-loaded genome databases, or we can generate ourselves. So our first task is to find out if they have a *Tribolium castaneum* genome. Go the help page for SnpEff, here:
 
 http://snpeff.sourceforge.net/SnpEff_manual.html
 
-Now see if you can figure out how to use the command line to i) get the software to print out the help message, ii) print out a list of all available databses, iii) View the first 10 rows of the table of databases, and iv) search the database table for "Tribolium":
+Now see if you can figure out how to use the command line to i) get the software to print out the help message, ii) print out a list of all available databases, iii) View the first 10 rows of the table of databases, and iv) search the database table for "Tribolium":
 
 <div class="fold s">
 ```{r eval = F}
@@ -91,7 +91,7 @@ java -jar snpEff.jar databases | grep -i Tribolium
 Hopefully you have found that there is a *Tribolium castaneum* database, and that it is simply called "Tribolium_castaneum". Now that we have this information, we can annotate our VCF files, using the following command:
 
 ```{r eval = F}
-java -Xmx4g -jar snpEff.jar -v Tribolium_castaneum ../TriboliumSSGenomes.vcf > Tribolium.ann.vcf
+java -Xmx4g -jar snpEff.jar -v Tribolium_castaneum ../../genetic_diversity/TriboliumSSGenomes.vcf > Tribolium.ann.vcf
 ```
 
 We will take you through each argument here separately - all this information can be obtained from the SnpEff help page.
@@ -125,7 +125,7 @@ java -jar SnpSift.jar filter "ANN[*].GENE = 'OPTIX'" Tribolium.ann.vcf > Triboli
 ```
 </div>
 
-Now we have created these new VCF files we can use vcftools to calculate diversity separately at sites with different functional properties. Navigate back to your selection directory, then, for each population, calculate:
+Now we have created these new VCF files we can use VCFtools to calculate diversity separately at sites with different functional properties. Navigate back to your selection directory, then, for each population, calculate:
 
 - Window $\pi$ (200kb windows, non-overlapping for non-synonymous sites on chromosome ChLG2
 - Window $\pi$ (200kb windows, non-overlapping) for synonymous sites on chromosome ChLG2
@@ -155,6 +155,8 @@ Ok, now we are ready to download our data for plotting. You will need to downloa
 - 200kb $\pi$ for synonymous variants on chromosome ChLG2 (2 files - one per population)
 - 200kb $\pi$ for non-synonymous variants on chromosome ChLG2 (2 files - one per population)
 - 1kb $\pi$ for all variants in the OPTIX gene (2 files - one per population)
+
+(HINT - use `selection\/*.pi` within `scp` to download all files ending in ".pi" from a particular folder.)
 
 ## Make some plots
 
@@ -292,7 +294,7 @@ which(!(nonsyn$BIN_START %in% syn$BIN_START))
 ```
 </div>
 
-This tells vcftools gave us 4 windows with a calculation for $\pi$ at synonymous sites but not non-synonymous sites, and three windows where $\pi$ was calculated at non-synonymous sites but not synonymous sites. This will have occurred because there was no synonymous/non-synonymous variants within those particular windows. We may wish to explore why that might be the case, but for now we can simply exclude sites that do not have both synonymous and non-synonymous variants.
+This tells VCFtools gave us 4 windows with a calculation for $\pi$ at synonymous sites but not non-synonymous sites, and three windows where $\pi$ was calculated at non-synonymous sites but not synonymous sites. This will have occurred because there was no synonymous/non-synonymous variants within those particular windows. We may wish to explore why that might be the case, but for now we can simply exclude sites that do not have both synonymous and non-synonymous variants.
 
 
 <div class="fold s">
@@ -334,7 +336,7 @@ head(dd)
 ```
 </div>
 
-Now we are ready to make our plot. The only thing that is different here is the addition of a manually added line sith a slope of 1 and intercept of zero. I have also specified axis limits so panels B and C end up being the same.
+Now we are ready to make our plot. The only thing that is different here is the addition of a manually added line with a slope of 1 and intercept of zero. I have also specified axis limits so panels B and C end up being the same.
 
 <div class="fold s">
 ```{R}
@@ -384,7 +386,7 @@ FigC
 ```
 </div>
 
-Now we just need to put the plots together using multiplot, and we're done!
+Now we just need to put the plots together using `multiplot()`, and we're done!
 
 <div class="fold s">
 ```{r,fig.width = 8,fig.height = 7,message = F, warning = F}
@@ -470,18 +472,18 @@ Fig
 
 So this region is characterised by high diversity and high Tajima's D in the FA, but not MB, population. What is the explanation for this? What are the problems with the approach we have taken?
 
-Finally, we can take a look at what genes are in this region of the genome. Go to the Tribolium genome browser here:
+Finally, we can take a look at what genes are in this region of the genome. Go to the *Tribolium* genome browser here:
 
 https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?context=genome&acc=GCF_000002335.3
 
 Use the genome data viewer to zoom into the relevant region on chromosome Lg2. What genes are there? Are there good candidates? Is looking for genes in this way a good idea?
 
 ##If you are finished
-Download the table of gene locations for Tribolium LG2, here:
+Download the table of gene locations for *Tribolium* LG2, here:
 
 https://www.ncbi.nlm.nih.gov/genome/proteins/216?genome_assembly_id=271841
 
-Read this table into R, and use R to:
+Read this table into R (HINT - this may need cleaning first!), and use R to:
 
 - pull out a list of genes within a region of high genomic diversity
 - plot genomic diversity for a region, and map on some gene locations - like this:
