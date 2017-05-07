@@ -12,9 +12,9 @@ output:
 In this practical we will look at two approaches for detecting *recent* selection among populations - one that requires discrete, predefined populations, and one that does not
 
 ## The data
-We will be using the great tits data set from the population structure practical.
+We will be using the great tit data set from the population structure practical. You do not need to copy the file across.
 
-Because in this session we are looking for loci under selection, we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can create such a file directly from the population_structure folder using a single line of plink code.
+In this session we are looking for loci under selection, so we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can create such a file using the information you generated in the population structure practical folder using a single line of plink code. Write a new .bim to the selection folder. The file should contain only unrelated individuals, but all markers
 
 <div class="fold s">
 ```{R, eval = F}
@@ -23,8 +23,8 @@ plink --bfile ../population_structure/GreatTits --keep ../population_structure/G
 </div>
 
 
-## Locus FST
-We can calculate FST very easily within plink - in fact we have already done this in the population structure practical, using a python script. But in that instance we were only interested in average FST across pairs of populations. We are now interested in the FST for each marker across all of our populations. Can you figure out how to calculate this?
+## Locus $F_{ST}$
+We can calculate $F_{ST}$ very easily within plink - in fact we have already done this in the population structure practical, using a python script. But in that instance we were only interested in average $F_{ST}$ across pairs of populations. We are now interested in the $F_{ST}$ for each marker across all of our populations. Can you figure out how to calculate this?
 
 <div class="fold s">
 ```{R, eval = F}
@@ -32,9 +32,9 @@ plink --bfile GreatTitsUnrel --family --fst --out GreatTitsUnrel
 ```
 </div>
 
-But is this the best way to define our populations? What did our Admixture results show? We will now try to use our Admixture results from the K = 4 analysis to assign each individual to an "admixture population", then run a locus-based FST analyses across the Admixture populations. If you think you can do this, go for it! Otherwise, step-by-step instructions below.
+Check the plink help and make sure you are happy with what the "family" tag is doing. Regardless, is this the best way to define our populations? What did our Admixture results show? We will now try to use our Admixture results from the $K$ = 4 analysis to assign each individual to an "Admixture population", then run a locus-based $F_{ST}$ analysis across the Admixture populations. If you think you can do this, go for it! Otherwise, step-by-step instructions below.
 
-Remember that this file has one line per individual, with individuals in the same order as in your plink file. It then has the proportion of each cluster assigned to each individual as a separate column. What we need to do is determine, for each individual, which is the 'largest' of the four clusters. We can do this in R. Start up R in your server console, then load your admixture into a data frame.
+Remember that your ".Q" file from the Admixture analysis has one line per individual, with individuals in the same order as in your plink file. It then has the proportion of each cluster assigned to each individual as a separate column (so 4 columns for the $K$ - 4 analysis). What we need to do is determine, for each individual, which is the 'largest' of the four clusters. We can do this in R. Start up R in your server console, then load your admixture into a data frame.
 
 <div class="fold s">
 ```{R, eval = F}
@@ -52,7 +52,7 @@ colnames(dd) <- paste0("K",c(1:4))
 ```
 </div>
 
-We now wish to generate a vector that tells us, for each individual, which of K1 to K4 is largest. Can you figure out how to do this, either using a `for` loop, or using `apply()`?
+We now wish to generate a vector that tells us, for each individual, which of K1 to K4 is largest. Can you figure out how to do this, either using a `for()` loop, or using `apply()`?
 
 <div class="fold s">
 ```{R, eval = F}
@@ -68,6 +68,8 @@ output <- apply(dd,1,function(x) names(which.max(x)))
 
 ```
 </div>
+
+Make sure that you fully understand how the above code has worked. Look up the help files for each function in the code, and discuss with your colleagues. 
 
 To define populations in plink, we are going to need to give it a file with our original population IDs in the first column, individual IDs in the second, and new population IDs in the third. We can create this using our output, and our.fam file. Load the .fam file into R
 
@@ -243,7 +245,7 @@ cor(eg1$PGC,eg1$Fst)
 
 They are strongly negatively correlated. Is that what we expect?
 
-Finally, we will use the `manhattan()` function in the qqman to produce a Manhattan plot of the corrected EigenGWAS p-values. Try to reproduce the plot below, using help that you can find online. Then see if your code matches mine.
+Finally, we will use the `manhattan()` function in the `qqman` library to produce a Manhattan plot of the corrected EigenGWAS p-values. Try to reproduce the plot below, using help that you can find online. Then see if your code matches mine.
 
 <div class="fold s">
 ```{r,warning = F, message = F, fig.width=10,fig.height = 4,cache = T}
@@ -269,7 +271,7 @@ How do you interpret these plots? Do we have to worry about fasle positives in o
 
 
 ##Over to you
-Make a publication quality figure summarising the selection analyses you have done. You can adapt figures we have already made or (better still) make completely new ones. For example, you may want to consider:
+Make a publication-quality figure summarising the selection analyses you have done. You can adapt figures we have already made or (better still) make completely new ones. For example, you may want to consider:
 
 - Manhattan plots for the other eigenvectors
 - Manhattan plots of sliding window FST (see the "sliding_window.r" script - can you get this working?)

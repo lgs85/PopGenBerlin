@@ -13,7 +13,7 @@ output:
 - How does R work?
 
 
-#What is R and why is it so great?
+#What is R?
 
 ## What is R?
 
@@ -27,6 +27,11 @@ R is an integrated suite of software facilities for data manipulation, calculati
 <div align="center">
 <p style="font-size:12px">https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf</p>
 </div>
+
+
+#Why use R?
+
+
 
 ## Why use R?
 
@@ -179,6 +184,16 @@ plot(x,y)
 #How does R work?
 
 
+##Our aim
+
+- Manipulate and analyse *numbers*
+- Manipulate and analyse *text*
+
+```{r, echo = F}
+boxplot(weight~feed,data=chickwts,ylab = "Weight (g)",xlab = "Feed type",main = "Chick weights and feed type")
+```
+
+
 
 
 ## R and Unix
@@ -212,6 +227,10 @@ x
 ```
 
 
+
+
+
+
 ##R objects
 
 ```{R}
@@ -219,6 +238,8 @@ x <- 4
 x + 7
 
 ```
+
+
 
 
 
@@ -235,107 +256,11 @@ x + y
 
 
 
-##Vectors
-
-```{R}
-x <- c(6,7,8)
-x
-
-x <- c(1:10)
-x
-
-```
-
-
-
-
-
-
-##Vectors
-
-```{R}
-x <- c(1:10)
-x + 1
-x/2
-
-y <- c(101:110)
-x*y
-
-```
-
-
-
-##Vectors
-
-```{R}
-x <- c(1:10)
-x + 1
-x/2
-
-y <- c(101:110)
-x*y
-
-```
-
-
-
-
-
-
-##Vectors
-
-```{R}
-x <- c(1,2,4,4,4,5)
-
-x[5]
-x[c(4:6)]
-
-```
-
-
-
-
-
-
-
-
-##Functions
-
-```{R}
-x <- c(1,2,4,4,4,5,11)
-sum(x)
-length(x)
-sum(x)/length(x)
-mean(x)
-
-
-```
-
-
-
-
-##Functions
-
-```{R}
-?mean
-```
-
-<div align="center">
-<img src="Images/mean_help.png" width=300>
-</div>
-
-
-
-
-
-
 ##Characters
 
 ```{R,error = T}
 hello
-```
 
-```{R,error = T}
 "hello"
 
 "hello world"
@@ -359,6 +284,81 @@ x
 
 ##Characters
 
+```{R,error = T}
+x <- "cats"
+y <- "dogs"
+
+x + y
+
+"1" + "2"
+
+```
+
+
+
+
+
+##Vectors
+
+```{R}
+x <- c(6,7,8)
+x
+
+y <- c(1:10)
+y
+
+z <- c("cats","cats","dogs")
+z
+
+```
+
+
+
+##Vectors
+
+Vectors can consist of numbers or characters, but not both
+
+
+```{R}
+
+x <- c(1,2,"cats")
+x
+
+```
+
+
+
+
+##Vectors
+
+```{R}
+x <- c(1:10)
+x/2
+
+y <- c(101:110)
+z <- x*y
+z
+```
+
+
+
+
+
+##Vectors
+
+```{R}
+x <- c(1,2,4,4,4,5)
+
+x[5]
+x[c(4:6)]
+
+```
+
+
+
+
+##Vectors
+
 ```{R}
 x <- "Martin has a bushy beard"
 x[1]
@@ -369,15 +369,114 @@ x[2]
 
 
 
-##Characters
+##Vectors
 
 ```{R}
-mb <- c("Martin","has","a","bushy","beard")
-mb[1]
-mb[2]
-mb[c(3:5)]
+x <- c("Martin","has","a","bushy","beard")
+x[1]
+x[2]
+x[c(3:5)]
 ```
 
+
+
+
+
+
+##Matrices
+
+```{R}
+x <- matrix(0,ncol = 6,nrow = 2)
+x
+
+x <- matrix(c(1:12),ncol = 4,nrow = 3)
+x
+```
+
+
+
+
+##Matrices
+
+```{R}
+
+x <- c("cats","cats","cats","cats","dogs","dogs")
+m <- matrix(x,
+            ncol = 3,nrow = 2)
+m
+
+m <- matrix(x,
+            ncol = 3,nrow = 2,byrow = T)
+m
+```
+
+
+
+
+##Matrices
+
+```{R}
+m
+m[2,]
+m[,3]
+```
+
+
+
+
+
+##Matrices
+
+```{R}
+m
+m[2,3]
+```
+
+
+
+##Functions
+
+- `c()`, and `matrix()` are *functions*.
+- Arguments for functions always enclosed within brackets after function name
+- Can be built-in or written ourselves
+
+
+##Some useful functions
+
+```{R}
+x <- seq(from = 0,to = 1000,by = 100)
+str(x)
+sum(x)
+length(x)
+
+```
+
+
+
+
+##Functions
+
+```{R}
+?mean
+```
+
+<div align="center">
+<img src="Images/mean_help.png" width=300>
+</div>
+
+
+
+
+
+##Factors
+```{R}
+
+x <- c("red","red","red","blue","blue","green")
+str(x)
+
+x1 <- factor(x)
+str(x1)
+```
 
 
 
@@ -385,12 +484,15 @@ mb[c(3:5)]
 
 ```{R}
 Sweet_colours <- c("Red","Purple","Yellow","Green")
+Number_eaten <- c(21,18,3,4)
 Number_left <- c(0,1,20,23)
 
-sweets <- data.frame(Sweet_colours,Number_left)
+sweets <- data.frame(Sweet_colours,Number_eaten,Number_left)
 
 sweets
 ```
+
+
 
 
 ##Data frames
@@ -404,12 +506,8 @@ ncol(sweets)
 ```
 
 
-##Data frames
 
-```{R}
-sweets$Sweet_colours
-sweets$Number_left
-```
+
 
 ##Data frames
 
@@ -420,10 +518,23 @@ sweets[2,2]
 ```
 
 
+
+
 ##Data frames
 
 ```{R}
-barplot(height = sweets$Number_left,names.arg = sweets$Sweet_colours)
+sweets$Sweet_colours
+sweets[,"Sweet_colours"]
+```
+
+
+
+##Data frames
+
+```{R,fig.width = 5,fig.height = 4,fig.align = "center"}
+plot(Number_left~Number_eaten,data = sweets,
+     xlab = "Number of sweets eaten",
+     ylab = "Number of sweets left")
 ```
 
 
@@ -448,19 +559,8 @@ barplot(height = sweets$Number_left,names.arg = sweets$Sweet_colours)
 
 #Your turn
 
-##Your turn
-- Open R studio
-- Type a simple calculation into the console (e.g. `4*4`)
-- Now click File > New file > R script
-- In your script, create a named vector (e.g. `x <- c(1:10)`)
-- On a new line write a command to perform a calculation on your object (e.g. `x/10`)
-- Try running a line at a time (ctrl + enter)
-- Try running the whole script (select all then ctrl + enter)
-- Add some comments to your script
 
 ##Your turn
 - Open *Intro_to_R_practical.pdf*
-- Read the instructions
-- Follow the instructions
-- Green sticky note if you are finished
-- Red sticky note if you are stuck
+- Follow the instructions!
+

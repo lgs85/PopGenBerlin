@@ -29,7 +29,7 @@ Our aim is to calculate *observed heterozygosity* (i.e. the proportion of hetero
 *If you think you can do this without guidance, please go ahead and do so*. Otherwise, step-by-step instructions are provided below.
 
 ### Download, read in and explore the data.
-Using the `scp -r` command, download the "intro_to_r" folder from the amazon server to your laptop.
+Using `scp` command, download the "intro_to_r" folder and all its containing files from the amazon server to your laptop.
 
 Now open up your file explorer. Find the "intro_to_r" folder you have just downloaded, and open the file "Mainland_Island_SNP_data.csv". You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.
 
@@ -91,7 +91,7 @@ dd[22,c("Allele_1","Allele_2")]
 
 
 ###Define our genotypes
-In our dataset we have separate information for each of the two alleles found in each individual. For example, we can see from when we ran the `head()` function that the first individual in our dataset has a "`r dd$Allele_1[1]`" for its first allele, and a "`r dd$Allele_2[1]`" for its second allele. This individual is therefore a `r ifelse(dd$Allele_1[1] == dd$Allele_2[1],"homozygote","heterozygote")` at this locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your terminal (I know we said not to do this, but it's ok here!):
+In our dataset we have separate information for each of the two alleles found in each individual. For example, we can see from when we ran the `head()` function that the first individual in our dataset has a "`r dd$Allele_1[1]`" for its first allele, and a "`r dd$Allele_2[1]`" for its second allele. This individual is therefore a `r ifelse(dd$Allele_1[1] == dd$Allele_2[1],"homozygote","heterozygote")` at this locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your console in R studio:
 
 ```{r,eval = F}
 4 < 3
@@ -165,21 +165,31 @@ table(dd$Het,dd$Pop) #Both combined
 We can assign the output of the `table()` function to an object. Then using this we can extract subsets of tata and perform calculations using them. Using this approach, we can divide the number of heterozygotes by the sample size to calculate observed heterozygosity. 
 
 ```{r}
-#Get the number of heterozygotes and the sample size for each population
-het_counts <- table(dd$Het,dd$Pop)["Heterozygote",] #pulls out the heterozygote row
-samplesizes <- table(dd$Pop) #Calculate sample sizes
+#Get the genotypes for each population
+geno_counts <- table(dd$Het,dd$Pop)
+geno_counts
+
+#Pull out the heterozygote row
+het_counts <- geno_counts["Heterozygote",]
+het_counts
+
+#Get total number of individuals per population
+sample_sizes <- table(dd$Pop)
+sample_sizes
 
 #Now divide the two together
-het_freqs <- het_counts/samplesizes
+het_freqs <- het_counts/sample_sizes
 het_freqs
 ```
 
+
 Now we can plot the frequencies. We will get into plotting in much more detail later in the course. For now, we will use the function `barplot()`.
+
 ```{r fig.width = 4}
 barplot(het_freqs,ylab = "Proportion heterozygotes")
 ```
 
-Finally, we can test whether the proportion of heterozygotes differs between mainland and island population using a Chi-squared test (`?chisq.test`).
+We can test whether the proportion of heterozygotes differs between mainland and island population using a Chi-squared test (`?chisq.test`).
 
 ```{r}
 chisq.test(dd$Het,dd$Pop)
@@ -187,9 +197,20 @@ chisq.test(dd$Het,dd$Pop)
 
 What are you able to conclude from this? Is the effect significant? Is it in the expected direction? What is lacking from this data?
 
-##Putting it all together
-How does your script look? Can you figure out which commands you need to perform all the above analysis? Your script should end up looking something like the *Mainland_Island_SNP_analysis.R* script including in the *Intro_to_R* folder. Note how we end up doing quite a lot with just five lines of code!
+Finally, we may wish to write our summarised data to a file. We can do this using the functions `write.table()` (to write a tab separated table), or `write.csv` to write a CSV file. Let's write our geneotype counts to file now. Note that you will have to change the file path depending on where you want to write your file.
 
+```{r}
+write.table(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.txt")
+
+write.csv(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.csv")
+
+```
+
+Open your text and csv files in sublime and/or excel. How do they look? Any problems? Can you use the help files to figure out how to remove the quotes in the tab separated text file?
+
+
+##Putting it all together
+How does your script look? Can you figure out which commands you need to perform all the above analysis? Your script should end up looking something like the *Mainland_Island_SNP_analysis.R* script including in the *intro_to_r* folder. Note how we end up doing quite a lot with just five lines of code!
 
 
 ##If you've finished
@@ -200,4 +221,6 @@ How does your script look? Can you figure out which commands you need to perform
 
 - I simulated the dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script "Mainland_Island_SNP_data.R", figure out what is being done with each line of code, and annotate the script accordingly.
 
-- Simulate your own SNP dataset, either based on my approach, or by developing your own code.
+- Simulate your own SNP dataset by developing your own code.
+
+- Make the above bar plot, and a stacked version of the above plot, using ggplot2

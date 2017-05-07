@@ -9,7 +9,7 @@ output:
 <script src="js/hide.js"></script>
 
 ## Introduction
-The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then VCFtools to estimate some common measures of genetic diversity in individuals and populations. We will then develop our skills in R to manipulate our output files from plink and VCFtools, and produce publication quality figures of our data.
+The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then VCFtools to estimate some common measures of genetic diversity in individuals and populations. We will then develop our skills in R to manipulate our output files from plink and VCFtools. Finally, we will introduce ggplot2, and learn how to use this package to produce publication quality figures of our data.
 
 Once again, you should try to figure things out for yourself before clicking on "show". To do this, you will need the documentation for VCFtools open. It can be found at https://vcftools.github.io/man_latest.html
 
@@ -143,7 +143,11 @@ FA$dist <- ceiling((FA$POS2 - FA$POS1)/1000)*1000
 ```
 </div>
 
-Now all we need to do is obtain the average R2 value for each 1000bp distance bin. For this we are going to use the `ddply()` function in the package `plyr`. With  `ddply()`, we can perform functions on variables data frames (e.g. calculate means), and return the output in a data frame. Have a look at the relevant help pages and try searching for help online. If you think you understand how it works, have a go at using `ddply()` to create a new data frame with averaged R2 values for each 1000bp window.
+Now we need to obtain the mean R2 value for each 1000bp distance bin. For this we are going to use the `ddply()` function in the package `plyr`. With  `ddply()`, we can perform functions on variables data frames (e.g. calculate means), and return the output in a data frame. Have a look at the relevant help pages and try searching for help online. Here is a tutorial:
+
+http://www.cookbook-r.com/Manipulating_data/Summarizing_data/
+
+If you think you understand how it works, have a go at using `ddply()` to create a new data frame with averaged R2 values for each 1000bp window.
 
 
 <div class="fold s">
@@ -233,7 +237,7 @@ multiplot(Fig1A,Fig1B,Fig1C,layout = matrix(c(1,2,3,3),nrow = 2, byrow = T))
 ```
 **Figure 1** Genomic variation in two experimentally evolved red flour beetle populations. **A** Observed heterozygosity (proportion of heterozygous sites) in each individual. **B** Nucleotide diversity in each population, estimated from 200kb non-overlapping windows. **C** Linkage disequilibrium between marker pairs the first 1mb of chromosome 6. R^2^ values are means of marker-pairs within 1kb non-overlapping bins.
 
-We will work through the figures one at a time. We will be using ggplot2 - if you have no experience using this package, take 5-10 minutes to familiarise yourself by searching for an online tutorial. <a href = "http://www.noamross.net/blog/2012/10/5/ggplot-introduction.html"> This </a> is a good one. We will start with panel **A**. Let's first take a look at our data:
+We will work through the figures one at a time. We will start with panel **A**. Let's first take a look at our data:
 
 ```{r}
 head(het)
@@ -248,7 +252,46 @@ het$Population <- c(rep("MB",3),rep("FA",3)) #Know from previously that the firs
 ```
 </div>
 
-Now we can use ggplot2 to plot heterozygosity against population. We will start off by using the function `geom_point`.
+Take a look at the structure of het. How has the population column been stored? Can you turn it into a factor?
+
+<div class="fold s">
+```{r}
+het$Population <- factor(het$Population)
+```
+</div>
+
+
+
+We can try plotiing heterozygosity against population using the base plotting function in R. We want heterozygosity on the y axis, and population ID on the x. So we would plot as follows:
+
+```{r}
+plot(Heterozygosity~Population,data = het)
+```
+
+Base graphics automatically generates a boxplot, which is not appropriate for our data (as we only have three points per population!). We could get around this, but it is a lot of unnecessary coding and work. 
+
+Instead, for the rest of this course we will be using ggplot2 for our plots - if you have no experience using this package, take 5-10 minutes to familiarise yourself by searching for an online tutorial. Here is one example:
+
+http://www.noamross.net/blog/2012/10/5/ggplot-introduction.html
+
+
+Basically, `ggplot()` builds up a plot in layers. We first tell R *what* we want to plot, then we tell it *how* to plot it (e.g. with points, boxplot etc.) 
+
+We can use ggplot2 to plot heterozygosity against population. We will start off defining the aesthetics, which produces a blank plot. by using the function `geom_point()`, as follows:
+
+```{r}
+#Load the ggplot library
+library(ggplot2)
+
+#Make a plot
+A <- ggplot(het,aes(x = Population, y = Heterozygosity))
+
+#Call the plot up
+A
+```
+
+
+Can you figure out how to now tell ggplot to add points to the plot?
 
 <div class="fold s">
 ```{r}
@@ -325,7 +368,7 @@ pi_both <- rbind(pi_MB,pi_FA)
 pi_both$Population <- c(rep("MB",nrow(pi_MB)),rep("FA",nrow(pi_FA)))
 ```
 
-Now we are ready to make a plot. We will start with the box plot. Remember that we can use a lot of the same arguments from our previous plot.
+Now we are ready to make a plot. We will start with the box plot. Remember that we can use a lot of the same arguments from our previous plot. But this time we will use `geom_boxplot()` instead of `geom_point()`.
 
 <div class="fold s">
 ```{r}
@@ -338,7 +381,7 @@ B
 ```
 </div>
 
-We can add a notch to the box plot easily:
+We can add a notch to the box plot:
 
 <div class="fold s">
 ```{r}
@@ -366,7 +409,7 @@ B
 ```
 </div>
 
-There are two problems here. First, the points are getting in the was of the box plots. Second, they have been coloured by population whereas we would like them to be grey. Any idea how we fix these things?
+There are two problems here. First, the points are getting in the way of the box plots. Second, they have been coloured by population whereas we would like them to be grey. Any idea how we fix these things?
 
 <div class="fold s">
 ```{r}
@@ -412,7 +455,7 @@ B
 ```
 </div>
 
-Done! Now we just need to make the LD plot and stick them all together. Let's take another look at the LD data:
+Done! Now we need to make the LD plot and stick them all together. Let's take another look at the LD data:
 ```{r}
 head(ld)
 ```
@@ -427,7 +470,7 @@ C
 ```
 </div>
 
-Notice that distance is in bp, whereas we would like it in kb. We can also add the lines very easily:
+Notice that distance is in bp, whereas we would like it in kb. We can also add the lines:
 
 <div class="fold s">
 ```{r}
@@ -455,9 +498,10 @@ C
 ```
 </div>
 
-Ok, we have done our plots! We now just need to make a single, muti-panel plot. Again, there are lots of ways we can do this and this is definitely something you should explore. For now we will use the `multiplot()` function from the `Rmisc` library. We can just list the plots without specifying anything to do with the layout:
+Ok, we have done our plots! We now need to make a single, muti-panel plot. Again, there are lots of ways we can do this and this is definitely something you should explore. For now we will use the `multiplot()` function from the `Rmisc` library. We can just list the plots without specifying anything to do with the layout:
 
 ```{r}
+Library(Rmisc)
 multiplot(A,B,C)
 ```
 However, this stacks the plots one on top of the other. We can alter the layout in an enormous number of ways using the argument `layout` and the function `matrix()`. Can you figure out what is going on here? If not, try looking up the `layout()` function and seeing how this works.

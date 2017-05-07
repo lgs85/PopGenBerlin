@@ -130,20 +130,20 @@ $(document).ready(function () {
 </div>
 <div id="the-data" class="section level2">
 <h2>The data</h2>
-<p>We will be using the great tits data set from the population structure practical.</p>
-<p>Because in this session we are looking for loci under selection, we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can create such a file directly from the population_structure folder using a single line of plink code.</p>
+<p>We will be using the great tit data set from the population structure practical. You do not need to copy the file across.</p>
+<p>In this session we are looking for loci under selection, so we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can create such a file using the information you generated in the population structure practical folder using a single line of plink code. Write a new .bim to the selection folder. The file should contain only unrelated individuals, but all markers</p>
 <div class="fold s">
 <pre class="r"><code>plink --bfile ../population_structure/GreatTits --keep ../population_structure/GreatTitsFilteredPruned.rel.id --make-bed --out GreatTitsUnrel</code></pre>
 </div>
 </div>
-<div id="locus-fst" class="section level2">
-<h2>Locus FST</h2>
-<p>We can calculate FST very easily within plink - in fact we have already done this in the population structure practical, using a python script. But in that instance we were only interested in average FST across pairs of populations. We are now interested in the FST for each marker across all of our populations. Can you figure out how to calculate this?</p>
+<div id="locus-f_st" class="section level2">
+<h2>Locus <span class="math">\(F_{ST}\)</span></h2>
+<p>We can calculate <span class="math">\(F_{ST}\)</span> very easily within plink - in fact we have already done this in the population structure practical, using a python script. But in that instance we were only interested in average <span class="math">\(F_{ST}\)</span> across pairs of populations. We are now interested in the <span class="math">\(F_{ST}\)</span> for each marker across all of our populations. Can you figure out how to calculate this?</p>
 <div class="fold s">
 <pre class="r"><code>plink --bfile GreatTitsUnrel --family --fst --out GreatTitsUnrel</code></pre>
 </div>
-<p>But is this the best way to define our populations? What did our Admixture results show? We will now try to use our Admixture results from the K = 4 analysis to assign each individual to an “admixture population”, then run a locus-based FST analyses across the Admixture populations. If you think you can do this, go for it! Otherwise, step-by-step instructions below.</p>
-<p>Remember that this file has one line per individual, with individuals in the same order as in your plink file. It then has the proportion of each cluster assigned to each individual as a separate column. What we need to do is determine, for each individual, which is the ‘largest’ of the four clusters. We can do this in R. Start up R in your server console, then load your admixture into a data frame.</p>
+<p>Check the plink help and make sure you are happy with what the “family” tag is doing. Regardless, is this the best way to define our populations? What did our Admixture results show? We will now try to use our Admixture results from the <span class="math">\(K\)</span> = 4 analysis to assign each individual to an “Admixture population”, then run a locus-based <span class="math">\(F_{ST}\)</span> analysis across the Admixture populations. If you think you can do this, go for it! Otherwise, step-by-step instructions below.</p>
+<p>Remember that your “.Q” file from the Admixture analysis has one line per individual, with individuals in the same order as in your plink file. It then has the proportion of each cluster assigned to each individual as a separate column (so 4 columns for the <span class="math">\(K\)</span> - 4 analysis). What we need to do is determine, for each individual, which is the ‘largest’ of the four clusters. We can do this in R. Start up R in your server console, then load your admixture into a data frame.</p>
 <div class="fold s">
 <pre class="r"><code>R
 
@@ -344,7 +344,7 @@ head(eg1)</code></pre>
 <pre class="r"><code>cor(eg1$PGC,eg1$Fst)</code></pre>
 <pre><code>## [1] -0.7433038</code></pre>
 <p>They are strongly negatively correlated. Is that what we expect?</p>
-<p>Finally, we will use the <code>manhattan()</code> function in the qqman to produce a Manhattan plot of the corrected EigenGWAS p-values. Try to reproduce the plot below, using help that you can find online. Then see if your code matches mine.</p>
+<p>Finally, we will use the <code>manhattan()</code> function in the <code>qqman</code> library to produce a Manhattan plot of the corrected EigenGWAS p-values. Try to reproduce the plot below, using help that you can find online. Then see if your code matches mine.</p>
 <div class="fold s">
 <pre class="r"><code>library(qqman)
 manhattan(eg1,chr = &quot;CHR&quot;,p = &quot;PGC&quot;,bp = &quot;BP&quot;)</code></pre>
@@ -363,7 +363,7 @@ qq(eg1$PGC)</code></pre>
 </div>
 <div id="over-to-you" class="section level2">
 <h2>Over to you</h2>
-<p>Make a publication quality figure summarising the selection analyses you have done. You can adapt figures we have already made or (better still) make completely new ones. For example, you may want to consider:</p>
+<p>Make a publication-quality figure summarising the selection analyses you have done. You can adapt figures we have already made or (better still) make completely new ones. For example, you may want to consider:</p>
 <ul>
 <li>Manhattan plots for the other eigenvectors</li>
 <li>Manhattan plots of sliding window FST (see the “sliding_window.r” script - can you get this working?)</li>

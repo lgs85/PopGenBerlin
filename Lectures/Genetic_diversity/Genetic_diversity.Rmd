@@ -39,7 +39,7 @@ knitr::opts_chunk$set(echo = FALSE)
 1. Individuals within species are variable
 2. Some variations are passed on to offspring
 3. In every generation more offspring are produced than can survive
-4. Individuals who survive and go on to reproduce are are naturally selected.
+4. Individuals who survive and go on to reproduce are naturally selected.
 
 
 <img src="Images/Darwin.png" width=250>
@@ -156,6 +156,9 @@ Gregor Mendel (1866): three“laws”
 
 
 
+
+
+
 ## Genetic variation in populations
 
 <div align = "left">
@@ -167,30 +170,13 @@ Gregor Mendel (1866): three“laws”
 
 
 
-
-
-## Genetic variation in populations
-
-<div align = "center">
-<img src="Images/DobzhanskyHeader.png" width=200>
-</div>
-
-<div align = "center">
-<img src="Images/DobzhanskyTable.png" width=300>
-</div>
-
-
-
-
-
-
-
-
 ## Genetic variation in populations
 
 <div align = "center">
 <img src="Images/LewontinHubby.png" width=550>
 </div>
+
+
 
 
 
@@ -267,6 +253,12 @@ Expected heterozygosity ($H_{EXP}$)
 
 *The expected proportion of heterozygotes at a locus, given the allele frequencies*
 
+For two allelesat frequency $p$ and $q$:
+
+$$ H_{EXP} = 2pq $$ 
+
+For multiple alleles:
+
 $$ H_{EXP} = 1 - \sum_{i = 1}^{n}p_{i^{2}} $$ 
 
 Where $p_i$ is the frequency of each allele $i$ in the population
@@ -290,6 +282,29 @@ $$ \pi = \sum_{i = 1}^{n}\sum_{j = 1}^{n}p_{i}p_{j}\pi_{ij} $$
 Where $p_{i}$ is the frequency of sequence $i$, $p_{j}$ is frequency of sequence $j$, and $pi_{ij}$ is the proportion of nucleotides that differ between the sequences $i$ and $j$.
 
 
+
+## How do we predict how much genetic variation should occur in populations?
+
+$$ p^{2} + 2pq + p^{2} = 1 $$ 
+
+
+
+## How do we predict how much genetic variation should occur in populations?
+
+$$ p^{2} + 2pq + p^{2} = 1 $$ 
+
+<div align = "center">
+HARDY-WEINBERG EQUILIBRIUM
+</div>
+
+
+## Hardy-Weinberg equilibrium
+
+- Allele and genotype frequencies in a population will remain constant from generation to generation in the absence of other evolutionary influences
+
+- What are these other evolutionary influences?
+
+- What can HW theory tell us about evolution?
 
 
 
@@ -395,3 +410,14 @@ Where $x_{11}$, $x_{22}$ etc. are frequencies of haplotypes $A_{1} B_{1}$, $A_{2
 - Many others
 
 
+
+#Practical
+
+
+## A quick introduction to ggplot2
+
+<br>
+
+<div align = "center">
+<img src="Images/ggplot2.png" width=700>
+</div>
