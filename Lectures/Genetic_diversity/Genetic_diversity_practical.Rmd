@@ -52,7 +52,7 @@ vcftools --vcf TriboliumSSGenomes.vcf --hardy --out TriboliumSSGenomes
 ```
 </div>
 
-Now use `ls -l`, `head` and/or `cat` as appropriate to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses have been performed?
+Now use `ls -l`, `head`, `cat` `less` etc., as appropriate, to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses have been performed?
 
 Hopefully you did noticed that the `.hwe` file was very large and didn't try to use `cat` to look at it! Using `head` we can see that the `--hardy` analysis has calculated observed and expected heterozygosity for every SNP. However, we it has averaged over our two populations for this. **Before reading on**, try to figure out how you would perform this analysis separately for each population. Then discuss with a neighbour whether you think this analysis is appropriate for this dataset (clue - think sample sizes), and think of other appropriate analyses.
 

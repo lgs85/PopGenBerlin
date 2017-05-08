@@ -1,12 +1,31 @@
 ---
-title: "Logging onto the Amazon EC2 server"
+title: "Dowloading files from the Amazon EC2 server"
 output: html_document
 ---
 
-You have been sent a key file called physaliaXX.pem, where XX is a number unique to your account. You will need this number for all the commands below. The examples will be for the user physalia28 - you will need to replace 28 with your own, unique number. Note also that the login name for Amazon will change daily. We will help with this. 
+##Everyone
+1. Log onto the Amazon server using your username and keyfile, as you did yesterday.
 
+2. We are going to create a new text file using the `nano` text editor. In the amazon server, type:
+
+```{r}
+nano
+```
+
+3. Type some text into nano, then press ctrl+X to exit. Type "Y" to save, then when prompted name your file "test.txt", then <enter>.
+
+4. Use `ls` to check that the test.txt file has appeared. 
+
+Our next step differs for windows and mac users. Go to the relevant section.
 
 ##Windows users
+- Start up your command prompt (e.g. open windows explorer and type "cmd" into the explorer bar and press <enter>)
+
+- Get the path to your current directory, and to your key file:
+
+```{r, eval = F}
+pscp - C:\Documents\path\to_your_file\physaliaXX.pkk
+```
 
 ###1. Create a windows key
 We need to convert the key file to a format that is compatible with Windows. We do this using PuTTYGen.

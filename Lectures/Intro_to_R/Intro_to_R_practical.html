@@ -146,7 +146,7 @@ $(document).ready(function () {
 <p><em>If you think you can do this without guidance, please go ahead and do so</em>. Otherwise, step-by-step instructions are provided below.</p>
 <div id="download-read-in-and-explore-the-data." class="section level3">
 <h3>Download, read in and explore the data.</h3>
-<p>Using <code>scp</code> command, download the “intro_to_r” folder and all its containing files from the amazon server to your laptop.</p>
+<p>Using <code>scp</code>, download the “intro_to_r” folder and all its containing files from the amazon server to your laptop.</p>
 <p>Now open up your file explorer. Find the “intro_to_r” folder you have just downloaded, and open the file “Mainland_Island_SNP_data.csv”. You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.</p>
 <p>Now open R studio. Either by typing in the console, or using the menu, set your working directory to the “intro_to_r” folder. Now, in your script, type in the commands ro read in the “Mainland_Island_SNP_data.csv” file, and assign the dataframe to a suitable object name. You can do this using something like the following code:</p>
 <pre class="r"><code>setwd(&quot;~/Documents/Teaching/PopGenBerlinLGS/intro_to_r&quot;)
