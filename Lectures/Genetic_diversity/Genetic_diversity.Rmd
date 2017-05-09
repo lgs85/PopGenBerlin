@@ -412,12 +412,3 @@ Where $x_{11}$, $x_{22}$ etc. are frequencies of haplotypes $A_{1} B_{1}$, $A_{2
 
 
 #Practical
-
-
-## A quick introduction to ggplot2
-
-<br>
-
-<div align = "center">
-<img src="Images/ggplot2.png" width=700>
-</div>

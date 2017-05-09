@@ -23,7 +23,7 @@ Now use what you have learned about plink, along with the plink website, to filt
 
 <div class="fold s">
 ```{r eval = F}
-plink --file GreatTits --hwe 0.01 --maf 0.05 --make-bed --out GreatTitsFiltered 
+plink --bfile GreatTits --hwe 0.01 --maf 0.05 --make-bed --out GreatTitsFiltered 
 ```
 </div>
 
@@ -49,8 +49,8 @@ Finally, we can filter based on individual relatedness. This is best done by exp
 
 <div class="fold s">
 ```{r eval = F}
-plink --bfile GreatTitsFiltered --rel-cutoff 0.4 --out GreatTitsFilteredPruned
-plink --bfile GreatTitsFiltered --keep GreatTitsFilteredPruned.rel.id --make-bed --out GreatTitsFilteredPrunedUnrel
+plink --bfile GreatTitsFilteredPruned --rel-cutoff 0.4 --out GreatTitsFilteredPruned
+plink --bfile GreatTitsFilteredPruned --keep GreatTitsFilteredPruned.rel.id --make-bed --out GreatTitsFilteredPrunedUnrel
 
 ```
 </div>
@@ -121,13 +121,16 @@ done
 ```
 </div>
 
-Done! Now we can download all of our results and do some plots. You will need to download:
-- The pairwise FST output from the python script
+Done! Now we can download all of our results and do some plots. Create a new folder called session4_output and copy the following files to that folder:
+
+- The pairwise FST output from the python script 
 - The file LatLong.txt
 - The output from your plink PCA (the ".eigenvec" file)
 - All of your admixture ".Q" files
 - The file "GreatTitsThinned.fam"
 - The R script "Admixture_plot.R"
+
+Now download the session4_output folder using scp or pscp.
 
 ##Putting it all together
 
@@ -138,7 +141,7 @@ library(geosphere)
 library(ggplot2)
 library(Rmisc)
 
-setwd("~/Documents/Teaching/PopGenBerlinLGS/population_structure/")
+setwd("~/Documents/Teaching/PopGenBerlinLGS/session4_output/")
 ll <- read.table("LatLong.txt",header = T,as.is = T)  
 pd <- read.table("pairwise_fst.txt",as.is = T)
 
@@ -204,7 +207,7 @@ We will begin with the IBD plot. Hopefully it is clear that to reproduce this we
 
 <div class="fold s">
 ```{R}
-pd <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/pairwise_fst.txt",as.is = T) #Or wherever you have put this
+pd <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session4_output/pairwise_fst.txt",as.is = T) #Or wherever you have put this
 head(pd)
 ```
 </div>
@@ -231,7 +234,7 @@ library(geosphere)
 
 <div class="fold s">
 ```{R}
-ll <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/LatLong.txt", header = T,as.is = T) #Or wherever you have put this
+ll <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session4_output/LatLong.txt", header = T,as.is = T) #Or wherever you have put this
 ll
 ```
 </div>
@@ -337,7 +340,7 @@ Now we can move onto our PCA plot. Load the PCA output into R.
 
 <div class="fold s">
 ```{R}
-pca1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsFilteredPrunedUnrel.eigenvec") #Or wherever you have put this
+pca1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session4_output/GreatTitsFilteredPrunedUnrel.eigenvec") #Or wherever you have put this
 head(pca1)
 ```
 </div>
@@ -387,7 +390,7 @@ B
 Now we are onto the tricky part - the admixture plots. Rather than take you through this step by step I have provided a function that I have written myself. This is in the "Admixture_plot.R" script that you downloaded. Open the script up and take a look at the code. We will not go into writing functions here, but essentially this script contains the code to create a function called `admixtureplot()`. After you have run the code in the script you will then be able to use the function. Running the code manually would work, but you would need to do this every time you ran the script you are currently working on. You could copy and paste the function code into your current script, but that would be rather unwieldy. We will use the following code:
 
 ```{r}
-source("~/Documents/Teaching/PopGenBerlinLGS/population_structure/Admixture_plot.R") #Or whatever the path to this script is
+source("~/Documents/Teaching/PopGenBerlinLGS/session4_output/Admixture_plot.R") #Or whatever the path to this script is
 ```
 
 If you look in the "environment" tab in the top right of R studio, you should see that the `admixtureplot()` function has been loaded. You can call up the code by typing `admixtureplot` (without brackets) into the console.
@@ -397,8 +400,8 @@ Now we are ready to try running the function. `admixtureplot` has 4 arguments, t
 Adapt the following code (depending on your working directory) to run the function for your K = 2 admixture output.
 
 ```{r,fig.height = 3}
-K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.2.Q")
-mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
+K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session4_output/GreatTitsThinned.2.Q")
+mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session4_output/GreatTitsThinned.fam")
 C <- admixtureplot(str_out = K2,k = 2, pops = mypops)
 
 C
@@ -408,16 +411,13 @@ Now it should be fairly clear how we can do the same thing for K = 3 and 4, and 
 
 <div class="fold s">
 ```{r}
-K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.2.Q")
-mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
+K2 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session4_output/GreatTitsThinned.2.Q")
 C <- admixtureplot(str_out = K2,k = 2, pops = mypops, xaxis = F)
 
-K3 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.3.Q")
-mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
+K3 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session4_output/GreatTitsThinned.3.Q")
 D <- admixtureplot(str_out = K3,k = 3, pops = mypops, xaxis = F)
 
-K4 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.4.Q")
-mypops <- read.table("~/Documents/Teaching/PopGenBerlinLGS/population_structure/GreatTitsThinned.fam")
+K4 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session4_output/GreatTitsThinned.4.Q")
 E <- admixtureplot(str_out = K4,k = 4, pops = mypops, xaxis = T)
 ```
 </div>

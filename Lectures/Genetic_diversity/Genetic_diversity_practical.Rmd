@@ -52,7 +52,7 @@ vcftools --vcf TriboliumSSGenomes.vcf --hardy --out TriboliumSSGenomes
 ```
 </div>
 
-Now use `ls -l`, `head`, `cat` `less` etc., as appropriate, to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses have been performed?
+Now use `ls -l`, `head`, `cat`,`less` etc., as appropriate, to explore the output files from each of these analyses. What have the analyses done? Have you noticed any problems with the way the analyses have been performed?
 
 Hopefully you did noticed that the `.hwe` file was very large and didn't try to use `cat` to look at it! Using `head` we can see that the `--hardy` analysis has calculated observed and expected heterozygosity for every SNP. However, we it has averaged over our two populations for this. **Before reading on**, try to figure out how you would perform this analysis separately for each population. Then discuss with a neighbour whether you think this analysis is appropriate for this dataset (clue - think sample sizes), and think of other appropriate analyses.
 
@@ -183,16 +183,16 @@ That's our analyses done! Now you can log out of the server, and use SCP to down
 - windowed nucleotide diversity (two files - one per population), 
 - windowed LD (one file). 
 
-Download your four genetic diversity outputs using SCP. Once you have done this, open R studio on your laptop and use `read.csv()` and `read.table()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
+Make a new folder called "session3_output" or something similar using `mkdir` Download your four genetic diversity outputs using `scp` (mac) or `pscp` (windows), in exactly the same way as you learned this morning. Once you have done this, open R studio on your laptop and use `read.csv()` and `read.table()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
 
 <div class="fold s">
 ```{r}
 rm(list=ls()) #Clear your workspace
 
-het <- read.table("~/Documents/Teaching/PopGenBerlinLGS/genetic_diversity/TriboliumSSGenomes.het",header = T)
-pi_MB <- read.table("~/Documents/Teaching/PopGenBerlinLGS/genetic_diversity//TriboliumSSGenomesMB.windowed.pi", header = T)
-pi_FA <- read.table("~/Documents/Teaching/PopGenBerlinLGS/genetic_diversity//TriboliumSSGenomesFA.windowed.pi", header = T)
-ld <- read.csv("~/Documents/Teaching/PopGenBerlinLGS/genetic_diversity//TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
+het <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session3_output/TriboliumSSGenomes.het",header = T)
+pi_MB <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session3_output/TriboliumSSGenomesMB.windowed.pi", header = T)
+pi_FA <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session3_output/TriboliumSSGenomesFA.windowed.pi", header = T)
+ld <- read.csv("~/Documents/Teaching/PopGenBerlinLGS/session3_output/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
 
 ```
 </div>
@@ -235,7 +235,10 @@ Fig1C <-  mutate(ld,Population = pop,distkb = dist/1000) %>%
 
 multiplot(Fig1A,Fig1B,Fig1C,layout = matrix(c(1,2,3,3),nrow = 2, byrow = T))
 ```
+<br>
 **Figure 1** Genomic variation in two experimentally evolved red flour beetle populations. **A** Observed heterozygosity (proportion of heterozygous sites) in each individual. **B** Nucleotide diversity in each population, estimated from 200kb non-overlapping windows. **C** Linkage disequilibrium between marker pairs the first 1mb of chromosome 6. R^2^ values are means of marker-pairs within 1kb non-overlapping bins.
+
+<br><br>
 
 We will work through the figures one at a time. We will start with panel **A**. Let's first take a look at our data:
 
@@ -313,7 +316,7 @@ A
 ```
 </div>
 
-Now we need to change the background colour. I did this using `theme_bw()`:
+Now we need to change the background colour. I did this by adding a layer called `theme_bw()`. Check out ggplots "themes" online for more:
 
 <div class="fold s">
 ```{r}
@@ -325,7 +328,7 @@ A
 ```
 </div>
 
-Remove the x axis and the legend:
+Remove the x axis label and the legend:
 
 <div class="fold s">
 ```{r}
@@ -381,12 +384,12 @@ B
 ```
 </div>
 
-We can add a notch to the box plot:
+We can add a notch to the box plot and remove the outliers (google!):
 
 <div class="fold s">
 ```{r}
 B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population)) +
-      geom_boxplot(notch = T)+
+      geom_boxplot(notch = T,outlier.shape = NA)+
       theme_bw()+
       theme(legend.position = "none")+
       xlab("")
@@ -400,7 +403,7 @@ To add the points behind the box plot we will use the function `geom_jitter`:
 <div class="fold s">
 ```{r}
 B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population)) +
-      geom_boxplot(notch = T)+
+      geom_boxplot(notch = T,outlier.shape = NA)+
       theme_bw()+
       theme(legend.position = "none")+
       xlab("")+
@@ -415,7 +418,7 @@ There are two problems here. First, the points are getting in the way of the box
 ```{r}
 B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population))+
       geom_jitter(col = "grey")+ #Add this before the geom_boxplot() to put the points behind the boxes
-      geom_boxplot(notch = T, alpha = 0)+ #alpha makes the background seethrough
+      geom_boxplot(notch = T, alpha = 0,outlier.shape = NA)+ #alpha makes the background seethrough
       theme_bw()+
       theme(legend.position = "none")+
       xlab("")
@@ -430,7 +433,7 @@ Getting there... the points in this plot are spread more widely here than in the
 ```{r}
 B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population))+
       geom_jitter(col = "grey",width = 0.1)+ #Add this before the geom_boxplot() to put the points behind the boxes
-      geom_boxplot(notch = T, alpha = 0)+ #alpha makes the background seethrough
+      geom_boxplot(notch = T, alpha = 0,outlier.shape = NA)+ #alpha makes the background seethrough
       theme_bw()+
       theme(legend.position = "none")+
       xlab("")
@@ -445,7 +448,7 @@ Finally, we just need to add the panel label and sort out our y axis. How can we
 ```{r}
 B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population))+
       geom_jitter(col = "grey",width = 0.1)+ #Add this before the geom_boxplot() to put the points behind the boxes
-      geom_boxplot(notch = T, alpha = 0)+ #alpha makes the background seethrough
+      geom_boxplot(notch = T, alpha = 0,outlier.shape = NA)+ #alpha makes the background seethrough
       theme_bw()+
       theme(legend.position = "none")+
       xlab("")+
@@ -501,9 +504,10 @@ C
 Ok, we have done our plots! We now need to make a single, muti-panel plot. Again, there are lots of ways we can do this and this is definitely something you should explore. For now we will use the `multiplot()` function from the `Rmisc` library. We can just list the plots without specifying anything to do with the layout:
 
 ```{r}
-Library(Rmisc)
+library(Rmisc)
 multiplot(A,B,C)
 ```
+<br>
 However, this stacks the plots one on top of the other. We can alter the layout in an enormous number of ways using the argument `layout` and the function `matrix()`. Can you figure out what is going on here? If not, try looking up the `layout()` function and seeing how this works.
 
 ```{r}

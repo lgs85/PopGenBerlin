@@ -6,6 +6,23 @@ output:
   ioslides_presentation
 ---
 
+##Today we go from this...
+
+```{r}
+x <- 1 + 1
+x
+```
+
+
+##To this...
+
+<div align="center">
+<img src="Images/rplot.png" width=600>
+</div>
+
+
+
+
 ##Outline
 
 - What is R and why is it so great?

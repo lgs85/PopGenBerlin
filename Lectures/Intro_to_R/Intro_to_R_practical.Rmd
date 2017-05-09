@@ -29,11 +29,11 @@ Our aim is to calculate *observed heterozygosity* (i.e. the proportion of hetero
 *If you think you can do this without guidance, please go ahead and do so*. Otherwise, step-by-step instructions are provided below.
 
 ### Download, read in and explore the data.
-Using `scp`, download the "intro_to_r" folder and all its containing files from the amazon server to your laptop.
+Using `scp` (mac/linux) or `pscp` (windows), download the "intro_to_r" folder and all its containing files from the amazon server to your laptop.
 
 Now open up your file explorer. Find the "intro_to_r" folder you have just downloaded, and open the file "Mainland_Island_SNP_data.csv". You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.
 
-Now open R studio. Either by typing in the console, or using the menu, set your working directory to the "intro_to_r" folder. Now, in your script, type in the commands ro read in the "Mainland_Island_SNP_data.csv" file, and assign the dataframe to a suitable object name. You can do this using something like the following code:
+Now open R studio. Either by typing in the console, or using the menu, set your working directory to the "intro_to_r" folder. Now, in your script, type in the commands ro read in the "Mainland_Island_SNP_data.csv" file, and assign the dataframe to a suitable object name. You can do this using something like the following code, depending on where you have stored your "intro_to_r" folder:
 
 ```{r}
 setwd("~/Documents/Teaching/PopGenBerlinLGS/intro_to_r")
