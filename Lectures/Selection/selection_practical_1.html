@@ -130,7 +130,7 @@ $(document).ready(function () {
 </div>
 <div id="the-data" class="section level2">
 <h2>The data</h2>
-<p>We will be using the <em>Tribolium castaneum</em> genomes from the genetic diversity practical. Change your working directory to the selection folder.</p>
+<p>We will be using the <em>Tribolium castaneum</em> genomes from the genetic diversity practical. Copy the selection folder from Dati and set your working directory there.</p>
 </div>
 <div id="site-and-window-nucleotide-diversity" class="section level2">
 <h2>Site and window nucleotide diversity</h2>
@@ -229,7 +229,7 @@ vcftools --vcf SnpEff/Tribolium.ann.syn.vcf --chr ChLG2 --window-pi 200000 --ind
 vcftools --vcf SnpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --window-pi-step 200 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out Tribolium_optix_MB1k
 vcftools --vcf SnpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --window-pi-step 200 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out Tribolium_optix_FA1k</code></pre>
 </div>
-<p>Ok, now we are ready to download our data for plotting. You will need to download the following files (10 in total) to a suitable directory on your laptop:</p>
+<p>Ok, now we are ready to download our data for plotting. You will need to copy the following files to a suitable directory on your server (e.g. session7_output) and copy the following files there (10 in total):</p>
 <ul>
 <li>200kb <span class="math">\(\pi\)</span> for all markers on chromosome ChLG2 (2 files - one per population)</li>
 <li>200kb Tajima’s D for all markers on chromosome ChLG2 (2 files - one per population)</li>
@@ -237,7 +237,7 @@ vcftools --vcf SnpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --win
 <li>200kb <span class="math">\(\pi\)</span> for non-synonymous variants on chromosome ChLG2 (2 files - one per population)</li>
 <li>1kb <span class="math">\(\pi\)</span> for all variants in the OPTIX gene (2 files - one per population)</li>
 </ul>
-<p>(HINT - use <code>selection\/*.pi</code> within <code>scp</code> to download all files ending in “.pi” from a particular folder.)</p>
+<p>(HINT - use <code>*.pi</code> to copy all files ending in “.pi” from a particular folder.)</p>
 </div>
 <div id="make-some-plots" class="section level2">
 <h2>Make some plots</h2>
@@ -251,8 +251,8 @@ vcftools --vcf SnpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --win
 library(ggplot2)
 
 #Read in data
-temp1 &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB200k.windowed.pi&quot;,header = T)
-temp2 &lt;-  read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA200k.windowed.pi&quot;,header = T)
+temp1 &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB200k.windowed.pi&quot;,header = T)
+temp2 &lt;-  read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA200k.windowed.pi&quot;,header = T)
 
 #Combine the data and add a population ID column
 pi200 &lt;- rbind(temp1,temp2)
@@ -273,8 +273,8 @@ FigA</code></pre>
 </div>
 <p>The bottom two plots require a little more data cleaning before we can make the plot. Let’s consider panel <strong>B</strong> first, which plots non-synonymous and synonymous <span class="math">\(\pi\)</span> for the MB population. We first need to read in the data and take a look at it:</p>
 <div class="fold s">
-<pre class="r"><code>nonsyn &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/Tribolium_nonsyn_MB200k.windowed.pi&quot;,header = T)
-syn &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/Tribolium_syn_MB200k.windowed.pi&quot;,header = T)
+<pre class="r"><code>nonsyn &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_nonsyn_MB200k.windowed.pi&quot;,header = T)
+syn &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_syn_MB200k.windowed.pi&quot;,header = T)
 
 str(syn)</code></pre>
 <pre><code>## 'data.frame':    79 obs. of  5 variables:
@@ -300,7 +300,7 @@ which(!(syn$BIN_START %in% nonsyn$BIN_START))</code></pre>
 which(!(nonsyn$BIN_START %in% syn$BIN_START))</code></pre>
 <pre><code>## [1] 36 39 71</code></pre>
 </div>
-<p>This tells VCFtools gave us 4 windows with a calculation for <span class="math">\(\pi\)</span> at synonymous sites but not non-synonymous sites, and three windows where <span class="math">\(\pi\)</span> was calculated at non-synonymous sites but not synonymous sites. This will have occurred because there was no synonymous/non-synonymous variants within those particular windows. We may wish to explore why that might be the case, but for now we can simply exclude sites that do not have both synonymous and non-synonymous variants.</p>
+<p>This tells VCFtools gave us 4 windows with a calculation for <span class="math">\(\pi\)</span> at synonymous sites but not non-synonymous sites, and three windows where <span class="math">\(\pi\)</span> was calculated at non-synonymous sites but not synonymous sites. This is likely to have occurred because there were no synonymous/non-synonymous variants within those particular windows. We may wish to explore why that might be the case, but for now we can simply exclude sites that do not have both synonymous and non-synonymous variants.</p>
 <div class="fold s">
 <pre class="r"><code>inboth &lt;- intersect(syn$BIN_START,nonsyn$BIN_START)
 
@@ -353,8 +353,8 @@ FigB</code></pre>
 <p>Once we have done this we can go through exactly the same process for the FA population, and change the colour.</p>
 <div class="fold s">
 <pre class="r"><code>#Read in the data
-nonsyn &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/Tribolium_nonsyn_FA200k.windowed.pi&quot;,header = T)
-syn &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/Tribolium_syn_FA200k.windowed.pi&quot;,header = T)
+nonsyn &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_nonsyn_FA200k.windowed.pi&quot;,header = T)
+syn &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_syn_FA200k.windowed.pi&quot;,header = T)
 
 #Get unique 
 inboth &lt;- intersect(syn$BIN_START,nonsyn$BIN_START)
@@ -393,8 +393,8 @@ multiplot(FigA,FigB,FigC,layout = matrix(c(1,1,2,3),nrow = 2,byrow = T))</code><
 <p>If you do identify regions showing unusual patterns of diversity, it is generally a good idea to follow them up a bit further. Let’s take a closer look at the region with highest <span class="math">\(\pi\)</span> in our dataset, found at around position 8MB. One thing we can do is zoom in on the region, using smaller sliding windows. Let’s take a look with the 50kb window data.</p>
 <div class="fold s">
 <pre class="r"><code>#Read in data
-temp1 &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB50k.windowed.pi&quot;,header = T)
-temp2 &lt;-  read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA50k.windowed.pi&quot;,header = T)
+temp1 &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB50k.windowed.pi&quot;,header = T)
+temp2 &lt;-  read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA50k.windowed.pi&quot;,header = T)
 
 #Combine the data and add a population ID column
 pi50 &lt;- rbind(temp1,temp2)
@@ -411,8 +411,8 @@ FigA</code></pre>
 <p>The region of high diversity in the FA population is still there. How about using 10kb windows?</p>
 <div class="fold s">
 <pre class="r"><code>#Read in data
-temp1 &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB10k.windowed.pi&quot;,header = T)
-temp2 &lt;-  read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA10k.windowed.pi&quot;,header = T)
+temp1 &lt;- read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB10k.windowed.pi&quot;,header = T)
+temp2 &lt;-  read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA10k.windowed.pi&quot;,header = T)
 
 #Combine the data and add a population ID column
 pi10 &lt;- rbind(temp1,temp2)
@@ -430,7 +430,7 @@ Fig</code></pre>
 Another thing we can do is look at a range of statistics in our region of interest. We can take a look at Tajima’s D for the FA population.
 <div class="fold s">
 <pre class="r"><code>#Read in data
-dd &lt;-  read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA50k.Tajima.D&quot;,header = T)
+dd &lt;-  read.table(&quot;~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA50k.Tajima.D&quot;,header = T)
 
 #Make a variable to colour the region of interest
 dd$Region &lt;- ifelse(dd$BIN_START %in% seq(8e06,9e06,5e04),&quot;HD region&quot;,&quot;Not HD region&quot;)

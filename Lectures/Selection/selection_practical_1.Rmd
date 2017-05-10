@@ -13,7 +13,7 @@ output:
 We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. Finally, we will learn how to annotate a VCF file and look at some of the cool things we can do if we have a reference genome.
 
 ## The data
-We will be using the *Tribolium castaneum* genomes from the genetic diversity practical. Change your working directory to the selection folder.
+We will be using the *Tribolium castaneum* genomes from the genetic diversity practical. Copy the selection folder from Dati and set your working directory there.
 
 ## Site and window nucleotide diversity
 In the genetic diversity practical we calculated $\pi$ in non-overlapping 200kb windows, and compared distributions of windowed-averages across experimental populations. For visualisation of how variation occurs along genomes, we sometimes wish to calculate statistics in *sliding* windows. This is done very simply using VCFtools - here is the code to calculate.
@@ -148,7 +148,7 @@ vcftools --vcf SnpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --win
 ```
 </div>
 
-Ok, now we are ready to download our data for plotting. You will need to download the following files (10 in total) to a suitable directory on your laptop:
+Ok, now we are ready to download our data for plotting. You will need to copy the following files to a suitable directory on your server (e.g. session7_output) and copy the following files there (10 in total):
 
 - 200kb $\pi$ for all markers on chromosome ChLG2 (2 files - one per population)
 - 200kb Tajima's D for all markers on chromosome ChLG2 (2 files - one per population)
@@ -156,7 +156,7 @@ Ok, now we are ready to download our data for plotting. You will need to downloa
 - 200kb $\pi$ for non-synonymous variants on chromosome ChLG2 (2 files - one per population)
 - 1kb $\pi$ for all variants in the OPTIX gene (2 files - one per population)
 
-(HINT - use `selection\/*.pi` within `scp` to download all files ending in ".pi" from a particular folder.)
+(HINT - use `*.pi` to copy all files ending in ".pi" from a particular folder.)
 
 ## Make some plots
 
@@ -164,7 +164,7 @@ This is the plot we will be aiming to make:
 
 ```{r,fig.width = 8,fig.height = 7,echo = F,message = F, warning = F}
 
-setwd("~/Documents/Teaching/PopGenBerlinLGS/selection")
+setwd("~/Documents/Teaching/PopGenBerlinLGS/session7_output/")
 temp1 <- read.table("TriboliumSSGenomesMB200k.windowed.pi",header = T)
 temp2 <- read.table("TriboliumSSGenomesFA200k.windowed.pi",header = T)
 
@@ -248,8 +248,8 @@ The top plot largely uses code/concepts that we have already introduced, so do h
 library(ggplot2)
 
 #Read in data
-temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB200k.windowed.pi",header = T)
-temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA200k.windowed.pi",header = T)
+temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB200k.windowed.pi",header = T)
+temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA200k.windowed.pi",header = T)
 
 #Combine the data and add a population ID column
 pi200 <- rbind(temp1,temp2)
@@ -274,8 +274,8 @@ The bottom two plots require a little more data cleaning before we can make the 
 
 <div class="fold s">
 ```{R}
-nonsyn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/Tribolium_nonsyn_MB200k.windowed.pi",header = T)
-syn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/Tribolium_syn_MB200k.windowed.pi",header = T)
+nonsyn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_nonsyn_MB200k.windowed.pi",header = T)
+syn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_syn_MB200k.windowed.pi",header = T)
 
 str(syn)
 str(nonsyn)
@@ -294,7 +294,7 @@ which(!(nonsyn$BIN_START %in% syn$BIN_START))
 ```
 </div>
 
-This tells VCFtools gave us 4 windows with a calculation for $\pi$ at synonymous sites but not non-synonymous sites, and three windows where $\pi$ was calculated at non-synonymous sites but not synonymous sites. This will have occurred because there was no synonymous/non-synonymous variants within those particular windows. We may wish to explore why that might be the case, but for now we can simply exclude sites that do not have both synonymous and non-synonymous variants.
+This tells VCFtools gave us 4 windows with a calculation for $\pi$ at synonymous sites but not non-synonymous sites, and three windows where $\pi$ was calculated at non-synonymous sites but not synonymous sites. This is likely to have occurred because there were no synonymous/non-synonymous variants within those particular windows. We may wish to explore why that might be the case, but for now we can simply exclude sites that do not have both synonymous and non-synonymous variants.
 
 
 <div class="fold s">
@@ -359,8 +359,8 @@ Once we have done this we can go through exactly the same process for the FA pop
 ```{R}
 
 #Read in the data
-nonsyn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/Tribolium_nonsyn_FA200k.windowed.pi",header = T)
-syn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/Tribolium_syn_FA200k.windowed.pi",header = T)
+nonsyn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_nonsyn_FA200k.windowed.pi",header = T)
+syn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_syn_FA200k.windowed.pi",header = T)
 
 #Get unique 
 inboth <- intersect(syn$BIN_START,nonsyn$BIN_START)
@@ -408,8 +408,8 @@ If you do identify regions showing unusual patterns of diversity, it is generall
 ```{R, warning = F}
 
 #Read in data
-temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB50k.windowed.pi",header = T)
-temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA50k.windowed.pi",header = T)
+temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB50k.windowed.pi",header = T)
+temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA50k.windowed.pi",header = T)
 
 #Combine the data and add a population ID column
 pi50 <- rbind(temp1,temp2)
@@ -431,8 +431,8 @@ The region of high diversity in the FA population is still there. How about usin
 ```{R, warning = F}
 
 #Read in data
-temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB10k.windowed.pi",header = T)
-temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA10k.windowed.pi",header = T)
+temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB10k.windowed.pi",header = T)
+temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA10k.windowed.pi",header = T)
 
 #Combine the data and add a population ID column
 pi10 <- rbind(temp1,temp2)
@@ -455,7 +455,7 @@ Another thing we can do is look at a range of statistics in our region of intere
 ```{R, warning = F}
 
 #Read in data
-dd <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA50k.Tajima.D",header = T)
+dd <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA50k.Tajima.D",header = T)
 
 #Make a variable to colour the region of interest
 dd$Region <- ifelse(dd$BIN_START %in% seq(8e06,9e06,5e04),"HD region","Not HD region")
@@ -491,8 +491,8 @@ Read this table into R (HINT - this may need cleaning first!), and use R to:
 
 ```{R,echo = F,warning = F,message = F}
 #Read in data
-temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesMB10k.windowed.pi",header = T)
-temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/TriboliumSSGenomesFA10k.windowed.pi",header = T)
+temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB10k.windowed.pi",header = T)
+temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA10k.windowed.pi",header = T)
 
 #Combine the data and add a population ID column
 pi10 <- rbind(temp1,temp2)
@@ -505,7 +505,7 @@ Fig <- ggplot(pi10,aes(x = BIN_START/1000, y = PI,col = Pop))+
   xlim(8000,9000)+
   xlab("Genomic position (KB)")
 
-genes <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/LG2genes.txt",header = T)
+genes <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/LG2genes.txt",header = T)
 genes <- subset(genes,Start %in% (8.4e06:8.6e06))
 genes <- subset(genes,!duplicated(GeneID))
 genes$y1 <- rep(0.022,nrow(genes))

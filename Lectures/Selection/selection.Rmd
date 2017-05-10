@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 <br>
 
-*"To my imagination it is far more satisfactory to look at such instincts as the young cuckoo ejecting its foster-brothers, ants making slaves, the larvæ of ichneumonidæ feeding within the live bodies of caterpillars, not as specially endowed or created instincts, but as small consequences of one general law, leading to the advancement of all organic beings, namely, multiply, vary, let the strongest live and the weakest die."*
+*"To my imagination it is far more satisfactory to look at such instincts as the young cuckoo ejecting its foster-brothers, ants making slaves, the larvae of ichneumonidae feeding within the live bodies of caterpillars, not as specially endowed or created instincts, but as small consequences of one general law, leading to the advancement of all organic beings; namely, multiply, vary, let the strongest live and the weakest die."*
 
 Darwin, *The Origin of Species*
 
@@ -73,56 +73,29 @@ Darwin, *The Origin of Species*
 
 ## Selectionism vs neutralism
 
-The neutralists think - rightly in my opinion - that adaptations are the tip of the iceberg: probably most evolutionary change, when seen at the molecular level, is non-functional.
+*"The neutralists think - rightly in my opinion - that adaptations are the tip of the iceberg: probably most evolutionary change, when seen at the molecular level, is non-functional."*
 
-
-## Can we find the tips of the iceberg?
-
-<div align = "center">
-<img src="Images/Mueller.png" width=500>
-</div>
-
-
-
-## Can we find the tips of the iceberg?
+Richard Dawkins, *The Blind Watchmaker*
 
 <div align = "center">
-<img src="Images/msat.png" width=500>
-</div>
-
-
-
-## Can we find the tips of the iceberg?
-
-<div align = "center">
-<img src="Images/warfarin.png" width=600>
+<img src="Images/Dawkins.png" width=400>
 </div>
 
 
 
 
-# Natural selection in the (population) genomic era
+# Natural selection in the (population) genomic era | Can we find the tips of the iceberg?
 
 
 
-# What can more markers tell us about natural selection?
+## Natural selection in the (population) genomic era
 
-
-
-## What can more markers tell us about natural selection?
+(Or, what can more markers tell us about natural selection?)
 
 We can take two approaches...
 
 - Identify the genetic basis of known adaptive traits (top-down approaches)
 - Identify loci under selection, then see what they do (bottom-up approaches)
-
-
-## Bottom up approaches are not new
-
-<div align = "center">
-<img src="Images/msat.png" width=500>
-</div>
-
 
 
 ## Bottom-up approaches to detecting selection
@@ -132,19 +105,24 @@ We can take two approaches...
 </div>
 
 
-## Bottom-up approaches to detecting selection
-
-<div align = "center">
-<img src="Images/chrdiag.png" width=600>
-</div>
-
-
 
 ## Bottom-up approaches to detecting selection
 
-<div align = "center">
-<img src="Images/flycatcher.png" width=600>
-</div>
+```{r,warning = F,fig.width = 6, fig.height = 4,fig.align = "center"}
+stat <- rbeta(5000,2,10)/10
+
+peak <- sample(seq(0,0.2,length.out = 50),50)
+stat[seq(2001,2100,length.out = 50)] <- stat[seq(2001,2100,length.out = 50)] + peak
+pos <- c(1:5000)
+dd <- data.frame(Statistic = stat,Position = pos)
+
+library(ggplot2)
+ggplot(dd,aes(x = Position,y = Statistic))+
+  geom_point()+
+  theme_bw()
+```
+
+
 
 
 
@@ -152,16 +130,11 @@ We can take two approaches...
 
 $\pi$
 
-Nucleotide diversity (we know this!)
+<div align = "center">
+<img src="Images/pi.png" width=400>
+</div>
 
 
-
-
-## Detecting selection within populations
-
-$d_{N}/d_{S}$
-
-Rate of non-synonynous compared to synonymous substitutions
 
 
 
@@ -174,15 +147,6 @@ https://www.youtube.com/watch?v=wiyay4YMq2A
 
 
 
-## Detecting selection within populations
-
-ROH
-
-Runs of homozygosity
-
-Long stretches of consecutive homozygous genotypes
-
-
 
 ## Detecting selection within populations
 
@@ -192,6 +156,9 @@ Integrated haplotype score
 
 The amount of extended haplotype homozygosity (EHH) at a given SNP along the ancestral allele relative to the derived allele. 
 
+<div align = "center">
+<img src="Images/ihs.png" width=600>
+</div>
 
 
 
@@ -202,7 +169,11 @@ The amount of extended haplotype homozygosity (EHH) at a given SNP along the anc
 
 $F_{ST}$
 
-We know this!
+<div align = "center">
+<img src="Images/finch.png" width=600>
+</div>
+
+
 
 
 
@@ -212,6 +183,9 @@ $Rsb$
 
 A comparison of extended haplotype homozygosity across two populations
 
+<div align = "center">
+<img src="Images/rsb.png" width=600>
+</div>
 
 
 
@@ -219,8 +193,9 @@ A comparison of extended haplotype homozygosity across two populations
 
 Ordination-based methods (e.g. EigenGWAS)
 
-Perform a GWAS on a principal component analysis
-
+<div align = "center">
+<img src="Images/eigengwas.png" width=400>
+</div>
 
 
 

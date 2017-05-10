@@ -14,7 +14,7 @@ In this practical we will look at two approaches for detecting *recent* selectio
 ## The data
 We will be using the great tit data set from the population structure practical. You do not need to copy the file across.
 
-In this session we are looking for loci under selection, so we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can create such a file using the information you generated in the population structure practical folder using a single line of plink code. Write a new .bim to the selection folder. The file should contain only unrelated individuals, but all markers
+In this session we are looking for loci under selection, so we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can create such a file using the information you generated in the population structure practical folder using a single line of plink code. Write a new plink file to the selection folder. The file should contain only unrelated individuals, but all markers
 
 <div class="fold s">
 ```{R, eval = F}
@@ -117,13 +117,15 @@ This analysis will take a little while to run - while it's running, you can star
 Given the bug we found, it would be sensible to check the output files from the EigenGWAS *very carefully*. Indeed, there are problems with some of the output files, which we will come to later. But see if you can spot and correct these problems now!
 
 ##Making plots
-In a new window, use SCP to download the following files to your laptop (these should all be in your "selection" folder on the server:
+Copy the following files to a folder called session8_output:
 
 - FST between your geographic populations (first plink analysis, ending in .fst)
 - FST between your admixture populations (second plink analysis, ending in .fst)
 - Your Eigenvectors from the EigenGWAS analysis (ending in .eigenvec)
 - Your EigenGWAS results (four files, all ending in .egwas)
 - The R script sliding_window.r
+
+Now download this file to your laptop using scp or pscp.
 
 We are going to do the plotting slightly differently this time. I will introduce you to some of the plots and functions you can run, then it is up to you to make a publication quality figure from our selection analyses.
 
@@ -132,7 +134,7 @@ Let's first explore our FST analyses. These are large files, with FST values cal
 <div class="fold s">
 ```{r}
 library(data.table)
-pop_fst <- fread("~/Documents/Teaching/PopGenBerlinLGS/selection/GreatTitsUnrel.fst")
+pop_fst <- fread("~/Documents/Teaching/PopGenBerlinLGS/session8_output/GreatTitsUnrel.fst")
 
 head(pop_fst)
 ```
@@ -160,7 +162,7 @@ We can also read in our FST values from our admixture populations, and compare m
 
 <div class="fold s">
 ```{r,fig.width=6,fig.height=5,warning = F,message = F,cache = T}
-ad_fst <- fread("~/Documents/Teaching/PopGenBerlinLGS/selection/GreatTitsK4.fst")
+ad_fst <- fread("~/Documents/Teaching/PopGenBerlinLGS/session8_output/GreatTitsK4.fst")
 
 pop_fst$ADFST <- ad_fst$FST
 
@@ -186,7 +188,7 @@ cor(pop_fst$FST,pop_fst$ADFST)
 Let's now take a look at the EigenGWAS data. First at the eigenvector file.
 <div class="fold s">
 ```{r}
-ev <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/null.eigenvec")
+ev <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session8_output/null.eigenvec")
 head(ev)
 ```
 </div>
@@ -218,9 +220,9 @@ EigenGWAS runs a GWAS on each of these four Eigenvectors. What do these four ana
 Let's load in the analysis from the first Eigenvector and take a look at the results. As you will see there are some issues with the results files EigenGWAS has given us.
 
 ```{r, message = F, warning = F,cache = T}
-eg1 <- fread("~/Documents/Teaching/PopGenBerlinLGS/selection/null.1.egwas",data.table = F) #some issues with this text file - use read.table as it's simpler
+eg1 <- fread("~/Documents/Teaching/PopGenBerlinLGS/session8_output/null.1.egwas",data.table = F) #some issues with this text file - use read.table as it's simpler
 
-eg1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/selection/null.1.egwas", header = T,stringsAsFactors = F) #Slower but works
+eg1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session8_output/null.1.egwas", header = T,stringsAsFactors = F) #Slower but works
 str(eg1)
 
 #Some variables read in as character - read as numeric

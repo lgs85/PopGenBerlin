@@ -12,14 +12,14 @@ output:
 In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, PCA) to detect and quantify population structure. We will also continue to developing our plotting skills in R.
 
 ## The data
-We will be using a large SNP dataset from nine European great tit populations to explore continental-scale genomic structure. The data are stored as binary plink files in the "population_structure" folder. 
+We will be using a large SNP dataset from nine European great tit populations to explore continental-scale genomic structure. The data are stored as binary plink files in the "population_structure" folder. **Make sure you have copied the population_structure folder from Dati to your home directory.**
 
 
 ## Data exploration and cleaning in plink
 
 Before we clean our data, use the command line to explore .bed, .bim and .fam files to try to figure out how many individuals and SNP markers have been typed.
 
-Now use what you have learned about plink, along with the plink website, to filter the dataset based on Hardy-Weinberg (only include loci  with P > 0.01) and minor allele frequencies (only include loci with MAF > 0.05). Give your output the name "GreatTitsFiltered".
+Now use what you have learned about plink and VCFtools, along with the plink website, to filter the dataset (HINT: filtering in plink and VCFtools is a very similar process!). You should filter based on Hardy-Weinberg (only include loci  with P > 0.01) and minor allele frequencies (only include loci with MAF > 0.05). Give your output the name "GreatTitsFiltered".
 
 <div class="fold s">
 ```{r eval = F}
@@ -27,7 +27,7 @@ plink --bfile GreatTits --hwe 0.01 --maf 0.05 --make-bed --out GreatTitsFiltered
 ```
 </div>
 
-Note how we can add both `--hwe` and `--maf` options to a single command and used the same output name. This is more efficient and saces us space.
+Note how we can add both `--hwe` and `--maf` options to a single command and used the same output name. This is more efficient and saves us space.
 
 We will now "prune" our markers based on LD. Check out the options that plink has for this. See if you can figure out how to prune markers, using appropriate thresholds. You should perform this on the "GreatTitsFiltered" binary plink files you have just created. Then take a look what I have chosen below:
 
@@ -37,7 +37,7 @@ plink --bfile GreatTitsFiltered --indep-pairwise 50 10 0.05 --make-bed --out Gre
 ```
 </div>
 
-I have chosen to prune in windows of 50 markers, shifting this window along 10 markers at a time. This is called a *sliding window*, and is somethig we will cover in more detail later in the course. The final argument (0.05) is the R^2 threshold of I chosen to prune with.Note that you can also use the Variance Inflation Factor (VIF), using the argument `--indep`.  If you have chosen different thresholds that's fine, but for now run the code with mine so we're all working from the same data. This argument has written two lists of SNPs as output files - one list of SNPs in linkage equilibrium with one another, and one list of SNPs to be excluded. We can use either of these to filter our binary plink file to create a new dataset only containing markers in linkage equilibrium.
+I have chosen to prune in windows of 50 markers, shifting this window along 10 markers at a time. This is called a *sliding window*, and is something we will cover in more detail later in the course. The final argument (0.05) is the R^2 threshold of I chosen to prune with.Note that you can also use the Variance Inflation Factor (VIF), using the argument `--indep`.  If you have chosen different thresholds that's fine, but for now run the code with mine so we're all working from the same data. This argument has written two lists of SNPs as output files - one list of SNPs in linkage equilibrium with one another, and one list of SNPs to be excluded. We can use either of these to filter our binary plink file to create a new dataset only containing markers in linkage equilibrium.
 
 <div class="fold s">
 ```{r eval = F}
@@ -92,7 +92,7 @@ plink --bfile GreatTitsFilteredPrunedUnrel --pca 4 --out GreatTitsFilteredPruned
 Have a look at the output files and check you are happy with what you have got (hint - use the plink manual). Again, we will download our file for plotting soon.
 
 ##Admixture
-Finally, we are going to run Admixture on our dataset. But first we need to do one more piece of cleaning. We still have a very large number of SNPs in our great tit dataset, and with this many individuals and SNPs it would take Admixture several hours to run. So we aree going to thin our markers substantially for the purpose of this practical. Can you figure out, using plink, how to randomly select 1% of your markers and write them to a new file?
+Finally, we are going to run Admixture on our dataset. But first we need to do one more piece of cleaning. We still have a very large number of SNPs in our great tit dataset, and with this many individuals and SNPs it would take Admixture several hours to run. So we are going to thin our markers substantially for the purpose of this practical. Can you figure out, using plink, how to randomly select 1% of your markers and write them to a new file?
 
 <div class="fold s">
 ```{R,eval = FALSE}
@@ -289,7 +289,7 @@ head(pd)
 ```
 </div>
 
-Now we have a distance column we can plot FST against distance, using wour `ggplot2` skills from the last practical.
+Now we have a distance column we can plot FST against distance, using your `ggplot2` skills from the last practical.
 
 <div class="fold s">
 ```{R}
@@ -395,7 +395,7 @@ source("~/Documents/Teaching/PopGenBerlinLGS/session4_output/Admixture_plot.R") 
 
 If you look in the "environment" tab in the top right of R studio, you should see that the `admixtureplot()` function has been loaded. You can call up the code by typing `admixtureplot` (without brackets) into the console.
 
-Now we are ready to try running the function. `admixtureplot` has 4 arguments, three of which are mandatory. `str_out` is your ".Q" file from admixture, loaded into R as a data frame, "pops" is the ".fam" plink file associated with the ".bed" file used to run admixture. `k` is simply the value of k for the run, and `xaxis` is an optional argument with which we can tell the funciton whether or not to plot x axis labels.
+Now we are ready to try running the function. `admixtureplot` has 4 arguments, three of which are mandatory. `str_out` is your ".Q" file from admixture, loaded into R as a data frame, "pops" is the ".fam" plink file associated with the ".bed" file used to run admixture. `k` is simply the value of k for the run, and `xaxis` is an optional argument with which we can tell the function whether or not to plot x axis labels.
 
 Adapt the following code (depending on your working directory) to run the function for your K = 2 admixture output.
 
@@ -447,7 +447,7 @@ layout.show(5)
 
 What the above basically does is creates a matrix with six rows and two columns - the left-hand panels are given three rows, while the right=hand panels are given two.
 
-This is almost there, but because only one of our three admixturew plots (the one due to go in panel 5) has x axis labels, we need to ascribe more space to this panel. Can you figure out a way to do this, and produce the layout shown below?
+This is almost there, but because only one of our three admixture plots (the one due to go in panel 5) has x axis labels, we need to ascribe more space to this panel. Can you figure out a way to do this, and produce the layout shown below?
 
 <div class="fold s">
 ```{R}
