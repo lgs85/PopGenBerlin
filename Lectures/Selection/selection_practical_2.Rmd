@@ -269,7 +269,7 @@ qq(eg1$PGC)
 ```
 </div>
 
-How do you interpret these plots? Do we have to worry about fasle positives in our data? Which points are "significant"? Is the correction working?
+How do you interpret these plots? Do we have to worry about false positives in our data? Which points are "significant"? Is the correction working?
 
 
 ##Over to you
@@ -279,7 +279,7 @@ Make a publication-quality figure summarising the selection analyses you have do
 - Manhattan plots of sliding window FST (see the "sliding_window.r" script - can you get this working?)
 - Going to the great tit reference genome (link below) and finding whether SNPs under divergent selection are in genes
   https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?context=genome&acc=GCF_001522545.2
-- Commbining your selection and population structure plots into a single figure.
+- Combining your selection and population structure plots into a single figure.
 
 Be creative!
 
