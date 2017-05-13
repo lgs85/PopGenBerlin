@@ -1,7 +1,7 @@
 ---
 title: "Natural selection and population genomics"
 author: "Lewis Spurgin"
-date: "7 April 2017"
+date: "May 2017"
 output: ioslides_presentation
 ---
 
