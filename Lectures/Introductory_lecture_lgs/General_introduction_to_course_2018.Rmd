@@ -33,7 +33,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - Population genetics/ genomics
 - Traceability / aquaculture / fisheries
 - evolutionary biology
-- phylogenetics/phylogenomics. 
+- phylogenetics/phylogenomics
 
 <div align="centre">
 <img src="Images/mimicry_catfish.jpg" width=500>
@@ -70,9 +70,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ##Who you are
 
-- 27 participants with very varied backgrounds
+- 21 participants with very varied backgrounds
 - Very different levels of experience and expertise
-- Probably have different expectations from the course (?)
+- Probably have different expectations from the course
+- You can learn lots from each other!
 
 ##Where are you from?
 
@@ -126,7 +127,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ##What we will do
 
 - Provide you background theory / examples / methods in lectures
-- Practical level - which programmes do what and how to use them.
+- Practical level - which programmes do what and how to use them
 - Be here to help...
 
 
@@ -148,31 +149,31 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ##Matching your expectations
 - You will not become experts from scratch in 1 week!
-- We will give you a broad introduction to many of the types of analyses and data sets you will encounter.
-- Provide you with the skills to analyse data sets on your own.
+- We will give you a broad introduction to many of the types of analyses and data sets you will encounter
+- Provide you with the skills to analyse data sets on your own
 - You never stop learning!
 
 
 ##Data files
 
-- All data files will be provided.
+- All data files will be provided
 - Files for each session will be in a folder called Dati
 - You have a short cut in your home folder
-- Own data on Friday or among yourselves during the week.
-- by the end of the week you should be able to run analyses on your own data sets.
+- Own data on Friday or among yourselves during the week
+- by the end of the week you should be able to run analyses on your own data sets
 
 ##The Amazon instance
 
 - We will be working from the Amazon EC2 cloud
-- We will go through the process of logging in in the next session.
-- We will be using a mixture of cloud based and laptop based analyses.
-- This will involve downloading files from the cloud to your laptops.
+- We will go through the process of logging in in the next session
+- We will be using a mixture of cloud based and laptop based analyses
+- This will involve downloading files from the cloud to your laptops
 
 ##Workshops
 
-- Each workshop will cover a different set of topics.
-- Timing may be quite fluid depending on the relative pace we work through the different sections.
-- Some of them you may not finish, but you can continue on your own time.
+- Each workshop will cover a different set of topics
+- Timing may be quite fluid depending on the relative pace we work through the different sections
+- Some of them you may not finish, but you can continue on your own time
 
 
 ##Workshop htmls
@@ -181,18 +182,15 @@ knitr::opts_chunk$set(echo = FALSE)
 <img src="Images/workshop_dropdown.png" width=800>
 </div>
 
-- You will have print outs of each workshop and html also available.
-- We will email you the html files each morning before the workshop.
+- You will have print outs of each workshop and html also available
+- We will email you the html files each morning before the workshop
 
 
 ##General workshop guidance
 
-- Try and use just the printouts i.e. don't just copy and paste commands from the html if you can help it.
+- Try and use just the printouts i.e. don't just copy and paste commands from the html if you can help it
 - Typing commands will help you to better understand what each command and option does. It will be slower, but much better for you!
-- Use help files, the internet and each other.
-- Use the "show answer" button on the html files if you are stuck.
+- Use help files, the internet and each other
+- Use the "show answer" button on the html files if you are stuck
 - Use the instructors if you are still stuck!
-
-
-#Icebreaker!
 
