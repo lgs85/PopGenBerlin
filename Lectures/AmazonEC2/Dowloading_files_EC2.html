@@ -123,10 +123,10 @@ $(document).ready(function () {
 <p>We are going to make a test file on the Amazon server and then download it to the desktop.</p>
 <div id="everyone" class="section level2">
 <h2>Everyone</h2>
-<ol style="list-style-type: decimal">
+<ul>
 <li><p>Log onto the Amazon server using your username and keyfile. Make sure you are in your home directory.</p></li>
-<li><p>Create a new folder, and place in it a new file with some text in it</p></li>
-</ol>
+<li><p>Create a new folder, and add a new text file to it.</p></li>
+</ul>
 <pre class="r"><code>mkdir hello_folder
 echo &quot;hello world&quot; &gt; hello_folder/hello.txt</code></pre>
 <p>Our next step differs for windows and mac users. Go to the relevant section.</p>
@@ -141,7 +141,7 @@ echo &quot;hello world&quot; &gt; hello_folder/hello.txt</code></pre>
 <pre class="r"><code>pscp -r -i C:\Users\yourname\Documents\PopGenBerlin\physaliaXX.ppk physaliaXX@ec2-XX-XXX-XX-XXX.us-west-2.compute.amazonaws.com:\hello_folder/hello.txt C:\users\yourname\Documents\PopGenBerlin</code></pre>
 <ul>
 <li><code>pcsp</code> expects three arguments, in the correct order. i) the path to your .pkk key file (after the option “-i”), ii) the address that you wish to download from, and iii) the address that you wish to download to. Hopefully once you have run the above you will see the <code>hello.txt</code> file in your <code>PopGenBerlin</code> (or equivalent) folder.</li>
-<li>Note that the slash direction differs between Windows and Linux. Once your are on the server, the direction changes!</li>
+<li>Note that the slash direction differs between Windows and Linux. Once you are on the server, the direction changes!</li>
 </ul>
 </div>
 <div id="maclinux-users" class="section level2">

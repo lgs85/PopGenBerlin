@@ -6,9 +6,9 @@ output: html_document
 We are going to make a test file on the Amazon server and then download it to the desktop.
 
 ##Everyone
-1. Log onto the Amazon server using your username and keyfile. Make sure you are in your home directory.
+- Log onto the Amazon server using your username and keyfile. Make sure you are in your home directory.
 
-2. Create a new folder, and place in it a new file with some text in it
+- Create a new folder, and add a new text file to it.
 
 ```{r, eval = F}
 mkdir hello_folder
@@ -32,7 +32,7 @@ pscp -r -i C:\Users\yourname\Documents\PopGenBerlin\physaliaXX.ppk physaliaXX@ec
 ```
 
 - `pcsp` expects three arguments, in the correct order. i) the path to your .pkk key file (after the option "-i"), ii) the address that you wish to download from, and iii) the address that you wish to download to. Hopefully once you have run the above you will see the `hello.txt` file in your `PopGenBerlin` (or equivalent) folder.
-- Note that the slash direction differs between Windows and Linux. Once your are on the server, the direction changes!
+- Note that the slash direction differs between Windows and Linux. Once you are on the server, the direction changes!
 
 
 

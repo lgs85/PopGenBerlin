@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "Population genomics: from data to inference"
 output: ioslides_presentation
 ---
 
@@ -29,11 +29,11 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ##Who we are | Martin Taylor
 
-- Mainly fish / aquatic organisms
-- Population genetics/ genomics
-- Traceability / aquaculture / fisheries
-- evolutionary biology
-- phylogenetics/phylogenomics
+- Mainly fish and aquatic organisms
+- Population genetics and genomics
+- Traceability, aquaculture and fisheries
+- Evolutionary biology
+- Phylogenetics and phylogenomics
 
 <div align="centre">
 <img src="Images/mimicry_catfish.jpg" width=500>
@@ -46,7 +46,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - Population genomics
 - Ecological adaptation
 - Population demography
-- Conservation/pest management
+- Conservation and pest management
 
 
 <div align="right">
@@ -68,12 +68,12 @@ knitr::opts_chunk$set(echo = FALSE)
 <img src="Images/uea_ariel.png" width=600>
 </div>
 
-##Who you are
+##Who are you?
 
 - 21 participants with very varied backgrounds
 - Very different levels of experience and expertise
 - Different expectations from the course
-- You can learn lots from each other!
+
 
 ##Where are you from?
 
@@ -88,6 +88,7 @@ knitr::opts_chunk$set(echo = FALSE)
 <img src="Images/position.png" width=500>
 </div>
 
+
 ##Who are you?
 
 <div align="center">
@@ -95,20 +96,42 @@ knitr::opts_chunk$set(echo = FALSE)
 </div>
 
 
+
+##Your interests
+
+<div align="center">
+<img src="Images/methods.png" width=800>
+</div>
+
+
+
+
 ##What the course is
 
 - Introduction to population genomics
-- Designed to take researchers through a range of basic analyses
+- Conceptual and practical
+- Designed to take you through a range of population genomic analyses
 - Broad rather than deep in any one area
 - Opportunity to network with peers
-- Mainly working with example data
 - Opportunity to work with your own data at the end of the course
 
 
-##Format of workshops
 
-- Typically one lecture per session
-- Practical component using class data files
+##What we won't cover
+- SNP calling
+- Phylogenomics
+- Annotation of genes / blast related activities
+- Transcriptomics
+- Genome assembly / scaffolding / annotation
+
+
+##What we will do
+
+- Provide you with background theory and introduce methods
+- Introduce you to which programmes do what and how to use them
+- Provide step-by-step guides to practical work
+- Be here to help...
+
 
 
 ##What we won't do
@@ -124,34 +147,24 @@ knitr::opts_chunk$set(echo = FALSE)
 </div>
 
 
-##What we will do
-
-- Provide you background theory / examples / methods in lectures
-- Practical level - which programmes do what and how to use them
-- Be here to help...
+#Some boring specifics
 
 
+##Format of workshops
 
-##Your interests
-
-<div align="center">
-<img src="Images/methods.png" width=800>
-</div>
-
-
-##What we won't cover
-- SNP calling
-- Phylogenomics
-- Annotation of genes / blast related activities
-- Transcriptomics
-- Genome assembly / scaffolding / annotation
+- Typically one lecture and one practical per session
+- Practicals will probably take majority of the time
+- Mainly working with example data
+- Emphasis on discussion and peer learning throughout
 
 
-##Matching your expectations
-- You will not become experts from scratch in 1 week!
-- We will give you a broad introduction to many of the types of analyses and data sets you will encounter
-- Provide you with the skills to analyse data sets on your own
-- You never stop learning!
+##Practical sessions
+
+- Timing may be fluid depending on the pace we work through the different sessions
+- Some of them you may not finish, but you can continue on your own time
+- If you do finish, there are open-ended tasks at the end. Use these to explore and develop the new skills you have learned
+
+
 
 
 ##Data files
@@ -162,6 +175,8 @@ knitr::opts_chunk$set(echo = FALSE)
 - Own data on Friday or among yourselves during the week
 - by the end of the week you should be able to run analyses on your own data sets
 
+
+
 ##The Amazon instance
 
 - We will be working from the Amazon EC2 cloud
@@ -169,11 +184,6 @@ knitr::opts_chunk$set(echo = FALSE)
 - We will be using a mixture of cloud based and laptop based analyses
 - This will involve downloading files from the cloud to your laptops
 
-##Workshops
-
-- Each workshop will cover a different set of topics
-- Timing may be quite fluid depending on the relative pace we work through the different sections
-- Some of them you may not finish, but you can continue on your own time
 
 
 ##Workshop htmls
@@ -182,15 +192,20 @@ knitr::opts_chunk$set(echo = FALSE)
 <img src="Images/workshop_dropdown.png" width=800>
 </div>
 
-- You will have print outs of each workshop and html also available
 - We will email you the html files each morning before the workshop
 
 
 ##General workshop guidance
 
-- Try and use just the printouts i.e. don't just copy and paste commands from the html if you can help it
-- Typing commands will help you to better understand what each command and option does. It will be slower, but much better for you!
+- Don't just copy and paste commands from the html - type them in
 - Use help files, the internet and each other
 - Use the "show answer" button on the html files if you are stuck
-- Use the instructors if you are still stuck!
+- Use the instructors if you are still stuck
+
+
+##Managing expectations
+- You will not become experts from scratch in 1 week
+- We will give you a broad introduction to many of the types of analyses and data sets you will encounter
+- Provide you with the skills to analyse datasets on your own
+- You never stop learning
 
