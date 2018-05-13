@@ -165,6 +165,14 @@ knitr::opts_chunk$set(echo = FALSE)
 - If you do finish, there are open-ended tasks at the end. Use these to explore and develop the new skills you have learned
 
 
+##The Amazon instance
+
+- We will be working from the Amazon EC2 cloud
+- We will go through the process of logging in in the next session
+- We will be using a mixture of cloud based and laptop based analyses
+- This will involve downloading files from the cloud to your laptops
+
+
 
 
 ##Data files
@@ -172,17 +180,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - All data files will be provided
 - Files for each session will be in a folder called Dati
 - You have a short cut in your home folder
-- Own data on Friday or among yourselves during the week
-- by the end of the week you should be able to run analyses on your own data sets
-
-
-
-##The Amazon instance
-
-- We will be working from the Amazon EC2 cloud
-- We will go through the process of logging in in the next session
-- We will be using a mixture of cloud based and laptop based analyses
-- This will involve downloading files from the cloud to your laptops
+- Own data on Friday
 
 
 
@@ -193,6 +191,8 @@ knitr::opts_chunk$set(echo = FALSE)
 </div>
 
 - We will email you the html files each morning before the workshop
+
+
 
 
 ##General workshop guidance
