@@ -1,7 +1,6 @@
 ---
 title: "Genetic diversity in populations"
 author: "Lewis Spurgin"
-date: "7 April 2017"
 output: ioslides_presentation
 ---
 
@@ -285,13 +284,13 @@ Where $p_{i}$ is the frequency of sequence $i$, $p_{j}$ is frequency of sequence
 
 ## How do we predict how much genetic variation should occur in populations?
 
-$$ p^{2} + 2pq + p^{2} = 1 $$ 
+$$ p^{2} + 2pq + q^{2} = 1 $$ 
 
 
 
 ## How do we predict how much genetic variation should occur in populations?
 
-$$ p^{2} + 2pq + p^{2} = 1 $$ 
+$$ p^{2} + 2pq + q^{2} = 1 $$ 
 
 <div align = "center">
 HARDY-WEINBERG EQUILIBRIUM
@@ -394,7 +393,6 @@ Where $x_{11}$, $x_{22}$ etc. are frequencies of haplotypes $A_{1} B_{1}$, $A_{2
 - vcftools
 - pyVCF (python)
 - Adegenet (R)
-- PopGenome (R)
 - diveRsity (R)
 - Many others
 
@@ -405,7 +403,6 @@ Where $x_{11}$, $x_{22}$ etc. are frequencies of haplotypes $A_{1} B_{1}$, $A_{2
 - **vcftools**
 - pyVCF (python)
 - Adegenet (R)
-- PopGenome (R)
 - diveRsity (R)
 - Many others
 

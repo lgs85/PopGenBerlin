@@ -42,7 +42,7 @@ pscp -r -i C:\Users\yourname\Documents\PopGenBerlin\physaliaXX.ppk physaliaXX@ec
 
 ```{R,eval = F}
 scp -r -i physaliaXX.pem physaliaXX@ec2-xx-xxx-xx-xxx.us-west-2.
-compute.amazonaws.com:~/hello_folder/hello.txt
+compute.amazonaws.com:~/hello_folder/hello.txt .
 ```
 
 - `scp` expects three arguments, in the correct order. i) the .pem key file (after the option "-i"), ii) the address that you wish to download from, and iii) the address that you wish to download to (here our current directory, so a full stop). Hopefully once you have run the above you will see the `hello.txt` file in your `PopGenBerlin` (or equivalent) folder.

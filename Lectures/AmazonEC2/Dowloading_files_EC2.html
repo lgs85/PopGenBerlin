@@ -150,7 +150,7 @@ echo &quot;hello world&quot; &gt; hello_folder/hello.txt</code></pre>
 <li>Open up a second terminal (in your first terminal, press cmd+n), and navigate to your PopGenBerlin (or equivalent) folder, in which your .pem file is stored. Once you are there, type and adapt the following. You will need to change the username <a href="mailto:physaliaXX@ec2-etc">physaliaXX@ec2-etc</a>. to your own username, and the daily-changing address that we have sent you.</li>
 </ul>
 <pre class="r"><code>scp -r -i physaliaXX.pem physaliaXX@ec2-xx-xxx-xx-xxx.us-west-2.
-compute.amazonaws.com:~/hello_folder/hello.txt</code></pre>
+compute.amazonaws.com:~/hello_folder/hello.txt .</code></pre>
 <ul>
 <li><code>scp</code> expects three arguments, in the correct order. i) the .pem key file (after the option “-i”), ii) the address that you wish to download from, and iii) the address that you wish to download to (here our current directory, so a full stop). Hopefully once you have run the above you will see the <code>hello.txt</code> file in your <code>PopGenBerlin</code> (or equivalent) folder.</li>
 </ul>

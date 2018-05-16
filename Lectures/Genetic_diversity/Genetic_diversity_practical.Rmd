@@ -9,7 +9,7 @@ output:
 <script src="js/hide.js"></script>
 
 ## Introduction
-The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then VCFtools to estimate some common measures of genetic diversity in individuals and populations. We will then develop our skills in R to manipulate our output files from plink and VCFtools. Finally, we will introduce ggplot2, and learn how to use this package to produce publication quality figures of our data.
+The aim of this practical is to get you estimating genomic diversity from large SNP data files. We will first become comfortable reading and subsetting very large data files. We will then use VCFtools to estimate some common measures of genetic diversity in individuals and populations. We will then develop our skills in R to manipulate our output files from plink and VCFtools. Finally, we will introduce ggplot2, and learn how to use this package to produce publication quality figures of our data.
 
 Once again, you should try to figure things out for yourself before clicking on "show". To do this, you will need the documentation for VCFtools open. It can be found at https://vcftools.github.io/man_latest.html
 

@@ -9,7 +9,7 @@ output:
 <script src="js/hide.js"></script>
 
 ## Introduction
-In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, PCA) to detect and quantify population structure. We will also continue to developing our plotting skills in R.
+In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, PCA) to detect and quantify population structure. We will also continue to develop our plotting skills in R.
 
 ## The data
 We will be using a large SNP dataset from nine European great tit populations to explore continental-scale genomic structure. The data are stored as binary plink files in the "population_structure" folder. **Make sure you have copied the population_structure folder from Dati to your home directory.**
@@ -360,7 +360,7 @@ Now we are ready to make the plot. By now, you should be able to do this yoursel
 <div class="fold s">
 ```{R}
 
-B <- ggplot(pc1,aes(x = PC1,y = PC2,col = Population))+
+B <- ggplot(pca1,aes(x = PC1,y = PC2,col = Population))+
       geom_point()+
       theme_bw()
 B
@@ -380,7 +380,7 @@ Perfect - all we need to do now is cosmetics. To change the colours you need to 
               "#ff7f00",
               "#cab2d6")
 
-B <- ggplot(pc1,aes(x = PC1,y = PC2,col = Population))+
+B <- ggplot(pca1,aes(x = PC1,y = PC2,col = Population))+
       geom_point()+
       theme_bw()+
       scale_colour_manual(values = mycols)
