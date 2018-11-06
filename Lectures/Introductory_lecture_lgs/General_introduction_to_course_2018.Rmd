@@ -7,7 +7,7 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-##Welcome to Berlin!
+##Welcome to Quebec!
 
 <div align="centre">
 <img src="Images/weather.png" width=800>
@@ -70,16 +70,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ##Who are you?
 
-- 21 participants with very varied backgrounds
+- 32 participants with very varied backgrounds
 - Very different levels of experience and expertise
 - Different expectations from the course
 
-
-##Where are you from?
-
-<div align="center">
-<img src="Images/map.png" width=800>
-</div>
 
 
 ##Who are you?
@@ -92,7 +86,15 @@ knitr::opts_chunk$set(echo = FALSE)
 ##Who are you?
 
 <div align="center">
-<img src="Images/organism.png" width=800>
+<img src="Images/experience.png" width=350>
+</div>
+
+
+
+##Who are you?
+
+<div align="center">
+<img src="Images/organism.png" width=500>
 </div>
 
 
