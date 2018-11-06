@@ -1,7 +1,6 @@
 ---
 title: "Natural selection and population genomics"
 author: "Lewis Spurgin"
-date: "May 2017"
 output: ioslides_presentation
 ---
 
@@ -41,6 +40,14 @@ Darwin, *The Origin of Species*
 <div align = "left">
 <img src="Images/TigerMoth.png" width=650>
 </div>
+
+
+## Natural selection and genetic variation
+<br>
+<div align = "left">
+<img src="Images/ohara.png" width=650>
+</div>
+
 
 
 

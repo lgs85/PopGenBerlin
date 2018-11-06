@@ -60,6 +60,13 @@ output: ioslides_presentation
 - BayEnv (genotype-environment association)
 
 
+## What have we covered
+<div align = "center">
+<img src="Images/music.png" width=700>
+</div>
+
+
+
 
 #A roadmap for population genomics analysis (post SNP-calling)
 
