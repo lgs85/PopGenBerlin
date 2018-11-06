@@ -1,11 +1,16 @@
 #Read in data
-dd <- read.csv("Mainland_Island_SNP_data.csv")
+dd <- read.csv("Mainland_Island_SNP_data.csv",stringsAsFactors = F)
 
-#Create a heterozygote/homozygote column
-dd$Het <- ifelse(dd$Allele_1 == dd$Allele_2,"Homozygote","Heterozygote")
+#Get just genotypes
+ddg <- dd[,3:ncol(dd)]
+
+#Create a heterozygote/homozygote matrix
+Het <- ifelse(ddg[,seq(1,ncol(ddg)-1,2)] == ddg[,seq(2,ncol(ddg),2)],0,1)
+Het <- data.frame(Pop = dd$Pop,Het)
+
 
 #Calculate heterozygote frequencies for each population
-het_freqs <- table(dd$Het,dd$Pop)["Heterozygote",]/table(dd$Pop)
+
 
 #Make a bar plot
 barplot(het_freqs,ylab = "Proportion heterozygotes")
