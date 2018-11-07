@@ -21,7 +21,7 @@ The aim of this practical is to get you comfortable using R and R studio. By the
 All the code you will need for this practical is included in this handout. However, you should try to figure things out for yourself before clicking on "show".
 
 ## The data
-I have simulated some genetic data from a bird species captured from mainland and island populations. All simulated samples have been genotyped at a single nucleotide polymorphism (SNP), at which two alleles (A and C) are found. We wish to know whether, at this locus, the mainland and island populations have different levels of genetic diversity.
+I have simulated some genetic data from a bird species captured from mainland and island populations. All simulated samples have been genotyped at five nucleotide polymorphism (SNP) markers, at each of which two alleles are found. We wish to know whether, at these loci, the mainland and island populations have different levels of genetic diversity.
 
 ## Instructions
 Our aim is to calculate *observed heterozygosity* (i.e. the proportion of heterozygotes) in each of the populations in our dataset. We will plot these proportions, and test whether levels of heterozygosity differ between the two populations. 
@@ -31,12 +31,12 @@ Our aim is to calculate *observed heterozygosity* (i.e. the proportion of hetero
 ### Download, read in and explore the data.
 Using `scp` (mac/linux) or `pscp` (windows), download the "intro_to_r" folder and all its containing files from the amazon server to your laptop.
 
-Now open up your file explorer. Find the "intro_to_r" folder you have just downloaded, and open the file "Mainland_Island_SNP_data.csv". You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, and the two alleles (A or C) at the SNP. This is a standard way of storing SNP genotype data, albeit one of many.
+Now open up your file explorer. Find the "intro_to_r" folder you have just downloaded, and open the file "Mainland_Island_SNP_data.csv". You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has four columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, followed one column per allele at each of the SNP loci. This is a standard way of storing SNP genotype data, albeit one of many.
 
 Now open R studio. Either by typing in the console, or using the menu, set your working directory to the "intro_to_r" folder. Now, in your script, type in the commands ro read in the "Mainland_Island_SNP_data.csv" file, and assign the dataframe to a suitable object name. You can do this using something like the following code, depending on where you have stored your "intro_to_r" folder:
 
 ```{r}
-setwd("~/Documents/Teaching/PopGenBerlinLGS/intro_to_r")
+setwd("~/Documents/Teaching/PopGenBerlin/Lectures/intro_to_r")
 dd <- read.csv("Mainland_Island_SNP_data.csv")
 ```
 
@@ -81,11 +81,11 @@ dd[,2]
 ```
 </div>
 
-3. The genotype for the 22nd individual
+3. The genotypes for the 22nd individual
 
 <div class="fold s">
 ```{r}
-dd[22,c("Allele_1","Allele_2")]
+dd[22,3:ncol(dd)]
 ```
 </div>
 
@@ -111,7 +111,7 @@ x == "cat"
 
 Hopefully you have figured out that a single equals sign and double equals sign mean very different things to R. A single equals sign generally works in the same way as the `<-` operator (with a few subtle differences), whereas a double equals sign asks a logical question, and returns a value of `TRUE` or `FALSE`.
 
-So coming back to our SNP data, we can use the `==` operator to ask whether the first individual in our dataset is a homozygote, by asking whether the variables `Allele_1` and `Allele_2` for this individual are the same.
+So coming back to our SNP data, we can use the `==` operator to ask whether the first individual in our dataset is a homozygote at the first locus, by asking whether the variables `SNP_1.1` and `SNP_1.2` for this individual are the same.
 
 <div class="fold s">
 ```{r}
@@ -119,54 +119,54 @@ So coming back to our SNP data, we can use the `==` operator to ask whether the 
 ind1 <- dd[1,]
 
 # Now ask whether Allele 1 and Allele 2 are identical
-ind1$Allele_1 == ind1$Allele_2
+ind1$SNP_1.1 == ind1$SNP_1.2
 
 ```
 </div>
 
-Because R works so nicely with vectors, we can do this for every individual in our dataset. Can you generate a list of `TRUE` and `FALSE` values telling you whether each individual is a homozygote?
+Because R works so nicely with vectors, we can do this for every individual in our dataset. Can you generate a list of `TRUE` and `FALSE` values telling you whether each individual is a homozygote at the `SNP_1` locus?
 
 <div class="fold s">
 ```{r}
 
-dd$Allele_1 == dd$Allele_2
+dd$SNP_1.1 == dd$SNP_1.2
 
 ```
 </div>
 
-This gives us `r nrow(dd)` `TRUE` or `FALSE` values, and tells us whether each individual in our dataset is a homozygote or not. Now all we need to do is turn this into a column of our data frame, indicating whether each individual is a homozygote or a heterozygote. We can do this using the `ifelse()` function. Check out what this function does using `?ifelse`. Can you generate a column saying whether each individual in your dataset is a homozygote or heterozygote? You should end up with something like this:
+This gives us `r nrow(dd)` `TRUE` or `FALSE` values, and tells us whether each individual in our dataset is a homozygote for SNP1 or not. Now all we need to a vector of values, indicating whether each individual is a homozygote or a heterozygote. We can do this using the `ifelse()` function. Check out what this function does using `?ifelse`. Can you generate a column saying whether each individual in your dataset is a homozygote or heterozygote for the first SNP? You should end up with something like this:
 
 <div class="fold s">
 ```{r}
 
 #Add a Heterozygosity column
-dd$Het <- ifelse(dd$Allele_1 == dd$Allele_2,"Homozygote","Heterozygote")
+SNP1_Het <- ifelse(dd$SNP_1.1 == dd$SNP_1.2,"Homozygote","Heterozygote")
 
 #Check that it's worked
-head(dd)
+SNP1_Het
 
 ```
 
 </div>
 
-We can see that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot.
+We can see by checking back to our original data that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot for this first locus.
 
 ###Step three - calculate and plot genotype frequencies
 
-Now we want to calculate the proportion of heterozygotes in each of our two populations. To do this, we need to know i) the number of heterozygotes in each population and ii) the total number of individuals in each population. We can get both of these pieces of information using the function `table()`.
+Now we want to calculate the proportion of SNP1 heterozygotes in each of our two populations. To do this, we need to know i) the number of heterozygotes in each population and ii) the total number of individuals in each population. We can get both of these pieces of information using the function `table()`.
 
 ```{r,fig.width = 4}
-table(dd$Het) #Number of each genotype
+table(SNP1_Het) #Number of each genotype
 table(dd$Pop) #Number of individuals in each population
-table(dd$Het,dd$Pop) #Both combined
+table(SNP1_Het,dd$Pop) #Both combined
 
 ```
 
-We can assign the output of the `table()` function to an object. Then using this we can extract subsets of tata and perform calculations using them. Using this approach, we can divide the number of heterozygotes by the sample size to calculate observed heterozygosity. 
+We can assign the output of the `table()` function to an object. Then using this we can extract subsets of tata and perform calculations using them. Using this approach, we can divide the number of heterozygotes by the sample size to calculate observed heterozygosity for SNP1. 
 
 ```{r}
 #Get the genotypes for each population
-geno_counts <- table(dd$Het,dd$Pop)
+geno_counts <- table(SNP1_Het,dd$Pop)
 geno_counts
 
 #Pull out the heterozygote row
@@ -192,7 +192,7 @@ barplot(het_freqs,ylab = "Proportion heterozygotes")
 We can test whether the proportion of heterozygotes differs between mainland and island population using a Chi-squared test (`?chisq.test`).
 
 ```{r}
-chisq.test(dd$Het,dd$Pop)
+chisq.test(SNP1_Het,dd$Pop)
 ```
 
 What are you able to conclude from this? Is the effect significant? Is it in the expected direction? What is lacking from this data?
@@ -209,11 +209,17 @@ write.csv(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genot
 Open your text and csv files in sublime and/or excel. How do they look? Any problems? Can you use the help files to figure out how to remove the quotes in the tab separated text file?
 
 
-##Putting it all together
-How does your script look? Can you figure out which commands you need to perform all the above analysis? Your script should end up looking something like the *Mainland_Island_SNP_analysis.R* script including in the *intro_to_r* folder. Note how we end up doing quite a lot with just five lines of code!
-
-
 ##If you've finished
+- Can you calculate heterozygosity for all five SNPs? Can you find a way to do it more quickly and efficiently than repeating the same code?
+- Following this, can you make a plot like the below?
+
+```{r }
+write.table(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.txt")
+
+write.csv(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.csv")
+
+```
+
 
 - Calculate and plot the frequency of the two alleles in each population.
 

@@ -1,36 +1,26 @@
+library(magrittr)
+library(plyr)
+library(ggplot2)
+
 #Read in data
-dd <- read.csv("Mainland_Island_SNP_data.csv",stringsAsFactors = F)
+dd <- read.csv("Mainland_Island_SNP_data.csv", stringsAsFactors = F)
 
-#Get just genotypes
-ddg <- dd[,3:ncol(dd)]
+#Separate alleles
+a1 <- dd[, seq(3, ncol(dd) - 1, 2)]
+a2 <- dd[, seq(4, ncol(dd), 2)]
 
-#Create a heterozygote/homozygote matrix
-Het <- ifelse(ddg[,seq(1,ncol(ddg)-1,2)] == ddg[,seq(2,ncol(ddg),2)],0,1)
-Het <- data.frame(Pop = dd$Pop,Het)
-
-
-#Calculate heterozygote frequencies for each population
-
-
-#Make a bar plot
-barplot(het_freqs,ylab = "Proportion heterozygotes")
-
-#Perform a Chi-squared test
-chisq.test(dd$Het,dd$Pop)
-
-#Allele frequencies
-a1 <- table(dd$Allele_1,dd$Pop)
-a2 <- table(dd$Allele_2,dd$Pop)
-
-a_counts <- a1+a2
-
-Island_freq <- a_counts[,"Island"]/sum(a_counts[,"Island"])
-Mainland_freq <- a_counts[,"Mainland"]/sum(a_counts[,"Mainland"])
-
-newdata <- cbind(Island_freq,Mainland_freq)
-
-barplot(newdata)
-
-
-
-
+#Calculate heterozygosity per locus and plot data
+p <-
+  data.frame(
+    Pop = rep(dd$Pop, 5),
+    SNP = rep(colnames(a1), each = nrow(dd)),
+    Het = unlist(as.vector(a1 != a2))
+  ) %>%
+  ddply(.(Pop, SNP),
+        summarise,
+        LocusHet = mean(Het)) %>%
+  ggplot(aes(x = Pop, y = LocusHet)) +
+  geom_point() +
+  theme_bw() +
+  xlab("") +
+  ylab("Heterozygosity")
