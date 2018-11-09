@@ -21,6 +21,6 @@ p <-
         LocusHet = mean(Het)) %>%
   ggplot(aes(x = Pop, y = LocusHet)) +
   geom_point() +
-  theme_bw() +
+  theme_classic() +
   xlab("") +
   ylab("Heterozygosity")

@@ -201,7 +201,6 @@ Finally, we may wish to write our summarised data to a file. We can do this usin
 
 ```{r}
 write.table(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.txt")
-
 write.csv(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.csv")
 
 ```
@@ -210,23 +209,22 @@ Open your text and csv files in sublime and/or excel. How do they look? Any prob
 
 
 ##If you've finished
+
 - Can you calculate heterozygosity for all five SNPs? Can you find a way to do it more quickly and efficiently than repeating the same code?
-- Following this, can you make a plot like the below?
+- Following this, can you make a plot something like the below?
 
-```{r }
-write.table(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.txt")
+```{r echo = F,fig.width = 6,fig.height=4,fig.align="center"}
 
-write.csv(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.csv")
+source("Mainland_Island_SNP_analysis.R")
+p
 
 ```
 
 
-- Calculate and plot the frequency of the two alleles in each population.
+- Calculate and plot the frequency distribution of minor alleles in each population.
 
-- Calculate expected genotype frequencies for each population, according to Hardy-Weinberg. Compare your observed and expected frequencies using chi-squared tests.
+- Calculate expected genotype frequencies for each SNP and population, according to Hardy-Weinberg. Compare your observed and expected frequencies using chi-squared tests.
 
 - I simulated the dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script "Mainland_Island_SNP_data.R", figure out what is being done with each line of code, and annotate the script accordingly.
 
 - Simulate your own SNP dataset by developing your own code.
-
-- Make the above bar plot, and a stacked version of the above plot, using ggplot2
