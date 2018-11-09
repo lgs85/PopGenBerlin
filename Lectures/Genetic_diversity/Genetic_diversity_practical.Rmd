@@ -183,23 +183,23 @@ That's our analyses done! Now you can log out of the server, and use SCP to down
 - windowed nucleotide diversity (two files - one per population), 
 - windowed LD (one file). 
 
-Make a new folder called "session3_output" or something similar using `mkdir` Download your four genetic diversity outputs using `scp` (mac) or `pscp` (windows), in exactly the same way as you learned this morning. Once you have done this, open R studio on your laptop and use `read.csv()` and `read.table()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
+Make a new folder called "session_3_output" or something similar using `mkdir` Download your four genetic diversity outputs using `scp` (mac) or `pscp` (windows), in exactly the same way as you learned this morning. Once you have done this, open R studio on your laptop and use `read.csv()` and `read.table()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
 
 <div class="fold s">
 ```{r}
 rm(list=ls()) #Clear your workspace
 
-het <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session3_output/TriboliumSSGenomes.het",header = T)
-pi_MB <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session3_output/TriboliumSSGenomesMB.windowed.pi", header = T)
-pi_FA <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session3_output/TriboliumSSGenomesFA.windowed.pi", header = T)
-ld <- read.csv("~/Documents/Teaching/PopGenBerlinLGS/session3_output/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
+het <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomes.het",header = T)
+pi_MB <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomesMB.windowed.pi", header = T)
+pi_FA <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomesFA.windowed.pi", header = T)
+ld <- read.csv("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
 
 ```
 </div>
 
 We are going to use the `ggplot2` library to make the following plot. If you think you can recreate this, please give it a shot. Otherwise, we will work through the plots step-by-step below.
 
-```{r echo = F,warning = F,message=F}
+```{r echo = F,warning = F,message=F,fig.height=6}
 library(Rmisc)
 library(plyr)
 library(magrittr)
@@ -211,7 +211,7 @@ Fig1A <- mutate(het,Population = c(rep("MB",3),rep("FA",3)),Heterozygosity = 1-(
   theme_bw()+
   theme(legend.position = "none")+
   xlab("")+
-  annotate("text",y = 0.24,x = 0.5,label = "A")
+  ggtitle("A")
 
 Fig1B <- rbind(pi_MB,pi_FA) %>%
   mutate(Population = c(rep("MB",nrow(pi_MB)),rep("FA",nrow(pi_FA)))) %>%
@@ -222,7 +222,7 @@ Fig1B <- rbind(pi_MB,pi_FA) %>%
   theme(legend.position = "none")+
   xlab("")+
   ylab(expression(pi))+
-  annotate("text",y = 0.013,x = 0.5,label = "B")
+  ggtitle("B")
 
 Fig1C <-  mutate(ld,Population = pop,distkb = dist/1000) %>%   
   ggplot(aes(x = distkb, y = meanR2,col = Population))+
@@ -231,7 +231,7 @@ Fig1C <-  mutate(ld,Population = pop,distkb = dist/1000) %>%
   theme_bw()+
   xlab("Distance (kb)")+
   ylab(expression("R"^2))+
-  annotate("text",y = 0.92,x = 0,label = "C")
+  ggtitle("C")
 
 multiplot(Fig1A,Fig1B,Fig1C,layout = matrix(c(1,2,3,3),nrow = 2, byrow = T))
 ```
@@ -351,7 +351,7 @@ A <- ggplot(het,aes(x = Population, y = Heterozygosity, col = Population)) +
   theme_bw()+
   theme(legend.position = "none")+
   xlab("")+
-  annotate("text",y = 0.24,x = 0.5,label = "A")
+  ggtitle("A")
 
 A
 ```
@@ -453,7 +453,7 @@ B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population))+
       theme(legend.position = "none")+
       xlab("")+
       ylab(expression(pi))+
-      annotate("text",y = 0.013,x = 0.5,label = "B")
+      ggtitle("B")
 B
 ```
 </div>
@@ -496,7 +496,7 @@ C <- ggplot(ld,aes(x = dist/1000, y = meanR2, col = pop)) +
       xlab("Distance (kb)")+
       ylab(expression(R^2))+
       scale_colour_discrete(name = "Population")+ #An alternative would be to just rename to pop column to Population.
-      annotate("text",y = 0.92,x = 0,label = "C")
+      ggtitle("C")
 C
 ```
 </div>
@@ -510,7 +510,7 @@ multiplot(A,B,C)
 <br>
 However, this stacks the plots one on top of the other. We can alter the layout in an enormous number of ways using the argument `layout` and the function `matrix()`. Can you figure out what is going on here? If not, try looking up the `layout()` function and seeing how this works.
 
-```{r}
+```{r,fig.height=6}
 multiplot(A,B,C,layout = matrix(c(1,2,3,3),nrow = 2,byrow = T))
 ```
 
