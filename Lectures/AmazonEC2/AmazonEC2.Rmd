@@ -3,7 +3,7 @@ title: "Logging onto the Amazon EC2 server"
 output: html_document
 ---
 
-You have been sent a key file called physaliaXX.pem, where XX is a number unique to your account. You will need this number for all the commands below. The examples will be for the user physalia28 - you will need to replace 28 with your own, unique number.
+You have been sent a key file called cXX.pem, where XX is a number unique to your account. You will need this number for all the commands below. The examples will be for the user "user28", with the key "c28" - you will need to replace 28 with your own, unique number.
 
 
 ##Windows users
@@ -29,7 +29,7 @@ We need to convert the key file to a format that is compatible with Windows. We 
 
 - Choose **Save private key** to save the key in the format that PuTTY can use. PuTTYgen displays a warning about saving the key without a passphrase. Choose **Yes**.
 
-- Specify the same name for the key that we have given you (e.g. **physalia28**. PuTTY automatically adds the .ppk file extension.
+- Specify the same name for the key that we have given you (e.g. **c28**. PuTTY automatically adds the .ppk file extension.
 
 - Your private key is now in the correct format for use with PuTTY. You can now connect to your instance using PuTTY's SSH client.
 
@@ -38,7 +38,7 @@ We need to convert the key file to a format that is compatible with Windows. We 
 - Start PuTTY (from the Start menu, choose **All Programs > PuTTY > PuTTY**)
 
 - In the Category pane, select *Session*
-- In the Host Name box, enter your username(e.g., physalia28), followed by '@', followed by the public DNS name. This changes each day and we will email it to you. In total you will have something like physalia28@ec2-54-187-83-150.us-west-2.compute.amazonaws.com
+- In the Host Name box, enter your username(e.g., "user28"), followed by '@', followed by the public DNS name. This changes each day and we will email it to you. In total you will have something like user28@ec2-54-187-83-150.us-west-2.compute.amazonaws.com
 - Under *Connection type*, select *SSH*.
 - Ensure that the *port* is *22*
 
@@ -56,16 +56,16 @@ We need to convert the key file to a format that is compatible with Windows. We 
 
 ##Mac and Linux Users
 
-- Open a terminal (on Mac, cmd + space, then type "terminal" and press <enter>)
-- Change your working directory to the folder containg your .pem phylia, using `cd`. Something like:
+- Open a terminal (on Mac, cmd + space, then type "terminal" and press "enter")
+- Change your working directory to the folder containg your .pem file, using `cd`. Something like:
 
 ```{r eval = F}
 cd ~/Documents/PopGenBerlin
 ```
 
-Now use your username and the public DNS (this will be emailed to you each day) to log onto the server via SSH.  The command will be something like the following (for user physalia 28):
+Now use your username and the public DNS (this will be emailed to you each day) to log onto the server via SSH.  The command will be something like the following (for user "user28"):
 
 ```{r eval = F}
-ssh -i physalia28.pem physalia28@ec2-54-187-83-150.us-west-2.compute.amazonaws.com
+ssh -i c28.pem user28@ec2-54-187-83-150.us-west-2.compute.amazonaws.com
 
 ```

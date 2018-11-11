@@ -9,20 +9,20 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ##Welcome to Quebec!
 
-<div align="centre">
-<img src="Images/weather.png" width=800>
+<div align="center">
+<img src="Images/weather.png" width=600>
 </div>
 
 ##Plan - Mon-Tues
 
-<div align="centre">
-<img src="Images/agenda1.png" width=800>
+<div align="center">
+<img src="Images/agenda1.png" width=450>
 </div>
 
 ##Plan - Wed-Fri
 
-<div align="centre">
-<img src="Images/agenda2.png" width=800>
+<div align="center">
+<img src="Images/agenda2.png" width=600>
 </div>
 
 
@@ -35,7 +35,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - Evolutionary biology
 - Phylogenetics and phylogenomics
 
-<div align="centre">
+<div align="center">
 <img src="Images/mimicry_catfish.jpg" width=500>
 </div>
 
