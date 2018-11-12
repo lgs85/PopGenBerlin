@@ -1,8 +1,0 @@
-
-VCFtools - v0.1.14
-(C) Adam Auton and Anthony Marcketta 2009
-
-Parameters as interpreted:
-	--vcf ../PopGenBerlinData/TriboliumSSGenomes.vcf
-
-Error: Can't determine file type of ../PopGenBerlinData/TriboliumSSGenomes.vcf

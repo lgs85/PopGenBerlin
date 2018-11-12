@@ -13,13 +13,13 @@ knitr::opts_chunk$set(echo = FALSE)
 <img src="Images/weather.png" width=600>
 </div>
 
-##Plan - Mon-Tues
+##Plan - Mon-Weds
 
 <div align="center">
 <img src="Images/agenda1.png" width=450>
 </div>
 
-##Plan - Wed-Fri
+##Plan - Thurs-Fri
 
 <div align="center">
 <img src="Images/agenda2.png" width=600>
@@ -149,13 +149,13 @@ knitr::opts_chunk$set(echo = FALSE)
 </div>
 
 
-#Some boring specifics
+#Some specifics
 
 
 ##Format of workshops
 
 - Typically one lecture and one practical per session
-- Practicals will probably take majority of the time
+- Practicals will take majority of the time
 - Mainly working with example data
 - Emphasis on discussion and peer learning throughout
 

@@ -60,7 +60,7 @@ We need to convert the key file to a format that is compatible with Windows. We 
 - Change your working directory to the folder containg your .pem file, using `cd`. Something like:
 
 ```{r eval = F}
-cd ~/Documents/PopGenBerlin
+cd ~/Documents/PopGenCanada
 ```
 
 Now use your username and the public DNS (this will be emailed to you each day) to log onto the server via SSH.  The command will be something like the following (for user "user28"):
