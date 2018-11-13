@@ -29,7 +29,14 @@ Our aim is to calculate *observed heterozygosity* (i.e. the proportion of hetero
 *If you think you can do this without guidance, please go ahead and do so*. Otherwise, step-by-step instructions are provided below.
 
 ### Download, read in and explore the data.
-Using `scp` (mac/linux) or `pscp` (windows), download the "intro_to_r" folder and all its containing files from the amazon server to your laptop.
+On the amazon server, copy the "intro_to_r" folder from my directiry to your home directory as follows:
+
+```{r eval = F}
+cd
+cp -r ../ubuntu/Dati/intro_to_r .
+```
+
+Now, open a fresh terminal or command prompt on your laptop, that is not logged onto the server. Using `scp` (mac/linux) or `pscp` (windows), download the "intro_to_r" folder and all its containing files from your home directory on the amazon server to your laptop.
 
 Now open up your file explorer. Find the "intro_to_r" folder you have just downloaded, and open the file "Mainland_Island_SNP_data.csv". You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has 12 columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, followed one column per allele at each of the five SNP loci. This is a standard way of storing SNP genotype data, albeit one of many.
 
