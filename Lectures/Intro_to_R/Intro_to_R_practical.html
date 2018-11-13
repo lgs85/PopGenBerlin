@@ -153,11 +153,9 @@ $(document).ready(function () {
 <h3>Download, read in and explore the data.</h3>
 <p>Using <code>scp</code> (mac/linux) or <code>pscp</code> (windows), download the “intro_to_r” folder and all its containing files from the amazon server to your laptop.</p>
 <p>Now open up your file explorer. Find the “intro_to_r” folder you have just downloaded, and open the file “Mainland_Island_SNP_data.csv”. You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has 12 columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, followed one column per allele at each of the five SNP loci. This is a standard way of storing SNP genotype data, albeit one of many.</p>
-<p>Now open R studio. Either by typing in the console, or using the menu, set your working directory to the “intro_to_r” folder. Now, in your script, type in the commands to read in the “Mainland_Island_SNP_data.csv” file, and assign the dataframe to a suitable object name. You can do this using something like the following code:</p>
-<pre class="r"><code>setwd(&quot;~/Documents/Teaching/PopGenBerlin/Lectures/intro_to_r&quot;)
-dd &lt;- read.csv(&quot;Mainland_Island_SNP_data.csv&quot;)</code></pre>
-<p>You will need to change the command above, depending on where the “intro_to_r” folder is stored on your computer. Also note how the command for changing the working directory in R differs to the corresponding command in bash and python.</p>
-<p>Once you are happy, run the commands. Make sure that you understand what these commands are doing. Click on the “environment” tab in the top-right panel of R studio. The object <code>dd</code> should now be listed. If so, the data has been successfully loaded into R.</p>
+<p>Now open R studio. Open a new script using <em>File &gt; New File &gt; R Script</em>. Set your working directory to the “intro_to_r” folder, by clicking <em>Session &gt; Set Working Directory &gt; Choose Directory</em>, or using the shortcut <code>ctrl+shift+h</code>. Now, in your script, type in the commands to read in the <em>Mainland_Island_SNP_data.csv</em> file, and assign the dataframe to a suitable object name. You can do this using something like the following code:</p>
+<pre class="r"><code>dd &lt;- read.csv(&quot;Mainland_Island_SNP_data.csv&quot;)</code></pre>
+<p>Click on the “environment” tab in the top-right panel of R studio. The object <code>dd</code> should now be listed. If so, the data has been successfully loaded into R.</p>
 <p>We can explore our data by typing some functions into our script and running them. We will use the functions <code>head()</code> and <code>str()</code>.</p>
 <pre class="r"><code>head(dd)</code></pre>
 <pre><code>##   Ind      Pop SNP_1.1 SNP_1.2 SNP_2.1 SNP_2.2 SNP_3.1 SNP_3.2 SNP_4.1
@@ -305,7 +303,7 @@ dd &lt;- read.csv(&quot;Mainland_Island_SNP_data.csv&quot;)</code></pre>
 </div>
 <div id="define-our-genotypes" class="section level3">
 <h3>Define our genotypes</h3>
-<p>In our dataset we have separate information for each of the two alleles found in each individual. For example, at our first SNP locus we can see from when we ran the <code>head()</code> function that the first individual in our dataset has “A” for its first allele, and “A” for its second allele. This individual is therefore a homozygote at this locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your console in R studio:</p>
+<p>In our dataset we have separate information for each of the two alleles found in each individual. For example, at our first SNP locus we can see from when we ran the <code>head()</code> function that the first individual in our dataset has “A” for its first allele, and “A” for its second allele. This individual is therefore a homozygote at this locus. We can tell R to use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your console in R studio:</p>
 <pre class="r"><code>4 &lt; 3
 4 &gt; 3
 

@@ -5,6 +5,33 @@ output:
   ioslides_presentation
 ---
 
+##Recap
+
+Yesterday we learned...
+
+- Bash
+- (Perl)
+- (Python)
+
+Today...
+
+- R!
+
+
+#NOT ANOTHER BLOODY LANGUAGE
+
+
+
+##Getting by with programming languages
+
+<div align="center">
+<img src="Images/wine.png" width=500>
+</div>
+
+
+
+
+
 ##Today we go from this...
 
 ```{r}
@@ -558,17 +585,16 @@ plot(Number_left~Number_eaten,data = sweets,
 
 ## R scripts
 
-`rScript`
+`Rscript`
 
-<div align="center">
-<img src="Images/Rscript.png" width=700>
-</div>
+```{r eval = F}
+quit()
 
-## R studio
-<div align="center">
-<img src="Images/Rstudio.png" width=700>
-</div>
+nano
+<write your R script>
 
+Rscript myscript.R
+```
 
 
 

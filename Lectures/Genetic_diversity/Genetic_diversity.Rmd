@@ -252,7 +252,7 @@ Expected heterozygosity ($H_{EXP}$)
 
 *The expected proportion of heterozygotes at a locus, given the allele frequencies*
 
-For two allelesat frequency $p$ and $q$:
+For two alleles at frequency $p$ and $q$:
 
 $$ H_{EXP} = 2pq $$ 
 

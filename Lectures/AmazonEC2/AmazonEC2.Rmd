@@ -3,7 +3,7 @@ title: "Logging onto the Amazon EC2 server"
 output: html_document
 ---
 
-You have been sent a key file called cXX.pem, where XX is a number unique to your account. You will need this number for all the commands below. The examples will be for the user "user28", with the key "c28" - you will need to replace 28 with your own, unique number.
+You have been sent a key file called cXX.pem, where XX is a number unique to your account. You will need this number for all the commands below. You will also need a username, which is "userXX", where XX is the same unique number on your key file. The examples will below be for the user "user28", with the key "c28" - you will need to replace 28 with your own, unique number.
 
 
 ##Windows users

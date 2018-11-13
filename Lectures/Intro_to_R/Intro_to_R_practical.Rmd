@@ -33,16 +33,14 @@ Using `scp` (mac/linux) or `pscp` (windows), download the "intro_to_r" folder an
 
 Now open up your file explorer. Find the "intro_to_r" folder you have just downloaded, and open the file "Mainland_Island_SNP_data.csv". You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has 12 columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, followed one column per allele at each of the five SNP loci. This is a standard way of storing SNP genotype data, albeit one of many.
 
-Now open R studio. Either by typing in the console, or using the menu, set your working directory to the "intro_to_r" folder. Now, in your script, type in the commands to read in the "Mainland_Island_SNP_data.csv" file, and assign the dataframe to a suitable object name. You can do this using something like the following code:
+Now open R studio. Open a new script using *File > New File > R Script*. Set your working directory to the "intro_to_r" folder, by clicking *Session > Set Working Directory > Choose Directory*, or using the shortcut `ctrl+shift+h`. Now, in your script, type in the commands to read in the *Mainland_Island_SNP_data.csv* file, and assign the dataframe to a suitable object name. You can do this using something like the following code:
 
 ```{r}
-setwd("~/Documents/Teaching/PopGenBerlin/Lectures/intro_to_r")
 dd <- read.csv("Mainland_Island_SNP_data.csv")
 ```
 
-You will need to change the command above, depending on where the "intro_to_r" folder is stored on your computer. Also note how the command for changing the working directory in R differs to the corresponding command in bash and python.
 
-Once you are happy, run the commands. Make sure that you understand what these commands are doing. Click on the "environment" tab in the top-right panel of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
+Click on the "environment" tab in the top-right panel of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
 
 We can explore our data by typing some functions into our script and running them. We will use the functions `head()` and `str()`.
 
@@ -93,7 +91,7 @@ dd[22,3:ncol(dd)]
 
 
 ###Define our genotypes
-In our dataset we have separate information for each of the two alleles found in each individual. For example, at our first SNP locus we can see from when we ran the `head()` function that the first individual in our dataset has "`r dd$SNP_1.1[1]`" for its first allele, and "`r dd$SNP_1.2[1]`" for its second allele. This individual is therefore a `r ifelse(dd$SNP_1.1[1] == dd$SNP_1.2[1],"homozygote","heterozygote")` at this locus. We can tell R to give use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your console in R studio:
+In our dataset we have separate information for each of the two alleles found in each individual. For example, at our first SNP locus we can see from when we ran the `head()` function that the first individual in our dataset has "`r dd$SNP_1.1[1]`" for its first allele, and "`r dd$SNP_1.2[1]`" for its second allele. This individual is therefore a `r ifelse(dd$SNP_1.1[1] == dd$SNP_1.2[1],"homozygote","heterozygote")` at this locus. We can tell R to use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your console in R studio:
 
 ```{r,eval = F}
 4 < 3
