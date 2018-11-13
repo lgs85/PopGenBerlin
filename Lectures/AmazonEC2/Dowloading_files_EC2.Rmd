@@ -25,14 +25,14 @@ Our next step differs for windows and mac users. Go to the relevant section.
 
 - Get the path to the directory, that contains your .ppk key file. You can do this by navigating to the folder in windows explorer, right-clicking in the address bar at the top, then selecting *copy as text* (or something similar!). You will need this path to be able to download files from the cloud.
 
-- We will now download the `hello.txt` file to our laptop hard drives. In your terminal, type and adapt the following. You will need to change the paths below to the path that you have copied from windows explorer. You will also need to change the username userXX@ec2-etc. to your own username, and the daily-changing address that we have sent you. 
+- We will now download the `hello_folder` folder to our laptop hard drives. In your terminal, type and adapt the following. You will need to change the paths below to the path that you have copied from windows explorer. You will also need to change the username userXX@ec2-etc. to your own username, and the daily-changing address that we have sent you. 
 
 
 ```{r, eval = F}
-pscp -r -i C:\Users\yourname\Documents\PopGenCanada\cXX.ppk userXX@ec2-XX-XXX-XX-XXX.us-west-2.compute.amazonaws.com:\hello_folder/hello.txt C:\users\yourname\Documents\PopGenCanada
+pscp -r -i C:\Users\yourname\Documents\PopGenCanada\cXX.ppk userXX@ec2-XX-XXX-XX-XXX.us-west-2.compute.amazonaws.com:\hello_folder C:\users\yourname\Documents\PopGenCanada
 ```
 
-- `pcsp` expects three arguments, in the correct order. i) the path to your .pkk key file (after the option "-i"), ii) the address that you wish to download from, and iii) the address that you wish to download to. Hopefully once you have run the above you will see the `hello.txt` file in your `PopGenCanada` (or equivalent) folder.
+- `pcsp` expects three arguments, in the correct order. i) the path to your .pkk key file (after the option "-i"), ii) the address that you wish to download from, and iii) the address that you wish to download to. Hopefully once you have run the above you will see the `hello_folder` containing the `hello.text` file in your `PopGenCanada` (or equivalent) folder.
 - Note that the slash direction differs between Windows and Linux. Once you are on the server, the direction changes!
 
 
@@ -43,15 +43,15 @@ pscp -r -i C:\Users\yourname\Documents\PopGenCanada\cXX.ppk userXX@ec2-XX-XXX-XX
 
 ```{R,eval = F}
 scp -r -i cXX.pem userXX@ec2-xx-xxx-xx-xxx.us-west-2.
-compute.amazonaws.com:~/hello_folder/hello.txt .
+compute.amazonaws.com:~/hello_folder .
 ```
 
-- `scp` expects three arguments, in the correct order. i) the .pem key file (after the option "-i"), ii) the address that you wish to download from, and iii) the address that you wish to download to (here our current directory, so a full stop). Hopefully once you have run the above you will see the `hello.txt` file in your `PopGenCanada` (or equivalent) folder.
+- `scp` expects three arguments, in the correct order. i) the .pem key file (after the option "-i"), ii) the address that you wish to download from, and iii) the address that you wish to download to (here our current directory, so a full stop). Hopefully once you have run the above you will see the `hello_folder` containing the `hello.text` file in your `PopGenCanada` (or equivalent) folder.
 
 
 ##Everyone again
 
-- Go back to the amazon server and remove the hello_folder you've just made.
+- Go back to the amazon server and remove the `hello_folder` you've just made.
 
 ```{R eval = F}
 rm -r hello_folder
