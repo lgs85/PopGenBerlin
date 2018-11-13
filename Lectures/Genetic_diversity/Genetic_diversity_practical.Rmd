@@ -20,7 +20,7 @@ Log onto the Amazon EC2 server and copy the `genetic_diversity` folder to your h
 
 ```{r eval = F}
 cd
-cp -r Dati/genetic_diversity .
+cp -r ../ubuntu/Dati/genetic_diversity .
 ```
 
 
