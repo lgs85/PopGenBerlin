@@ -34,7 +34,7 @@ Now navigate to your newly copied genetic diversity using `cd genetic_diversity`
 ```{r, eval = F}
 ls -l #Get info for all file in directory, including file size - could also use wc (word count)
 cat Tribolium_sample_names.csv #Print file to console
-head -n 11 TriboliumSSGenomes.vcf #Get first 100 lines
+head -n 11 TriboliumSSGenomes.vcf #Get first 11 lines
 
 ```
 </div>
