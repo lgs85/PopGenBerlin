@@ -12,7 +12,12 @@ output:
 In this practical we will be analysing population structure in a genomic dataset. By the end of the practical you should be able to employ some commonly used methods (FST, admixture, PCA) to detect and quantify population structure. We will also continue to develop our plotting skills in R.
 
 ## The data
-We will be using a large SNP dataset from nine European great tit populations to explore continental-scale genomic structure. The data are stored as binary plink files in the "population_structure" folder. **Make sure you have copied the population_structure folder from Dati to your home directory.**
+We will be using a large SNP dataset from European great tit populations to explore continental-scale genomic structure. The data are stored as binary plink files in the ubuntu "population_structure" folder. **Make sure you have copied the population_structure folder to your home directory using the following command.**
+
+```{r eval = F}
+cd
+cp -r ../ubuntu/Dati/population_structure .
+```
 
 
 ## Data exploration and cleaning in plink
@@ -470,3 +475,4 @@ multiplot(A,B,C,D,E,layout = matrix(c(1,1,2,2,3,4,5,5),ncol = 2))
 - Load the `ecodist` library and test whether FST and distance are correlated using a Mantel test, and a partial Mantel test including the "Comparison" variable.
 - Plot PC3 and PC4 from the PCA
 - Log back onto the server and try to estimate the CV error for each of your admixture analyses. Extract this information and plot CV error versus K (look up online if you don't know what CV error is)
+- Adapt my admixture plot script to change colours, ordering etc., or write your own.

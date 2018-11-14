@@ -13,7 +13,15 @@ output:
 We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. Finally, we will learn how to annotate a VCF file and look at some of the cool things we can do if we have a reference genome.
 
 ## The data
-We will be using the *Tribolium castaneum* genomes from the genetic diversity practical. Copy the selection folder from Dati and set your working directory there.
+We will be using the *Tribolium castaneum* genomes from the genetic diversity practical. Copy the "selection1" folder to your home directory and navigate into it as follows:
+
+```{r eval = F}
+
+cd
+cp -r ../ubuntu/Dati/selection1 .
+cd selection1
+
+```
 
 ## Site and window nucleotide diversity
 In the genetic diversity practical we calculated $\pi$ in non-overlapping 200kb windows, and compared distributions of windowed-averages across experimental populations. For visualisation of how variation occurs along genomes, we sometimes wish to calculate statistics in *sliding* windows. This is done very simply using VCFtools - here is the code to calculate.
@@ -104,7 +112,9 @@ We will take you through each argument here separately - all this information ca
 - ../TriboliumSSGenomes.vcf *your vcf file (not in this directory, hence "..")*
 - Tribolium.ann.vcf *the output name I have specified - this can be whatever you like*
 
-Once the program has run, we can use the associated software SnpSift to filter our annotated VCF file based on a range of criteria. Take a look at the SnpSift manual:
+Once the program has run, have a look at your annotated VCF file using the command line. Can you see how it is different from your original file?
+
+We can use the associated software SnpSift to filter our annotated VCF file based on a range of criteria. Take a look at the SnpSift manual:
 
 http://snpeff.sourceforge.net/SnpSift.html
 
