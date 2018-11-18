@@ -139,7 +139,7 @@ $(document).ready(function () {
 <pre class="r"><code>cd
 cp -r ../ubuntu/Dati/selection2 .
 cd selection2</code></pre>
-<p>In this session we are looking for loci under selection, so we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude unrelated individuals. You can create such a file using the information you generated in the population structure practical folder using a single line of plink code. Write a new plink file to the selection folder. The file should contain only unrelated individuals, but all markers</p>
+<p>In this session we are looking for loci under selection, so we do not want to filter based on Hardy-Weinberg, or to prune based on LD, as this would remove loads of interesting information. However, we still want to exclude related individuals. You can create such a file using the information you generated in the population structure practical folder using a single line of plink code. Write a new plink file to the selection folder. The file should contain only unrelated individuals, but all markers</p>
 <div class="fold s">
 <pre class="r"><code>plink --bfile ../population_structure/GreatTits --keep ../population_structure/GreatTitsFilteredPruned.rel.id --make-bed --out GreatTitsUnrel</code></pre>
 </div>
