@@ -40,34 +40,41 @@ Now, open a fresh terminal or command prompt on your laptop, that is not logged 
 
 Now open up your file explorer. Find the "intro_to_r" folder you have just downloaded, and open the file "Mainland_Island_SNP_data.csv". You can open this in a spreadsheet editor (e.g. excel), or in your text editor. You should be able to see that the data has 12 columns, and lots of rows. Each row is an individual. The columns correspond to individual ID, population ID, followed one column per allele at each of the five SNP loci. This is a standard way of storing SNP genotype data, albeit one of many.
 
-Now open R studio. Open a new script using *File > New File > R Script*. Set your working directory to the "intro_to_r" folder, by clicking *Session > Set Working Directory > Choose Directory*, or using the shortcut `ctrl+shift+h`. Now, in your script, type in the commands to read in the *Mainland_Island_SNP_data.csv* file, and assign the dataframe to a suitable object name. You can do this using something like the following code:
+Now open R studio. Open a new script using *File > New File > R Script*. Set your working directory to the "intro_to_r" folder, by clicking *Session > Set Working Directory > Choose Directory*, or using the shortcut `ctrl+shift+h`.
 
-```{r}
-dd <- read.csv("Mainland_Island_SNP_data.csv")
+We are going to use the tidyverse library to read in and manipulate our data. We need to load in this library, which you have hopefully already installed (see the software instruction sheet we sent before the course if not). At the top of our script, type the following:
+
+```{r, echo = T,message=FALSE}
+library(tidyverse)
+```
+
+Click on the line in the script and either click "Run", or press `ctrl+enter` to execute the line of code. Hopefully you get a message showing the packages being attached.
+
+Now, in the next line of your script type in the commands to read in the *Mainland_Island_SNP_data.csv* file, and assign the dataframe to a suitable object name. We will use tidyverse's `read_csv()` instead of the traditional `read.csv()` command (**note that we are using an underscore and not a full stop**):
+
+```{r, message = F}
+dd <- read_csv("Mainland_Island_SNP_data.csv")
 ```
 
 
 Click on the "environment" tab in the top-right panel of R studio. The object `dd` should now be listed. If so, the data has been successfully loaded into R. 
 
-We can explore our data by typing some functions into our script and running them. We will use the functions `head()` and `str()`.
+We can call up the tibble `dd` by just typing its name into the console or script and executing. You should get something like the following:
 
 ```{r}
-head(dd)
-str(dd)
+dd
 ```
 
-The function `head()` can be very useful when you want a quick look data frames with many rows. But `str()` gives us all the same information and more. From the output above, you should be able to answer the following:
+Tibbles are, by default, printed in a user-friendly way. We do not get lots of information dumped to our screen, and R includes lots of useful information for us. From the output above, you should be able to answer the following:
 
 - How many individuals are there in your dataset?
 - How many populations are there?
 - How has R stored the SNP allele data?
 
-Note also the `$` symbols before each of the variable names. We can call up individual variables, and perform functions on them, using this notation.
+We can call up individual variables, and perform functions on them, using the `$` notation. Note that, however, R will dump the entire variable to the screen, so we should be careful if we have very large datasets.
 
 ```{r}
 dd$Pop
-head(dd$Pop)
-str(dd$Pop)
 ```
 
 We can also use square bracket notation to call up individual rows and columns. Using this notation, get R to print out the following (if you can't remember how to do this, use the internet):
@@ -147,10 +154,10 @@ This gives us `r nrow(dd)` `TRUE` or `FALSE` values, and tells us whether each i
 ```{r}
 
 #Add a Heterozygosity column
-SNP1_Het <- ifelse(dd$SNP_1.1 == dd$SNP_1.2,"Homozygote","Heterozygote")
+dd$SNP1_Het <- ifelse(dd$SNP_1.1 == dd$SNP_1.2,"Homozygote","Heterozygote")
 
 #Check that it's worked
-SNP1_Het
+dd$SNP1_Het
 
 ```
 
@@ -160,55 +167,59 @@ We can see by checking back to our original data that the homozygotes and heterz
 
 ###Step three - calculate and plot genotype frequencies
 
-Now we want to calculate the proportion of SNP1 heterozygotes in each of our two populations. To do this, we need to know i) the number of heterozygotes in each population and ii) the total number of individuals in each population. We can get both of these pieces of information using the function `table()`.
+Now we want to calculate the proportion of SNP1 heterozygotes in each of our two populations. To do this, we need to know i) the number of heterozygotes in each population and ii) the total number of individuals in each population. We can get both of these pieces of information using the function `count()` from the `dplyr` package.
 
 ```{r,fig.width = 4}
-table(SNP1_Het) #Number of each genotype
-table(dd$Pop) #Number of individuals in each population
-table(SNP1_Het,dd$Pop) #Both combined
+count(dd,SNP1_Het)
+count(dd,Pop)
+count(dd,SNP1_Het,Pop)
+
 
 ```
 
-We can assign the output of the `table()` function to an object. Then using this we can extract subsets of tata and perform calculations using them. Using this approach, we can divide the number of heterozygotes by the sample size to calculate observed heterozygosity for SNP1. 
+Note that this function uses the name of the tibble *dd* as the first argument, then you specify which columns you want to count. This is a feature of almost every function in the tidyverse, and we'll get to why it's important later. 
+
+We can assign the output of the `count()` function to an object. Then using this we can extract subsets of data and perform calculations using them. Using this approach, we can divide the number of heterozygotes by the sample size to calculate observed heterozygosity for SNP1. 
 
 ```{r}
 #Get the genotypes for each population
-geno_counts <- table(SNP1_Het,dd$Pop)
+geno_counts <- count(dd,SNP1_Het,Pop)
 geno_counts
 
-#Pull out the heterozygote row
-het_counts <- geno_counts["Heterozygote",]
+#Use filter to pull out the heterozygote rows
+het_counts <- filter(geno_counts, SNP1_Het == "Heterozygote")
 het_counts
 
 #Get total number of individuals per population
-sample_sizes <- table(dd$Pop)
+sample_sizes <- count(dd, Pop)
 sample_sizes
 
-#Now divide the two together
-het_freqs <- het_counts/sample_sizes
-het_freqs
+#Now divide the two together and add them to a new column
+het_counts$het_freqs <- het_counts$n/sample_sizes$n
+het_counts
 ```
 
 
 Now we can plot the frequencies. We will get into plotting in much more detail later in the course. For now, we will use the function `barplot()`.
 
 ```{r fig.width = 4}
-barplot(het_freqs,ylab = "Proportion heterozygotes")
+barplot(height = het_counts$het_freqs, names.arg = het_counts$Pop,ylab = "Proportion heterozygotes")
 ```
 
 We can test whether the proportion of heterozygotes differs between mainland and island population using a Chi-squared test (`?chisq.test`).
 
 ```{r}
-chisq.test(SNP1_Het,dd$Pop)
+chisq.test(dd$SNP1_Het,dd$Pop)
 ```
 
 What are you able to conclude from this? Is the effect significant? Is it in the expected direction? What is lacking from this data?
 
-Finally, we may wish to write our summarised data to a file. We can do this using the functions `write.table()` (to write a tab separated table), or `write.csv` to write a CSV file. Let's write our geneotype counts to file now. Note that you will have to change the file path depending on where you want to write your file.
+Finally, we may wish to write our summarised data to a file. We can do this using the functions `write_delim()` (to write a tab separated table), or `write_csv` to write a CSV file. Let's write our geneotype counts to file now. Note that you will have to change the file path depending on where you want to write your file.
 
 ```{r}
-write.table(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.txt")
-write.csv(geno_counts,file = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.csv")
+
+write_delim(geno_counts,path = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.txt")
+write_csv(geno_counts,path = "~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.csv")
 
 ```
 
@@ -221,7 +232,7 @@ Open your text and csv files in sublime and/or excel. How do they look? Any prob
 - Following this, can you make a plot something like the below? You can compare your code to mine, which is in the script "Mainland_Island_SNP_analysis.R"
 
 
-```{r echo = F,fig.width = 6,fig.height=4,fig.align="center"}
+```{r echo = F,fig.width = 6,fig.height=4,fig.align="center",message = F}
 
 source("Mainland_Island_SNP_analysis.R")
 p

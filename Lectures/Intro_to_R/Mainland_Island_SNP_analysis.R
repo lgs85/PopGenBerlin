@@ -1,9 +1,7 @@
-library(magrittr)
-library(plyr)
-library(ggplot2)
+library(tidyverse)
 
 #Read in data
-dd <- read.csv("Mainland_Island_SNP_data.csv", stringsAsFactors = F)
+dd <- read_csv("Mainland_Island_SNP_data.csv")
 
 #Separate alleles
 a1 <- dd[, seq(3, ncol(dd) - 1, 2)]
@@ -11,14 +9,13 @@ a2 <- dd[, seq(4, ncol(dd), 2)]
 
 #Calculate heterozygosity per locus and plot data
 p <-
-  data.frame(
-    Pop = rep(dd$Pop, 5),
+  tibble(
+    Pop = rep(dd$Pop, ncol(a1)),
     SNP = rep(colnames(a1), each = nrow(dd)),
     Het = unlist(as.vector(a1 != a2))
   ) %>%
-  ddply(.(Pop, SNP),
-        summarise,
-        LocusHet = mean(Het)) %>%
+  group_by(Pop, SNP) %>%
+  summarise(LocusHet = mean(Het)) %>%
   ggplot(aes(x = Pop, y = LocusHet)) +
   geom_point() +
   theme_classic() +
