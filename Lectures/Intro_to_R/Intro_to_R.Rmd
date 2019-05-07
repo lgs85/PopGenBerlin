@@ -180,9 +180,9 @@ R is:
 
 
 ##Simulate and generate data
-```{r,echo = F,fig.width = 5,fig.height = 5,fig.align='center'}
-x <- c(1:20)
-y <- x + rnorm(20,sd = 2.5)
+```{r,fig.width = 4,fig.height = 4,fig.align='center'}
+x <- rnorm(20,mean = 20,sd = 2.5)
+y <- x + rnorm(20,mean = 0, sd = 0.5)
 plot(x,y)
 ```
 
@@ -595,6 +595,83 @@ nano
 
 Rscript myscript.R
 ```
+
+
+
+
+
+
+#Tidyverse
+
+
+
+
+
+##Tidyverse
+
+<div align="center">
+<img src="Images/tidyverse.png" width=600>
+</div>
+
+<div align="center">
+<p style="font-size:12px">https://www.tidyverse.org/</p>
+</div>
+
+
+
+
+##Tidyverse - reading and data formats
+
+*readr*
+
+"a fast and friendly way to read rectangular data (like csv, tsv, and fwf). It is designed to flexibly parse many types of data found in the wild, while still cleanly failing when data unexpectedly changes."
+
+<br>
+
+*tibble*
+
+"a modern reimagining of the data frame, keeping what time has proven to be effective, and throwing out what is not. Tibbles are data.frames that are lazy and surly: they do less (i.e. they don’t change variable names or types, and don’t do partial matching) and complain more (e.g. when a variable does not exist)."
+
+
+
+
+##Tidyverse - data wrangling
+
+*dplyr*
+
+"a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges"
+
+<br>
+
+*tidyr*
+
+"The goal of tidyr is to help you create tidy data. Tidy data is data where: each variable is in a column, each observation is a row, each value is a cell."
+
+
+
+
+##Tidyverse - data plotting
+
+*ggplot2*
+
+"ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details."
+
+
+
+
+##Tidyverse - help
+
+<div align="center">
+<img src="Images/r4ds.png" width=300>
+</div>
+
+<div align="center">
+<p style="font-size:12px">https://r4ds.had.co.nz/</p>
+</div>
+
+
+
+
 
 
 
