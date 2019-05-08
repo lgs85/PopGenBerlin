@@ -109,19 +109,19 @@ Use `ls - l` to look at the size of the output files. You will see that they are
 
 ```{r eval = F}
 R
-library(data.table)
+library(tidyverse)
 ```
 
-The library `data.table` includes the very useful function `fread()`, which is designed to read in very large text files. Take a look at the help file for this function. Now use `fread()` to read in the two `.geno.ld` files you have created (one for each population), and assign each data frame to a different object name.
+Now use `read_delim()` to read in the two `.geno.ld` files you have created (one for each population), and assign each data frame to a different object name.
 
 <div class="fold s">
 ```{r eval = F}
-MB <- fread("TriboliumSSGenomesMB.geno.ld")
-FA <- fread("TriboliumSSGenomesFA.geno.ld")
+MB <- read_delim("TriboliumSSGenomesMB.geno.ld", delim = "\t")
+FA <- read_delim("TriboliumSSGenomesFA.geno.ld", delim = "\t")
 ```
 </div>
 
-Have a look at what's contained in these data files using `head()` and/or `str()`. You will see that they are very large indeed. Each row contains the LD statistic and other information for a pair of SNPs. There are five columns: the chromosome that the two SNPs are on, the positions (in bp) of the two SNPs, the number of individuals tested, and the R2 value. We want to plot how R2 declines with the physical distance between pairs of SNPs. However, we can't plot all of our data as i) there's too much, and ii) with three individuals the R2 values are two noisy. So as before, we are going to use windowed averages. This time we will use 1000bp windows, as the maximum distance between any pair of SNPs in our data is 100,000. Our aim is to reduce our two data files each containing millions of LD measures to a single data file with 100 averaged LD measures for each population.
+Have a look at what's contained in these data files by typing in their names. You will see that they are very large indeed. Each row contains the LD statistic and other information for a pair of SNPs. There are five columns: the chromosome that the two SNPs are on, the positions (in bp) of the two SNPs, the number of individuals tested, and the R2 value. We want to plot how R2 declines with the physical distance between pairs of SNPs. However, we can't plot all of our data as i) there's too much, and ii) with three individuals the R2 values are two noisy. So as before, we are going to use windowed averages. This time we will use 1000bp windows, as the maximum distance between any pair of SNPs in our data is 100,000. Our aim is to reduce our two data files each containing millions of LD measures to a single data file with 100 averaged LD measures for each population.
 
 The first thing we wish to do is calculate the physical distance between each pair of SNPs. This can be obtained by subtracting the SNP positions.
 
@@ -151,34 +151,48 @@ FA$dist <- ceiling((FA$POS2 - FA$POS1)/1000)*1000
 ```
 </div>
 
-Now we need to obtain the mean R2 value for each 1000bp distance bin. For this we are going to use the `ddply()` function in the package `plyr`. With  `ddply()`, we can perform functions on variables data frames (e.g. calculate means), and return the output in a data frame. Have a look at the relevant help pages and try searching for help online. Here is a tutorial:
+Now we need to obtain the mean R2 value for each 1000bp distance bin. For this we are going to use the `group_by()` and `summarise()` functions in the tidyverse package `dplyr`. These functions allow us to perform functions on variables tibbles (e.g. calculate means), and return the output in a simplified tibble. Have a look at the relevant help pages and try searching for help online. Here is a tutorial:
 
-http://www.cookbook-r.com/Manipulating_data/Summarizing_data/
+https://datacarpentry.org/R-genomics/04-dplyr.html#split-apply-combine_data_analysis_and_the_summarize()_function
 
-If you think you understand how it works, have a go at using `ddply()` to create a new data frame with averaged R2 values for each 1000bp window.
+If you have not come across pipes before, you may want to read some of the previous sections on the above webpage. When you think you understand how it works, have a go at using these functions to create a new data frame with averaged R2 values for each 1000bp window. Two ways of doing this are presented below.
 
 
 <div class="fold s">
 ```{r eval = F}
-library(plyr)
 
-MB2 <- ddply(MB,
-      .(dist),
-      summarise,
-      meanR2 = mean(`R^2`))
+###################
+#Option 1 - uses lots of variable names
+###################
 
-FA2 <- ddply(FA,
-      .(dist),
-      summarise,
-      meanR2 = mean(`R^2`))
+MB2 <- group_by(MB,dist) %>%
+  summarise(meanR2 = mean(`R^2`))
 
-#Combine
-dd <- rbind(MB2,FA2)
+FA2 <- group_by(FA,dist) %>%
+  summarise(meanR2 = mean(`R^2`))
 
-#Add a population column
-dd$pop <- rep(c("MB","FA"),c(nrow(MB2),nrow(FA2)))
+dd <- bind_rows(MB2,FA2) #Combines
 
-write.csv(dd,"TriboliumSSGenomes.windowed.ld.csv",row.names = F)
+dd$pop <- rep(c("MB","FA"),c(nrow(MB2),nrow(FA2))) #Adds a population column
+
+
+###################
+#Option 2 - the tidyverse way
+###################
+
+dd <-   MB %>%
+  group_by(dist) %>%
+  summarise(meanR2 = mean(`R^2`)) %>%
+  mutate(pop = "MB") %>%
+  bind_rows(FA %>%
+  group_by(dist) %>%
+  summarise(meanR2 = mean(`R^2`)) %>%
+  mutate(pop = "FB"))
+  
+
+
+#Write output
+write_csv(dd,"TriboliumSSGenomes.windowed.ld.csv")
 
 ```
 </div>
@@ -191,16 +205,18 @@ That's our analyses done! Now you can log out of the server, and use SCP to down
 - windowed nucleotide diversity (two files - one per population), 
 - windowed LD (one file). 
 
-Make a new folder called "session_3_output" or something similar using `mkdir` Download your four genetic diversity outputs using `scp` (mac) or `pscp` (windows), in exactly the same way as you learned this morning. Once you have done this, open R studio on your laptop and use `read.csv()` and `read.table()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
+Make a new folder called "session_3_output" or something similar using `mkdir` Download your four genetic diversity outputs using `scp` (mac) or `pscp` (windows), in exactly the same way as you learned this morning. Once you have done this, open R studio on your laptop and use `read_csv()` and `read_delim()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
 
 <div class="fold s">
 ```{r}
 rm(list=ls()) #Clear your workspace
 
-het <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomes.het",header = T)
-pi_MB <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomesMB.windowed.pi", header = T)
-pi_FA <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomesFA.windowed.pi", header = T)
-ld <- read.csv("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
+library(tidyverse) #load the tidyverse
+
+het <- read_delim("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomes.het",delim = "\t")
+pi_MB <- read_delim("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomesMB.windowed.pi",delim = "\t")
+pi_FA <- read_delim("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomesFA.windowed.pi",delim = "\t")
+ld <- read_csv("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
 
 ```
 </div>
@@ -208,12 +224,11 @@ ld <- read.csv("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumS
 We are going to use the `ggplot2` library to make the following plot. If you think you can recreate this, please give it a shot. Otherwise, we will work through the plots step-by-step below.
 
 ```{r echo = F,warning = F,message=F,fig.height=6}
-library(Rmisc)
-library(plyr)
-library(magrittr)
-library(ggplot2)
 
-Fig1A <- mutate(het,Population = c(rep("MB",3),rep("FA",3)),Heterozygosity = 1-(O.HOM./N_SITES)) %>%
+library(Rmisc)
+
+Fig1A <- mutate(het,Population = c(rep("MB",3),rep("FA",3)),
+                Heterozygosity = 1-(`O(HOM)`/N_SITES)) %>%
   ggplot(aes(x = Population, y = Heterozygosity,col = Population))+
   geom_point()+
   theme_bw()+
@@ -251,48 +266,29 @@ multiplot(Fig1A,Fig1B,Fig1C,layout = matrix(c(1,2,3,3),nrow = 2, byrow = T))
 We will work through the figures one at a time. We will start with panel **A**. Let's first take a look at our data:
 
 ```{r}
-head(het)
+het
 ```
 
-As we have already seen, the `--het` function in vcftools gives us, for each individual, the number of homozygous sites, the number of heterozygous sites, the total number of sites and the inbreeding coefficient F. In panel **A** you can see that I have plotted the *proportion* of heterozygous sites per individual. Can you calculate this in R, and assign individual heterozygosity to a new column? You will also notice that there is no "population" column, and we will need one. Can you use the the available information (hint: see previous code) to assign a population column?
+As we have already seen, the `--het` function in vcftools gives us, for each individual, the number of homozygous sites, the number of heterozygous sites, the total number of sites and the inbreeding coefficient F. In panel **A** you can see that I have plotted the *proportion* of heterozygous sites per individual. Can you calculate this in R, and assign individual heterozygosity to a new column? You will also notice that there is no "population" column, and we will need one. Can you use the the available information (hint: see previous code) to assign a population column? (hint 2: why might the variable names be causing an error?)
 
 <div class="fold s">
 ```{r}
-het$Heterozygosity <- 1-(het$O.HOM./het$N_SITES)
+het$Heterozygosity <- 1-(het$`O(HOM)`/het$N_SITES) #The back ticks get around the parentheses in the variable name
 het$Population <- c(rep("MB",3),rep("FA",3)) #Know from previously that the first three individuals are from MB
 ```
 </div>
 
-Take a look at the structure of het. How has the population column been stored? Can you turn it into a factor?
 
-<div class="fold s">
-```{r}
-het$Population <- factor(het$Population)
-```
-</div>
-
-
-
-We can try plotiing heterozygosity against population using the base plotting function in R. We want heterozygosity on the y axis, and population ID on the x. So we would plot as follows:
-
-```{r}
-plot(Heterozygosity~Population,data = het)
-```
-
-Base graphics automatically generates a boxplot, which is not appropriate for our data (as we only have three points per population!). We could get around this, but it is a lot of unnecessary coding and work. 
-
-Instead, for the rest of this course we will be using ggplot2 for our plots - if you have no experience using this package, take 5-10 minutes to familiarise yourself by searching for an online tutorial. Here is one example:
+For the rest of this course we will be using ggplot2 for our plots - if you have no experience using this package, take 5-10 minutes to familiarise yourself by searching for an online tutorial. Here is one example:
 
 http://www.noamross.net/blog/2012/10/5/ggplot-introduction.html
-
 
 Basically, `ggplot()` builds up a plot in layers. We first tell R *what* we want to plot, then we tell it *how* to plot it (e.g. with points, boxplot etc.) 
 
 We can use ggplot2 to plot heterozygosity against population. We will start off defining the aesthetics, which produces a blank plot. by using the function `geom_point()`, as follows:
 
+
 ```{r}
-#Load the ggplot library
-library(ggplot2)
 
 #Make a plot
 A <- ggplot(het,aes(x = Population, y = Heterozygosity))
@@ -368,14 +364,14 @@ A
 And we're there! Now let's move onto panel B, which is slightly more complicated. Again, we first look at the data. Remember we have two data frames for the nucleotide diversity data - one for each population:
 
 ```{r}
-str(pi_MB)
-str(pi_FA)
+pi_MB
+pi_FA
 ```
 
 Because ggplot likes to work from a single data frame, we first need to combine our data from the two populations and add a population ID column:
 
 ```{r}
-pi_both <- rbind(pi_MB,pi_FA)
+pi_both <- bind_rows(pi_MB,pi_FA)
 pi_both$Population <- c(rep("MB",nrow(pi_MB)),rep("FA",nrow(pi_FA)))
 ```
 
@@ -468,7 +464,9 @@ B
 
 Done! Now we need to make the LD plot and stick them all together. Let's take another look at the LD data:
 ```{r}
-head(ld)
+
+ld
+
 ```
 This should be relatively simple by now, as we can use the other two plots as templates, and our data is already conveniently formatted in the right way. Let's start by plotting the points, with distance between marker pairs on the x axis, R2 on the y axis, with colours corresponding to populations.
 
@@ -523,6 +521,7 @@ multiplot(A,B,C,layout = matrix(c(1,2,3,3),nrow = 2,byrow = T))
 ```
 
 ##If you've finished
+- We didn't perform any filtering steps on our data. Explore filtering based on LD, Hardy-Weinberg and missing data (and anything else you think relevant). How does this affect your results?
 - Use `multiplot()` to crease a multi-panelled plot with i) the LD plot on the top, and ii) the heterozygosity plot stretched along the left-hand side, with the pi and LD plots both on the right hand side.
 - Plot and test whether nucleotide diversity in each 200kb window is correlated between the two populations. What might explain such a pattern?
 - Recreate this plot of nucleotide diversity (200kb windows) for each chromosome, as precisely as you can: 
