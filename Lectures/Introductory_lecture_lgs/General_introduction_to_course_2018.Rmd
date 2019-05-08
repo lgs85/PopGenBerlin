@@ -7,7 +7,7 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-##Welcome to Quebec!
+##Welcome to Berlin!
 
 <div align="center">
 <img src="Images/weather.png" width=600>
@@ -86,7 +86,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ##Who are you?
 
 <div align="center">
-<img src="Images/experience.png" width=350>
+<img src="Images/experience.png" width=250>
 </div>
 
 
