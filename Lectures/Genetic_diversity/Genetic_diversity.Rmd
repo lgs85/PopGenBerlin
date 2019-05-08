@@ -382,6 +382,76 @@ Where $x_{11}$, $x_{22}$ etc. are frequencies of haplotypes $A_{1} B_{1}$, $A_{2
 
 
 
+
+
+## Considerations for dealing with genomic data
+
+Having (very) many loci presents isues with:
+
+- Error detection
+- Unusual patterns of variation
+- Non-independence of loci
+- False positives
+- Computing power
+
+We deal with these issues using **filtering**
+
+
+
+
+
+
+
+## Filtering genomic data - dealing with error
+
+We may want to:
+
+- Remove SNPs based with low quality scores
+- Remove SNPs that are missing from lots of individuals
+
+
+
+
+
+## Filtering genomic data - dealing with unusual patterns of variation
+
+We may want to:
+
+- Remove SNPs not in Hardy-Weinberg equilibrium
+- Remove SNPs on sex chromosomes
+- Remove SNPs with low MAF
+
+
+
+
+## Filtering genomic data - dealing with non-independence
+
+We may want to:
+
+- Remove SNPs in linkage disequilibrium
+- Remove highly related individuals
+
+
+
+
+
+## Filtering genomic data - dealing with computing issues
+
+We may want to:
+
+- First remove SNPs based on biological/statistical reasons
+- Be more strict with our filtering parameters
+- Filter (thin) SNPs randomly
+
+
+
+
+
+#What filters and thresholds should I use?
+
+
+
+
 # Software
 
 
