@@ -174,15 +174,16 @@ This is the plot we will be aiming to make:
 
 ```{r,fig.width = 8,fig.height = 7,echo = F,message = F, warning = F}
 
+library(tidyverse)
+library(Rmisc)
+
 setwd("~/Documents/Teaching/PopGenBerlinLGS/session7_output/")
-temp1 <- read.table("TriboliumSSGenomesMB200k.windowed.pi",header = T)
-temp2 <- read.table("TriboliumSSGenomesFA200k.windowed.pi",header = T)
+temp1 <- read_delim("TriboliumSSGenomesMB200k.windowed.pi",delim = "\t")
+temp2 <- read_delim("TriboliumSSGenomesFA200k.windowed.pi",delim = "\t")
 
 pi200 <- rbind(temp1,temp2)
 pi200$Pop <- c(rep("MB",nrow(temp1)),rep("FA",nrow(temp2)))
 
-library(ggplot2)
-library(Rmisc)
 
 FigA <- ggplot(pi200,aes(x = BIN_START/1000, y = PI,col = Pop))+
   geom_line()+
@@ -196,8 +197,8 @@ FigA <- ggplot(pi200,aes(x = BIN_START/1000, y = PI,col = Pop))+
 
 ####################
 
-temp1 <- read.table("Tribolium_nonsyn_MB200k.windowed.pi",header = T)
-temp2 <- read.table("Tribolium_syn_MB200k.windowed.pi",header = T)
+temp1 <- read_delim("Tribolium_nonsyn_MB200k.windowed.pi",delim = "\t")
+temp2 <- read_delim("Tribolium_syn_MB200k.windowed.pi",delim = "\t")
 
 inboth <- intersect(paste0(temp1$CHROM,temp1$BIN_START),paste0(temp2$CHROM,temp2$BIN_START))
 temp1 <- subset(temp1,paste0(CHROM,BIN_START) %in% inboth)
@@ -217,8 +218,8 @@ FigB <- ggplot(temp1,aes(x = S_pi, y = NS_pi))+
   annotate("text",x = 0,y = 0.0014,label = "B")
 ####################
 
-temp1 <- read.table("Tribolium_nonsyn_FA200k.windowed.pi",header = T)
-temp2 <- read.table("Tribolium_syn_FA200k.windowed.pi",header = T)
+temp1 <- read_delim("Tribolium_nonsyn_FA200k.windowed.pi",delim = "\t")
+temp2 <- read_delim("Tribolium_syn_FA200k.windowed.pi",delim = "\t")
 
 inboth <- intersect(paste0(temp1$CHROM,temp1$BIN_START),paste0(temp2$CHROM,temp2$BIN_START))
 temp1 <- subset(temp1,paste0(CHROM,BIN_START) %in% inboth)
