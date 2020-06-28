@@ -105,7 +105,7 @@ dd[22,3:ncol(dd)]
 </div>
 
 
-###Define our genotypes
+### Define our genotypes
 In our dataset we have separate information for each of the two alleles found in each individual. For example, at our first SNP locus we can see from when we ran the `head()` function that the first individual in our dataset has "`r dd$SNP_1.1[1]`" for its first allele, and "`r dd$SNP_1.2[1]`" for its second allele. This individual is therefore a `r ifelse(dd$SNP_1.1[1] == dd$SNP_1.2[1],"homozygote","heterozygote")` at this locus. We can tell R to use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your console in R studio:
 
 ```{r,eval = F}
@@ -166,7 +166,7 @@ dd$SNP1_Het
 
 We can see by checking back to our original data that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot for this first locus.
 
-###Step three - calculate and plot genotype frequencies
+### Step three - calculate and plot genotype frequencies
 
 Now we want to calculate the proportion of SNP1 heterozygotes in each of our two populations. To do this, we need to know i) the number of heterozygotes in each population and ii) the total number of individuals in each population. We can get both of these pieces of information using the function `count()` from the `dplyr` package.
 
@@ -227,7 +227,7 @@ write_csv(geno_counts,path = "~/Documents/Teaching/PopGenBerlinLGS/example_genot
 Open your text and csv files in sublime and/or excel. How do they look? Any problems? Can you use the help files to figure out how to remove the quotes in the tab separated text file?
 
 
-##If you've finished
+## If you've finished
 
 - Can you calculate heterozygosity for all five SNPs? Can you find a way to do it more quickly and efficiently than repeating the same code?
 - Following this, can you make a plot something like the below? You can compare your code to mine, which is in the script "Mainland_Island_SNP_analysis.R"

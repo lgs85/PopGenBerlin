@@ -569,7 +569,10 @@ cp -r Dati/intro_to_r .</code></pre>
 ## # … with 1 more variable: SNP_5.2 &lt;chr&gt;</code></pre>
 <pre class="r"><code>#For the more experienced - can you do think of a better way to do this using grep()?</code></pre>
 </div>
-<p>###Define our genotypes In our dataset we have separate information for each of the two alleles found in each individual. For example, at our first SNP locus we can see from when we ran the <code>head()</code> function that the first individual in our dataset has “A” for its first allele, and “A” for its second allele. This individual is therefore a homozygote at this locus. We can tell R to use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your console in R studio:</p>
+</div>
+<div id="define-our-genotypes" class="section level3">
+<h3>Define our genotypes</h3>
+<p>In our dataset we have separate information for each of the two alleles found in each individual. For example, at our first SNP locus we can see from when we ran the <code>head()</code> function that the first individual in our dataset has “A” for its first allele, and “A” for its second allele. This individual is therefore a homozygote at this locus. We can tell R to use this information to tell us about heterozygosity. But first, we need to get an understanding of logical operators in R. Try typing the following commands directly into your console in R studio:</p>
 <pre class="r"><code>4 &lt; 3
 4 &gt; 3
 
@@ -677,7 +680,9 @@ dd$SNP1_Het</code></pre>
 ## [246] &quot;Homozygote&quot;   &quot;Heterozygote&quot; &quot;Homozygote&quot;   &quot;Heterozygote&quot; &quot;Homozygote&quot;</code></pre>
 </div>
 <p>We can see by checking back to our original data that the homozygotes and heterzygotes are being correctly identified. Now we can do some calculations and make a plot for this first locus.</p>
-<p>###Step three - calculate and plot genotype frequencies</p>
+</div>
+<div id="step-three---calculate-and-plot-genotype-frequencies" class="section level3">
+<h3>Step three - calculate and plot genotype frequencies</h3>
 <p>Now we want to calculate the proportion of SNP1 heterozygotes in each of our two populations. To do this, we need to know i) the number of heterozygotes in each population and ii) the total number of individuals in each population. We can get both of these pieces of information using the function <code>count()</code> from the <code>dplyr</code> package.</p>
 <pre class="r"><code>count(dd,SNP1_Het)</code></pre>
 <pre><code>## # A tibble: 2 x 2
@@ -750,7 +755,10 @@ het_counts</code></pre>
 <pre class="r"><code>write_delim(geno_counts,path = &quot;~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.txt&quot;)
 write_csv(geno_counts,path = &quot;~/Documents/Teaching/PopGenBerlinLGS/example_genotype_counts.csv&quot;)</code></pre>
 <p>Open your text and csv files in sublime and/or excel. How do they look? Any problems? Can you use the help files to figure out how to remove the quotes in the tab separated text file?</p>
-<p>##If you’ve finished</p>
+</div>
+</div>
+<div id="if-youve-finished" class="section level2">
+<h2>If you’ve finished</h2>
 <ul>
 <li>Can you calculate heterozygosity for all five SNPs? Can you find a way to do it more quickly and efficiently than repeating the same code?</li>
 <li>Following this, can you make a plot something like the below? You can compare your code to mine, which is in the script “Mainland_Island_SNP_analysis.R”</li>
@@ -762,7 +770,6 @@ write_csv(geno_counts,path = &quot;~/Documents/Teaching/PopGenBerlinLGS/example_
 <li><p>I simulated the dataset for this practical in R. However, I did a dreadful job of annotating the script that I used to generate this dataset. Go through the script “Mainland_Island_SNP_data.R”, figure out what is being done with each line of code, and annotate the script accordingly.</p></li>
 <li><p>Try simulating your own SNP dataset by developing my code, or your own.</p></li>
 </ul>
-</div>
 </div>
 
 

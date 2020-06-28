@@ -19,8 +19,9 @@ cd
 cp -r ../ubuntu/Dati/population_structure .
 ```
 
+## Instructions
 
-## Data exploration and cleaning in plink
+### Data exploration and cleaning in plink
 
 Before we clean our data, use the command line to explore .bed, .bim and .fam files to try to figure out how many individuals and SNP markers have been typed.
 
@@ -63,7 +64,7 @@ plink --bfile GreatTitsFilteredPruned --keep GreatTitsFilteredPruned.rel.id --ma
 We have rushed through this a little, but you should now have an idea about some of the processes that you can use to tidy your SNP data. 
 
 
-## Pairwise FST
+### Pairwise FST
 
 Let's now focus on looking at population structure. In the "population_structure" folder, you should be able to find a file called "pairwise_fst_plink.py" Take a look at this file using `nano`. 
 
@@ -85,7 +86,7 @@ python pairwise_fst_plink.py
 
 Take a look at the output from the python script(either using `cat` or `nano`), and make sure you understand the format of the output (hint - explore the python script and discuss with your colleagues). We will later use this output to create an isolation by distance plot, but for now we will run some extra population structure analyses on the server.
 
-## PCA
+### PCA
 We can also use plink to generate a PCA of our genetic data. Again, we will use the pruned and cleaned dataset we generated earlier. Can you figure out how to run a PCA on this data, in which you keep the first four principal components?
 
 <div class="fold s">
@@ -96,7 +97,7 @@ plink --bfile GreatTitsFilteredPrunedUnrel --pca 4 --out GreatTitsFilteredPruned
 
 Have a look at the output files and check you are happy with what you have got (hint - use the plink manual). Again, we will download our file for plotting soon.
 
-##Admixture
+### Admixture
 Finally, we are going to run Admixture on our dataset. But first we need to do one more piece of cleaning. We still have a very large number of SNPs in our great tit dataset, and with this many individuals and SNPs it would take Admixture several hours to run. So we are going to thin our markers substantially for the purpose of this practical. Can you figure out, using plink, how to randomly select 1% of your markers and write them to a new file?
 
 <div class="fold s">
@@ -137,14 +138,14 @@ Done! Now we can download all of our results and do some plots. Create a new fol
 
 Now download the session4_output folder using scp or pscp.
 
-##Putting it all together
+### Putting it all together
 
 Once again, we will start be giving you the end product of this practical. The plot below is what you should be aiming for. Hopefully you can see that we have an IBD plot on the top left, a PCA on the bottom-left, then on the right we have three structure-type bar plots with K ranging from 2-4. If you feel as though you can have a go at this without step-by-step instruction, please go ahead now. Otherwise, full instructions are given below.
 
 ```{r echo = F,fig.width=10, message  = F,warning = F}
 library(geosphere)
 library(tidyverse)
-library(Rmisc)
+library(cowplot)
 
 setwd("~/Documents/Teaching/PopGenBerlinLGS/session_4_output/")
 ll <- read_delim("LatLong.txt",delim = "\t")  
@@ -203,8 +204,10 @@ D <- admixtureplot(str_out = K3,k = 3, pops = mypops,xaxis = F)
 K4 <- read_delim("GreatTitsThinned.4.Q", delim = " ",col_names = F)
 E <- admixtureplot(str_out = K4,k = 4, pops = mypops,xaxis = T)
 
+left_col <- plot_grid(A,B,nrow = 2)
+right_col <- plot_grid(C,D,E,nrow = 3,rel_heights = c(0.5,0.5,1))
 
-multiplot(A,B,C,D,E,layout = matrix(c(1,1,2,2,3,4,5,5),ncol = 2))
+plot_grid(left_col,right_col,ncol = 2)
 
 ```
   
@@ -427,51 +430,36 @@ E <- admixtureplot(str_out = K4,k = 4, pops = mypops, xaxis = T)
 ```
 </div>
 
-Now all we need to do is put our five plots together, using `multiplot()`. This is a bit more tricky is we have two plots on the left and three on the right. I will demonstrate how we will do this using `layout()`. To make a matrix for a 6-panel plot, we would do the following:
+Now all we need to do is put our five plots together, using `plot_grid()`. This is a bit more tricky is we have two plots on the left and three on the right. The easiest way is to first make the left and right columns separately.
 
-```{R}
-layout(matrix(1:6,ncol = 2))
-layout.show(6)
+```{R,fig.width = 5}
+left_col <- plot_grid(A,B,nrow = 2)
+right_col <- plot_grid(C,D,E,nrow = 3)
+
+left_col
+right_col
+
 ```
 
-A key feature or `layout()` is that plots can take up more than one panel. So, for example, if the three left-hand panels into a single plot, we could do the following:
 
-```{R}
-layout(matrix(c(1,1,1,2:4),ncol = 2))
-layout.show(4)
-```
-
-Bearing this in mind, see if you can figure out how to use `layout()` and `layout.show()` to produce a template for our 5-panelled figure, with two plots on the left and two on the right.
+These are almost there, but because only one of our three admixture plots has x axis labels, we need to ascribe more space to this panel. Can you figure out a way to do this, using the help for `plot_grid()`?
 
 <div class="fold s">
-```{R}
-layout(matrix(c(1,1,1,2,2,2,3,3,4,4,5,5),ncol = 2))
-layout.show(5)
+```{R,fig.width = 5}
+right_col <- plot_grid(C,D,E,nrow = 3,rel_heights = c(0.5,0.5,1))
+
+right_col
 ```
 </div>
 
-What the above basically does is creates a matrix with six rows and two columns - the left-hand panels are given three rows, while the right=hand panels are given two.
-
-This is almost there, but because only one of our three admixture plots (the one due to go in panel 5) has x axis labels, we need to ascribe more space to this panel. Can you figure out a way to do this, and produce the layout shown below?
-
-<div class="fold s">
-```{R}
-
-#12-row matrix
-layout(matrix(c(1,1,2,2,3,4,5,5),ncol = 2))
-layout.show(5)
-```
-</div>
-
-Now we can use this layout within the `multiplot()` function to make our final figure:
+Now we can use an additonal `plot_grid()` function to make our final figure:
 <div class="fold s">
 ```{R,fig.width = 10}
-library(Rmisc)
-multiplot(A,B,C,D,E,layout = matrix(c(1,1,2,2,3,4,5,5),ncol = 2))
+plot_grid(left_col,right_col,ncol = 2)
 ```
 </div>
 
-##If you've finished
+## If you've finished
 - Load the `ecodist` library and test whether FST and distance are correlated using a Mantel test, and a partial Mantel test including the "Comparison" variable.
 - Plot PC3 and PC4 from the PCA
 - Log back onto the server and try to estimate the CV error for each of your admixture analyses. Extract this information and plot CV error versus K (look up online if you don't know what CV error is)

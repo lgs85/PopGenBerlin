@@ -16,6 +16,8 @@ Once again, you should try to figure things out for yourself before clicking on 
 ## The data
 We will be working with some of my own genomic data obtained from experimentally evolved populations the red flour beetle *Tribolium castaneum*. The data file includes SNP information (in vcf format) from six resequenced genomes. Three of these individuals come from a population that has been experimentally evolved under male-biased sex ratios for ~80 generations, while the other three come from a population with a female-biased sex ratio (see Lumley et al. 2015, *Nature* for details of the experimental lines). We wish to know whether levels of genomic diversity differs between these two populations as a result of differing patterns of sexual selection.
 
+## Instructions
+
 Log onto the Amazon EC2 server and copy the `genetic_diversity` folder to your home directory as follows. 
 
 ```{r eval = F}
@@ -509,7 +511,7 @@ plot_grid(top_row,C,nrow = 2,labels = c("","C"))
 ```
 </div>
 
-##If you've finished
+## If you've finished
 - We didn't perform any filtering steps on our data. Explore filtering based on LD, Hardy-Weinberg and missing data (and anything else you think relevant). How does this affect your results?
 - Use `multiplot()` to crease a multi-panelled plot with i) the LD plot on the top, and ii) the heterozygosity plot stretched along the left-hand side, with the pi and LD plots both on the right hand side.
 - Plot and test whether nucleotide diversity in each 200kb window is correlated between the two populations. What might explain such a pattern?
