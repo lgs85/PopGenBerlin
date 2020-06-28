@@ -70,10 +70,10 @@ vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD
 
 What is the difference between the way we have constructed the windows between this analysis and the sliding window analysis of $\pi$? Do you think this will cause any problems?
 
-## SnpEff
-We will now use this very cool piece of software to annotate the SNPs in out VCF file, using the *Tribolium* reference genome. To run SnpEff we need work within the directory in which the program is contained. Use `cd` to navigate to your own copy of the `SnpEff` directory, which is within the `selection` directory.
+## snpEff
+We will now use this very cool piece of software to annotate the SNPs in out VCF file, using the *Tribolium* reference genome. To run snpEff we need work within the directory in which the program is contained. Use `cd` to navigate to your own copy of the `snpEff` directory, which is within the `selection` directory.
 
-SnpEff takes a VCF file, and compares the positions against a reference genome database. It then extracts lots of information from the genome database (whether the SNP is in an intron, exon etc., whether it is a zero-fold/four-fold site). The program comes with lots of pre-loaded genome databases, or we can generate ourselves. So our first task is to find out if they have a *Tribolium castaneum* genome. Go the help page for SnpEff, here:
+snpEff takes a VCF file, and compares the positions against a reference genome database. It then extracts lots of information from the genome database (whether the SNP is in an intron, exon etc., whether it is a zero-fold/four-fold site). The program comes with lots of pre-loaded genome databases, or we can generate ourselves. So our first task is to find out if they have a *Tribolium castaneum* genome. Go the help page for snpEff, here:
 
 http://snpeff.sourceforge.net/SnpEff_manual.html
 

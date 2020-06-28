@@ -5,7 +5,7 @@ output:
   ioslides_presentation
 ---
 
-##Recap
+## Recap
 
 Yesterday we learned...
 
@@ -18,11 +18,11 @@ Today...
 - R!
 
 
-#NOT ANOTHER BLOODY LANGUAGE
+# NOT ANOTHER BLOODY LANGUAGE
 
 
 
-##Getting by with programming languages
+## Getting by with programming languages
 
 <div align="center">
 <img src="Images/wine.png" width=500>
@@ -32,7 +32,7 @@ Today...
 
 
 
-##Today we go from this...
+## Today we go from this...
 
 ```{r}
 x <- 1 + 1
@@ -40,7 +40,7 @@ x
 ```
 
 
-##To this...
+## To this...
 
 <div align="center">
 <img src="Images/rplot.png" width=600>
@@ -49,14 +49,14 @@ x
 
 
 
-##Outline
+## Outline
 
 - What is R and why is it so great?
 - What does R do?
 - How does R work?
 
 
-#What is R?
+# What is R?
 
 ## What is R?
 
@@ -72,7 +72,7 @@ R is an integrated suite of software facilities for data manipulation, calculati
 </div>
 
 
-#Why use R?
+# Why use R?
 
 
 
@@ -128,14 +128,14 @@ R is:
 
 
 
-##R is powerful
+## R is powerful
 - Can handle big data
 - Can perform complex simulations
 - Can be used with High Performance Clusters
 
 
 
-##R is flexible
+## R is flexible
 <div align="center">
 <img src="Images/Rdo.png" width=500>
 </div>
@@ -151,7 +151,7 @@ R is:
 
 
 
-##R is well supported
+## R is well supported
 
 - Extensive built-in help
 - Tutorials with packages
@@ -164,13 +164,13 @@ R is:
 
 
 
-#What does R do?
+# What does R do?
 
 
 
 
 
-##What can I do in R?
+## What can I do in R?
 - Simulate and generate data
 - Read, process and manipulate data
 - Data analysis and statistics
@@ -179,7 +179,7 @@ R is:
 
 
 
-##Simulate and generate data
+## Simulate and generate data
 ```{r,fig.width = 4,fig.height = 4,fig.align='center'}
 x <- rnorm(20,mean = 20,sd = 2.5)
 y <- x + rnorm(20,mean = 0, sd = 0.5)
@@ -187,7 +187,7 @@ plot(x,y)
 ```
 
 
-##Simulate and generate data
+## Simulate and generate data
 
 <div align="center">
 <img src="Images/simecol.png" width=600>
@@ -196,7 +196,7 @@ plot(x,y)
 
 
 
-##Read, process and manipulate data
+## Read, process and manipulate data
 
 - Read in text files and tables
 - Reformat tables
@@ -212,7 +212,7 @@ plot(x,y)
 
 
 
-##Data analysis and statistics
+## Data analysis and statistics
 - Linear models, mixed models
 - Bayesian models
 - Spatial analysis
@@ -224,10 +224,10 @@ plot(x,y)
 
 
 
-#How does R work?
+# How does R work?
 
 
-##Our aim
+## Our aim
 
 - Manipulate and analyse *numbers*
 - Manipulate and analyse *text*
@@ -258,7 +258,7 @@ boxplot(weight~feed,data=chickwts,ylab = "Weight (g)",xlab = "Feed type",main = 
 
 
 
-##R objects
+## R objects
 
 ```{R,error = T}
 x <- 4
@@ -274,7 +274,7 @@ x
 
 
 
-##R objects
+## R objects
 
 ```{R}
 x <- 4
@@ -286,7 +286,7 @@ x + 7
 
 
 
-##R objects
+## R objects
 
 ```{R}
 x <- 4
@@ -299,7 +299,7 @@ x + y
 
 
 
-##Characters
+## Characters
 
 ```{R,error = T}
 hello
@@ -314,7 +314,7 @@ hello
 
 
 
-##Characters
+## Characters
 
 ```{R}
 x <- "Martin has a bushy beard"
@@ -325,7 +325,7 @@ x
 
 
 
-##Characters
+## Characters
 
 ```{R,error = T}
 x <- "cats"
@@ -341,7 +341,7 @@ x + y
 
 
 
-##Vectors
+## Vectors
 
 ```{R}
 x <- c(6,7,8)
@@ -357,7 +357,7 @@ z
 
 
 
-##Vectors
+## Vectors
 
 Vectors can consist of numbers or characters, but not both
 
@@ -372,7 +372,7 @@ x
 
 
 
-##Vectors
+## Vectors
 
 ```{R}
 x <- c(1:10)
@@ -387,7 +387,7 @@ z
 
 
 
-##Vectors
+## Vectors
 
 ```{R}
 x <- c(1,2,4,4,4,5)
@@ -400,7 +400,7 @@ x[c(4:6)]
 
 
 
-##Vectors
+## Vectors
 
 ```{R}
 x <- "Martin has a bushy beard"
@@ -412,7 +412,7 @@ x[2]
 
 
 
-##Vectors
+## Vectors
 
 ```{R}
 x <- c("Martin","has","a","bushy","beard")
@@ -426,7 +426,7 @@ x[c(3:5)]
 
 
 
-##Matrices
+## Matrices
 
 ```{R}
 x <- matrix(0,ncol = 6,nrow = 2)
@@ -439,7 +439,7 @@ x
 
 
 
-##Matrices
+## Matrices
 
 ```{R}
 
@@ -456,7 +456,7 @@ m
 
 
 
-##Matrices
+## Matrices
 
 ```{R}
 m
@@ -468,7 +468,7 @@ m[,3]
 
 
 
-##Matrices
+## Matrices
 
 ```{R}
 m
@@ -477,14 +477,14 @@ m[2,3]
 
 
 
-##Functions
+## Functions
 
 - `c()`, and `matrix()` are *functions*.
 - Arguments for functions always enclosed within brackets after function name
 - Can be built-in or written ourselves
 
 
-##Some useful functions
+## Some useful functions
 
 ```{R}
 x <- seq(from = 0,to = 1000,by = 100)
@@ -497,7 +497,7 @@ length(x)
 
 
 
-##Functions
+## Functions
 
 ```{R}
 ?mean
@@ -511,7 +511,7 @@ length(x)
 
 
 
-##Factors
+## Factors
 ```{R}
 
 x <- c("red","red","red","blue","blue","green")
@@ -523,7 +523,7 @@ str(x1)
 
 
 
-##Data frames
+## Data frames
 
 ```{R}
 Sweet_colours <- c("Red","Purple","Yellow","Green")
@@ -538,7 +538,7 @@ sweets
 
 
 
-##Data frames
+## Data frames
 
 ```{R}
 str(sweets)
@@ -552,7 +552,7 @@ ncol(sweets)
 
 
 
-##Data frames
+## Data frames
 
 ```{R}
 sweets[2,]
@@ -563,7 +563,7 @@ sweets[2,2]
 
 
 
-##Data frames
+## Data frames
 
 ```{R}
 sweets$Sweet_colours
@@ -572,7 +572,7 @@ sweets[,"Sweet_colours"]
 
 
 
-##Data frames
+## Data frames
 
 ```{R,fig.width = 5,fig.height = 4,fig.align = "center"}
 plot(Number_left~Number_eaten,data = sweets,
@@ -601,13 +601,13 @@ Rscript myscript.R
 
 
 
-#Tidyverse
+# Tidyverse
 
 
 
 
 
-##Tidyverse
+## Tidyverse
 
 <div align="center">
 <img src="Images/tidyverse.png" width=600>
@@ -620,7 +620,7 @@ Rscript myscript.R
 
 
 
-##Tidyverse - reading and data formats
+## Tidyverse - reading and data formats
 
 *readr*
 
@@ -635,7 +635,7 @@ Rscript myscript.R
 
 
 
-##Tidyverse - data wrangling
+## Tidyverse - data wrangling
 
 *dplyr*
 
@@ -650,7 +650,11 @@ Rscript myscript.R
 
 
 
-##Tidyverse - data plotting
+## Tidyverse - programming and plotting
+
+*purrr*
+
+"purrr enhances R’s functional programming (FP) toolkit by providing a complete and consistent set of tools for working with functions and vectors."
 
 *ggplot2*
 
@@ -659,7 +663,7 @@ Rscript myscript.R
 
 
 
-##Tidyverse - help
+## Tidyverse - help
 
 <div align="center">
 <img src="Images/r4ds.png" width=300>
@@ -676,10 +680,10 @@ Rscript myscript.R
 
 
 
-#Your turn
+# Your turn
 
 
-##Your turn
+## Your turn
 - Open *Intro_to_R_practical.pdf*
 - Follow the instructions!
 

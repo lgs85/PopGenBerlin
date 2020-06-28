@@ -3,12 +3,12 @@ title: "Logging onto the Amazon EC2 server"
 output: html_document
 ---
 
-You have been sent a key file called cXX.pem, where XX is a number unique to your account. You will need this number for all the commands below. You will also need a username, which is "userXX", where XX is the same unique number on your key file. The examples will below be for the user "user28", with the key "c28" - you will need to replace 28 with your own, unique number.
+You have been sent a key file called cXX.pem, where XX is a number unique to your account.You will need this number for all the commands below.  We recommend that you create a folder for this course, and save the key file within this folder. You have also been allocated a username, which is "userXX", where XX is the same unique number on your key file. The examples will below be for the user "user28", with the key "c28" - you will need to replace 28 with your own, unique number.
 
 
-##Windows users
+## Windows users
 
-###1. Create a windows key
+### 1. Create a windows key
 We need to convert the key file to a format that is compatible with Windows. We do this using PuTTYGen.
 
 - Start PuTTYgen (for example, from the Start menu, choose **All Programs > PuTTY > PuTTYgen**).
@@ -33,7 +33,7 @@ We need to convert the key file to a format that is compatible with Windows. We 
 
 - Your private key is now in the correct format for use with PuTTY. You can now connect to your instance using PuTTY's SSH client.
 
-###2. Starting a PuTTY session
+### 2. Starting a PuTTY session
 
 - Start PuTTY (from the Start menu, choose **All Programs > PuTTY > PuTTY**)
 
@@ -54,18 +54,19 @@ We need to convert the key file to a format that is compatible with Windows. We 
 
 
 
-##Mac and Linux Users
+## Mac and Linux Users
 
 - Open a terminal (on Mac, cmd + space, then type "terminal" and press "enter")
 - Change your working directory to the folder containg your .pem file, using `cd`. Something like:
 
-```{r eval = F}
-cd ~/Documents/PopGenCanada
+```{bash, eval = F}
+cd ~/Documents/PopGenCourse
 ```
 
 Now use your username and the public DNS (this will be emailed to you each day) to log onto the server via SSH.  The command will be something like the following (for user "user28"):
 
-```{r eval = F}
-ssh -i c28.pem user28@ec2-54-187-83-150.us-west-2.compute.amazonaws.com
+```{bash, eval = F}
+chmod 400 c28.pem
+ssh -i c28.pem user28@ec2-XX-XXX-XX-XXX.us-west-2.compute.amazonaws.com
 
 ```

@@ -20,7 +20,7 @@ Log onto the Amazon EC2 server and copy the `genetic_diversity` folder to your h
 
 ```{r eval = F}
 cd
-cp -r ../ubuntu/Dati/genetic_diversity .
+cp -r Dati/genetic_diversity .
 ```
 
 
@@ -31,7 +31,7 @@ Now navigate to your newly copied genetic diversity using `cd genetic_diversity`
 3. Print the first 11 lines of `TriboliumSSGenomes.vcf` to the terminal
 
 <div class="fold s">
-```{r, eval = F}
+```{bash, eval = F}
 ls -l #Get info for all file in directory, including file size - could also use wc (word count)
 cat Tribolium_sample_names.csv #Print file to console
 head -n 11 TriboliumSSGenomes.vcf #Get first 11 lines
@@ -205,18 +205,20 @@ That's our analyses done! Now you can log out of the server, and use SCP to down
 - windowed nucleotide diversity (two files - one per population), 
 - windowed LD (one file). 
 
-Make a new folder called "session_3_output" or something similar using `mkdir` Download your four genetic diversity outputs using `scp` (mac) or `pscp` (windows), in exactly the same way as you learned this morning. Once you have done this, open R studio on your laptop and use `read_csv()` and `read_delim()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
+Make a new folder called "session_3_output" or something similar using `mkdir` and copy the relevant files into this folder. Download your folder containing the four genetic diversity outputs using `scp` (mac) or `pscp` (windows), in exactly the same way as you learned this morning. Once you have done this, open R studio on your laptop and use `read_csv()` and `read_delim()` as appropriate to read in your newly created and downloaded data files to four suitably-named objects.
 
 <div class="fold s">
-```{r}
+```{r, message = F}
 rm(list=ls()) #Clear your workspace
 
 library(tidyverse) #load the tidyverse
 
-het <- read_delim("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomes.het",delim = "\t")
-pi_MB <- read_delim("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomesMB.windowed.pi",delim = "\t")
-pi_FA <- read_delim("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomesFA.windowed.pi",delim = "\t")
-ld <- read_csv("~/Documents/Teaching/PopGenBerlinLGS/session_3_output/TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
+setwd("~/OneDrive - University of East Anglia/Documents/Teaching/PopGenBerlinLGS/session_3_output/")
+
+het <- read_delim("TriboliumSSGenomes.het",delim = "\t")
+pi_MB <- read_delim("TriboliumSSGenomesMB.windowed.pi",delim = "\t")
+pi_FA <- read_delim("TriboliumSSGenomesFA.windowed.pi",delim = "\t")
+ld <- read_csv("TriboliumSSGenomes.windowed.ld.csv") #Or whatever you have called it
 
 ```
 </div>
@@ -225,7 +227,7 @@ We are going to use the `ggplot2` library to make the following plot. If you thi
 
 ```{r echo = F,warning = F,message=F,fig.height=6}
 
-library(Rmisc)
+library(cowplot)
 
 Fig1A <- mutate(het,Population = c(rep("MB",3),rep("FA",3)),
                 Heterozygosity = 1-(`O(HOM)`/N_SITES)) %>%
@@ -233,8 +235,7 @@ Fig1A <- mutate(het,Population = c(rep("MB",3),rep("FA",3)),
   geom_point()+
   theme_bw()+
   theme(legend.position = "none")+
-  xlab("")+
-  ggtitle("A")
+  xlab("")
 
 Fig1B <- rbind(pi_MB,pi_FA) %>%
   mutate(Population = c(rep("MB",nrow(pi_MB)),rep("FA",nrow(pi_FA)))) %>%
@@ -244,8 +245,9 @@ Fig1B <- rbind(pi_MB,pi_FA) %>%
   theme_bw()+
   theme(legend.position = "none")+
   xlab("")+
-  ylab(expression(pi))+
-  ggtitle("B")
+  ylab(expression(pi))
+
+het_figs <- plot_grid(Fig1A,Fig1B, nrow = 1, labels = "AUTO")
 
 Fig1C <-  mutate(ld,Population = pop,distkb = dist/1000) %>%   
   ggplot(aes(x = distkb, y = meanR2,col = Population))+
@@ -253,10 +255,9 @@ Fig1C <-  mutate(ld,Population = pop,distkb = dist/1000) %>%
   geom_line()+
   theme_bw()+
   xlab("Distance (kb)")+
-  ylab(expression("R"^2))+
-  ggtitle("C")
+  ylab(expression("R"^2))
 
-multiplot(Fig1A,Fig1B,Fig1C,layout = matrix(c(1,2,3,3),nrow = 2, byrow = T))
+plot_grid(het_figs, Fig1C,nrow = 2, labels = c("","C"))
 ```
 <br>
 **Figure 1** Genomic variation in two experimentally evolved red flour beetle populations. **A** Observed heterozygosity (proportion of heterozygous sites) in each individual. **B** Nucleotide diversity in each population, estimated from 200kb non-overlapping windows. **C** Linkage disequilibrium between marker pairs the first 1mb of chromosome 6. R^2^ values are means of marker-pairs within 1kb non-overlapping bins.
@@ -346,20 +347,6 @@ A
 ```
 </div>
 
-Add the panel label:
-
-<div class="fold s">
-```{r}
-A <- ggplot(het,aes(x = Population, y = Heterozygosity, col = Population)) +
-  geom_point()+
-  theme_bw()+
-  theme(legend.position = "none")+
-  xlab("")+
-  ggtitle("A")
-
-A
-```
-</div>
 
 And we're there! Now let's move onto panel B, which is slightly more complicated. Again, we first look at the data. Remember we have two data frames for the nucleotide diversity data - one for each population:
 
@@ -446,7 +433,7 @@ B
 ```
 </div>
 
-Finally, we just need to add the panel label and sort out our y axis. How can we add a symbol? (Hint - look up `expression()`):
+Finally, we just need to sort out our y axis. How can we add a symbol? (Hint - look up `expression()`):
 
 <div class="fold s">
 ```{r}
@@ -456,8 +443,7 @@ B <- ggplot(pi_both,aes(x = Population, y = PI, col = Population))+
       theme_bw()+
       theme(legend.position = "none")+
       xlab("")+
-      ylab(expression(pi))+
-      ggtitle("B")
+      ylab(expression(pi))
 B
 ```
 </div>
@@ -491,7 +477,7 @@ C
 ```
 </div>
 
-All we need to do now is add the panel label, sort out the x axis and y axis labels (hint: you will need `expression()` again for the y axis), and change the legend title. See if you can figure out how to do the the latter on your own (there are multiple ways).
+All we need to do now is sort out the x axis and y axis labels (hint: you will need `expression()` again for the y axis), and change the legend title. See if you can figure out how to do the the latter on your own (there are multiple ways).
 
 <div class="fold s">
 ```{r}
@@ -501,24 +487,27 @@ C <- ggplot(ld,aes(x = dist/1000, y = meanR2, col = pop)) +
       theme_bw()+
       xlab("Distance (kb)")+
       ylab(expression(R^2))+
-      scale_colour_discrete(name = "Population")+ #An alternative would be to just rename to pop column to Population.
-      ggtitle("C")
+      scale_colour_discrete(name = "Population")
 C
 ```
 </div>
 
-Ok, we have done our plots! We now need to make a single, muti-panel plot. Again, there are lots of ways we can do this and this is definitely something you should explore. For now we will use the `multiplot()` function from the `Rmisc` library. We can just list the plots without specifying anything to do with the layout:
+Ok, we have done our plots! We now need to make a single, muti-panel plot with labels. Again, there are lots of ways we can do this and this is definitely something you should explore. We will use the `plot_grid()` function from the `cowplot` library. We can just list the plots without specifying anything to do with the layout:
 
 ```{r}
-library(Rmisc)
-multiplot(A,B,C)
+library(cowplot)
+plot_grid(A,B,C, labels = "AUTO")
 ```
 <br>
-However, this stacks the plots one on top of the other. We can alter the layout in an enormous number of ways using the argument `layout` and the function `matrix()`. Can you figure out what is going on here? If not, try looking up the `layout()` function and seeing how this works.
+However, this leaves a gap in the bottom right. We can alter the layout in an enormous number of ways. Can you figure out what how to plot the first two figures on the top row and the LD figure on the bottom row? 
+
+<div class="fold s">
 
 ```{r,fig.height=6}
-multiplot(A,B,C,layout = matrix(c(1,2,3,3),nrow = 2,byrow = T))
+top_row <- plot_grid(A,B,labels = "AUTO")
+plot_grid(top_row,C,nrow = 2,labels = c("","C"))
 ```
+</div>
 
 ##If you've finished
 - We didn't perform any filtering steps on our data. Explore filtering based on LD, Hardy-Weinberg and missing data (and anything else you think relevant). How does this affect your results?

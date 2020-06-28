@@ -29,11 +29,11 @@ Our aim is to calculate *observed heterozygosity* (i.e. the proportion of hetero
 *If you think you can do this without guidance, please go ahead and do so*. Otherwise, step-by-step instructions are provided below.
 
 ### Download, read in and explore the data.
-On the amazon server, copy the "intro_to_r" folder from my directiry to your home directory as follows:
+On the amazon server, copy the "intro_to_r" folder from my directory to your home directory as follows:
 
 ```{r eval = F}
 cd
-cp -r ../ubuntu/Dati/intro_to_r .
+cp -r Dati/intro_to_r .
 ```
 
 Now, open a fresh terminal or command prompt on your laptop, that is not logged onto the server. Using `scp` (mac/linux) or `pscp` (windows), download the "intro_to_r" folder and all its containing files from your home directory on the amazon server to your laptop.
@@ -100,6 +100,7 @@ dd[,2]
 <div class="fold s">
 ```{r}
 dd[22,3:ncol(dd)]
+#For the more experienced - can you do think of a better way to do this using grep()?
 ```
 </div>
 
