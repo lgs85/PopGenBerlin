@@ -8,15 +8,15 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-##Outline
+## Outline
 - Historical overview
 - Natural selection in the (population) genomic era
 - Software and tools
 
-#Historical overview
+# Historical overview
 
 
-##Evolution by natural selection
+## Evolution by natural selection
 
 <br>
 
@@ -216,7 +216,7 @@ Combine signals from multiple statistics!
 
 
 
-##Issues
+## Issues
 
 <div align = "center">
 <img src="Images/error.png" width=500>
@@ -226,12 +226,12 @@ Combine signals from multiple statistics!
 
 
 
-#Software
+# Software
 
 
 
 
-##Software
+## Software
 
 - Plink (again!)
 - VCFtools (again!)

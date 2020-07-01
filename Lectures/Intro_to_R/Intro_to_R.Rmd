@@ -190,7 +190,7 @@ plot(x,y)
 ## Simulate and generate data
 
 <div align="center">
-<img src="Images/simecol.png" width=600>
+<img src="Images/shiny.png" width=500>
 </div>
 
 

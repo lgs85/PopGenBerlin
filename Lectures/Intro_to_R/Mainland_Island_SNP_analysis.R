@@ -21,3 +21,4 @@ p <-
   theme_classic() +
   xlab("") +
   ylab("Heterozygosity")
+

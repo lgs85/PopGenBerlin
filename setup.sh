@@ -17,10 +17,14 @@ for(i in 1:length(userdirs))
 }
 
 
-ls
 
 
-ssh -i "pop20.pem" ubuntu@ec2-18-236-245-229.us-west-2.compute.amazonaws.com
+
+
+#NOTES
+
+ssh -i "pop20.pem" ubuntu@ec2-54-212-132-94.us-west-2.compute.amazonaws.com
+
 
 scp -i "pop20.pem" -r ubuntu@ec2-18-236-245-229.us-west-2.compute.amazonaws.com:~/lewis/intro_to_r ../PopGenBerlinLGS
 

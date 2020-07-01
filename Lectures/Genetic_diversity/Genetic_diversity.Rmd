@@ -8,7 +8,7 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-##Outline
+## Outline
 - Historical overview
 - How much genetic variation exists in populations?
 - Genetic diversity in the genomic era
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 
-#Historical overview
+# Historical overview
 
 
 
@@ -33,16 +33,11 @@ knitr::opts_chunk$set(echo = FALSE)
 
 **Darwin’s four postulates in the Origin of Species (1859)**
 
-<div class = "columns-2">
-
 1. Individuals within species are variable
 2. Some variations are passed on to offspring
 3. In every generation more offspring are produced than can survive
 4. Individuals who survive and go on to reproduce are naturally selected.
 
-
-<img src="Images/Darwin.png" width=250>
-</div>
 
 
 
@@ -74,18 +69,6 @@ Gregor Mendel (1866): three“laws”
 <div align = "center">
 <img src="Images/Particulate.png" width=400>
 </div>
-
-
-
-
-
-
-
-## The modern synthesis
-<div align = "center">
-<img src="Images/FoundingFathers.png" width=400>
-</div>
-
 
 
 
@@ -447,7 +430,7 @@ We may want to:
 
 
 
-#What filters and thresholds should I use?
+# What filters and thresholds should I use?
 
 
 
@@ -478,4 +461,4 @@ We may want to:
 
 
 
-#Practical
+# Practical

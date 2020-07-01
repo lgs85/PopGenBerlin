@@ -8,6 +8,10 @@ output:
 
 <script src="js/hide.js"></script>
 
+```{r setup, echo = F}
+knitr::opts_knit$set(root.dir = '~/OneDrive - University of East Anglia/Documents/Teaching/PopGenBerlinLGS/session7_output/')
+```
+
 
 ## Introduction
 We are going to begin looking at variation *within* genomes in order to make some inferences about selection. We will learn how to use sliding windows, and explore how to plot and interpret sliding-window based statistics. Finally, we will learn how to annotate a VCF file and look at some of the cool things we can do if we have a reference genome.
@@ -18,12 +22,14 @@ We will be using the *Tribolium castaneum* genomes from the genetic diversity pr
 ```{r eval = F}
 
 cd
-cp -r ../ubuntu/Dati/selection1 .
+cp -r Dati/selection1 .
 cd selection1
 
 ```
 
-## Site and window nucleotide diversity
+## Instructions
+
+### Site and window nucleotide diversity
 In the genetic diversity practical we calculated $\pi$ in non-overlapping 200kb windows, and compared distributions of windowed-averages across experimental populations. For visualisation of how variation occurs along genomes, we sometimes wish to calculate statistics in *sliding* windows. This is done very simply using VCFtools - here is the code to calculate.
 
 ```{r eval = F}
@@ -54,7 +60,7 @@ vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --window-
 
 And that's it! Explore your outputs using the command line and check that everything makes sense. We will look at how to plot this data later.
 
-## Tajima's D
+### Tajima's D
 
 We can also use VCFtools to calculate Tajima's *D*. Can you calculate this statistic for chromosome ChLG2 in 50kb windows? 
 
@@ -70,7 +76,7 @@ vcftools --vcf ../genetic_diversity/TriboliumSSGenomes.vcf --chr ChLG2 --TajimaD
 
 What is the difference between the way we have constructed the windows between this analysis and the sliding window analysis of $\pi$? Do you think this will cause any problems?
 
-## snpEff
+### snpEff
 We will now use this very cool piece of software to annotate the SNPs in out VCF file, using the *Tribolium* reference genome. To run snpEff we need work within the directory in which the program is contained. Use `cd` to navigate to your own copy of the `snpEff` directory, which is within the `selection` directory.
 
 snpEff takes a VCF file, and compares the positions against a reference genome database. It then extracts lots of information from the genome database (whether the SNP is in an intron, exon etc., whether it is a zero-fold/four-fold site). The program comes with lots of pre-loaded genome databases, or we can generate ourselves. So our first task is to find out if they have a *Tribolium castaneum* genome. Go the help page for snpEff, here:
@@ -144,16 +150,16 @@ Now we have created these new VCF files we can use VCFtools to calculate diversi
 <div class="fold s">
 ```{r eval = FALSE}
 #non-syn diversity
-vcftools --vcf SnpEff/Tribolium.ann.nonsyn.vcf --chr ChLG2 --window-pi 200000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out Tribolium_nonsyn_MB200k
-vcftools --vcf SnpEff/Tribolium.ann.nonsyn.vcf --chr ChLG2 --window-pi 200000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out Tribolium_nonsyn_FA200k
+vcftools --vcf snpEff/Tribolium.ann.nonsyn.vcf --chr ChLG2 --window-pi 200000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out Tribolium_nonsyn_MB200k
+vcftools --vcf snpEff/Tribolium.ann.nonsyn.vcf --chr ChLG2 --window-pi 200000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out Tribolium_nonsyn_FA200k
 
 #syn diversity
-vcftools --vcf SnpEff/Tribolium.ann.syn.vcf --chr ChLG2 --window-pi 200000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out Tribolium_syn_MB200k
-vcftools --vcf SnpEff/Tribolium.ann.syn.vcf --chr ChLG2 --window-pi 200000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out Tribolium_syn_FA200k
+vcftools --vcf snpEff/Tribolium.ann.syn.vcf --chr ChLG2 --window-pi 200000 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out Tribolium_syn_MB200k
+vcftools --vcf snpEff/Tribolium.ann.syn.vcf --chr ChLG2 --window-pi 200000 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out Tribolium_syn_FA200k
 
 #optix
-vcftools --vcf SnpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --window-pi-step 200 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out Tribolium_optix_MB1k
-vcftools --vcf SnpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --window-pi-step 200 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out Tribolium_optix_FA1k
+vcftools --vcf snpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --window-pi-step 200 --indv 2014_SOL_MG4955 --indv 2014_SOL_MG4956 --indv 2014_SOL_MG4957 --out Tribolium_optix_MB1k
+vcftools --vcf snpEff/Tribolium.ann.optix.vcf --chr ChLG2 --window-pi 1000 --window-pi-step 200 --indv 2014_SOL_MG4972 --indv 2014_SOL_MG4973 --indv 2014_SOL_MG4974 --out Tribolium_optix_FA1k
 
 ```
 </div>
@@ -168,21 +174,21 @@ Ok, now we are ready to download our data for plotting. You will need to copy th
 
 (HINT - use `*.pi` to copy all files ending in ".pi" from a particular folder.)
 
-## Make some plots
+### Make some plots
 
 This is the plot we will be aiming to make:
 
 ```{r,fig.width = 8,fig.height = 7,echo = F,message = F, warning = F}
 
 library(tidyverse)
-library(Rmisc)
+library(cowplot)
 
-setwd("~/Documents/Teaching/PopGenBerlinLGS/session7_output/")
-temp1 <- read_delim("TriboliumSSGenomesMB200k.windowed.pi",delim = "\t")
-temp2 <- read_delim("TriboliumSSGenomesFA200k.windowed.pi",delim = "\t")
+MB <- read_delim("TriboliumSSGenomesMB200k.windowed.pi",delim = "\t")
+FA <- read_delim("TriboliumSSGenomesFA200k.windowed.pi",delim = "\t")
 
-pi200 <- rbind(temp1,temp2)
-pi200$Pop <- c(rep("MB",nrow(temp1)),rep("FA",nrow(temp2)))
+pi200 <- bind_rows(MB,FA) %>%
+  mutate(Pop = c(rep("MB",nrow(MB)),rep("FA",nrow(FA))))
+
 
 
 FigA <- ggplot(pi200,aes(x = BIN_START/1000, y = PI,col = Pop))+
@@ -191,57 +197,48 @@ FigA <- ggplot(pi200,aes(x = BIN_START/1000, y = PI,col = Pop))+
   scale_color_manual(values = c("grey",grey(0.2)))+
   xlab("Position (kb)")+
   ylab(expression(pi))+
-  theme(legend.position = "none")+
-  annotate("text",x = -100,y = 0.012,label = "A")
+  theme(legend.position = "none")
 
 
 ####################
 
-temp1 <- read_delim("Tribolium_nonsyn_MB200k.windowed.pi",delim = "\t")
-temp2 <- read_delim("Tribolium_syn_MB200k.windowed.pi",delim = "\t")
+nonsyn <- read_delim("Tribolium_nonsyn_MB200k.windowed.pi",delim = "\t")
+syn <- read_delim("Tribolium_syn_MB200k.windowed.pi",delim = "\t")
 
-inboth <- intersect(paste0(temp1$CHROM,temp1$BIN_START),paste0(temp2$CHROM,temp2$BIN_START))
-temp1 <- subset(temp1,paste0(CHROM,BIN_START) %in% inboth)
-temp2 <- subset(temp2,paste0(CHROM,BIN_START) %in% inboth)
+ns200 <- left_join(nonsyn,syn,by = c("CHROM","BIN_START","BIN_END")) %>%
+  dplyr::rename(NS_pi = "PI.x",S_pi = "PI.y")
 
-temp1$NS_pi <- temp1$PI
-temp1$S_pi <- temp2$PI
 
-FigB <- ggplot(temp1,aes(x = S_pi, y = NS_pi))+
+FigB <- ggplot(ns200,aes(x = S_pi, y = NS_pi))+
   geom_point(col = grey(0.2))+
   theme_bw()+
   ylab(expression(paste(pi," (non-synonymous sites)")))+
   xlab(expression(paste(pi," (synonymous sites)")))+
   xlim(0,1.4e-03)+
   ylim(0,1.4e-03)+
-  geom_abline(intercept = 0, slope = 1,lty = 2)+
-  annotate("text",x = 0,y = 0.0014,label = "B")
+  geom_abline(intercept = 0, slope = 1,lty = 2)
+
 ####################
 
-temp1 <- read_delim("Tribolium_nonsyn_FA200k.windowed.pi",delim = "\t")
-temp2 <- read_delim("Tribolium_syn_FA200k.windowed.pi",delim = "\t")
+nonsyn <- read_delim("Tribolium_nonsyn_FA200k.windowed.pi",delim = "\t")
+syn <- read_delim("Tribolium_syn_FA200k.windowed.pi",delim = "\t")
 
-inboth <- intersect(paste0(temp1$CHROM,temp1$BIN_START),paste0(temp2$CHROM,temp2$BIN_START))
-temp1 <- subset(temp1,paste0(CHROM,BIN_START) %in% inboth)
-temp2 <- subset(temp2,paste0(CHROM,BIN_START) %in% inboth)
+ns200 <- left_join(nonsyn,syn,by = c("CHROM","BIN_START","BIN_END")) %>%
+  dplyr::rename(NS_pi = "PI.x",S_pi = "PI.y")
 
-temp1$NS_pi <- temp1$PI
-temp1$S_pi <- temp2$PI
-
-FigC <- ggplot(temp1,aes(x = S_pi, y = NS_pi))+
-  geom_point(col = "grey")+
+FigC <- ggplot(ns200,aes(x = S_pi, y = NS_pi))+
+  geom_point(col = grey(0.2))+
   theme_bw()+
-  xlim(0,1.4e-03)+
-  ylim(0,1.4e-03)+
   ylab(expression(paste(pi," (non-synonymous sites)")))+
   xlab(expression(paste(pi," (synonymous sites)")))+
-  geom_abline(intercept = 0, slope = 1,lty = 2)+
-  annotate("text",x = 0,y = 0.0014,label = "C")
+  xlim(0,1.4e-03)+
+  ylim(0,1.4e-03)+
+  geom_abline(intercept = 0, slope = 1,lty = 2)
 
 
 ####################
 
-multiplot(FigA,FigB,FigC,layout = matrix(c(1,1,2,3),nrow = 2,byrow = T))
+plot_grid(FigA, plot_grid(FigB,FigC,labels = c("B","C"),nrow =1),labels = c("A",""),nrow = 2)
 
 ####################
 
@@ -251,31 +248,26 @@ multiplot(FigA,FigB,FigC,layout = matrix(c(1,1,2,3),nrow = 2,byrow = T))
 
 You should be able to have a fairly good go at reproducing the above on your own by now. If you get stuck, follow along below.
 
-The top plot largely uses code/concepts that we have already introduced, so do have a go at reproducing this yourself. The code is below, for when you want to check.
+The top plot largely uses code/concepts that we have already introduced, so do have a go at reproducing this yourself. The code I've used is below, for when you want to check/compare.
 
 <div class="fold s">
-```{R}
+```{R, message = F}
 #Load ggplot2
-library(ggplot2)
+library(tidyverse)
 
-#Read in data
-temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB200k.windowed.pi",header = T)
-temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA200k.windowed.pi",header = T)
+MB <- read_delim("TriboliumSSGenomesMB200k.windowed.pi",delim = "\t")
+FA <- read_delim("TriboliumSSGenomesFA200k.windowed.pi",delim = "\t")
 
-#Combine the data and add a population ID column
-pi200 <- rbind(temp1,temp2)
-pi200$Pop <- c(rep("MB",nrow(temp1)),rep("FA",nrow(temp2)))
+pi200 <- bind_rows(MB,FA) %>%
+  mutate(Pop = c(rep("MB",nrow(MB)),rep("FA",nrow(FA))))
 
-#Make the plot
 FigA <- ggplot(pi200,aes(x = BIN_START/1000, y = PI,col = Pop))+
   geom_line()+
   theme_bw()+
   scale_color_manual(values = c("grey",grey(0.2)))+
   xlab("Position (kb)")+
   ylab(expression(pi))+
-  theme(legend.position = "none")+
-  annotate("text",x = -100,y = 0.012,label = "A")
-
+  theme(legend.position = "none")
 FigA
 
 ```
@@ -284,12 +276,12 @@ FigA
 The bottom two plots require a little more data cleaning before we can make the plot. Let's consider panel **B** first, which plots non-synonymous and synonymous $\pi$ for the MB population. We first need to read in the data and take a look at it:
 
 <div class="fold s">
-```{R}
-nonsyn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_nonsyn_MB200k.windowed.pi",header = T)
-syn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_syn_MB200k.windowed.pi",header = T)
+```{R, message = F}
+nonsyn <- read_delim("Tribolium_nonsyn_MB200k.windowed.pi",delim = "\t")
+syn <- read_delim("Tribolium_syn_MB200k.windowed.pi",delim = "\t")
 
-str(syn)
-str(nonsyn)
+syn
+nonsyn
 ```
 </div>
 
@@ -305,53 +297,35 @@ which(!(nonsyn$BIN_START %in% syn$BIN_START))
 ```
 </div>
 
-This tells VCFtools gave us 4 windows with a calculation for $\pi$ at synonymous sites but not non-synonymous sites, and three windows where $\pi$ was calculated at non-synonymous sites but not synonymous sites. This is likely to have occurred because there were no synonymous/non-synonymous variants within those particular windows. We may wish to explore why that might be the case, but for now we can simply exclude sites that do not have both synonymous and non-synonymous variants.
+This tells us that VCFtools gave us 4 windows with a calculation for $\pi$ at synonymous sites but not non-synonymous sites, and three windows where $\pi$ was calculated at non-synonymous sites but not synonymous sites. This is likely to have occurred because there were no synonymous/non-synonymous variants within those particular windows. We may wish to explore why that might be the case, but for now we can simply combine the files. Look up the function `left_join()` in the tidyverse help pages and see if you can have a go at this. As a hint - you want to join by the columns CHROM, BIN_START and BIN_END.
 
 
 <div class="fold s">
 ```{R}
-inboth <- intersect(syn$BIN_START,nonsyn$BIN_START)
 
-syn <- subset(syn,BIN_START %in% inboth)
-nonsyn <- subset(nonsyn,BIN_START %in% inboth)
+ns200 <- left_join(nonsyn,syn,by = c("CHROM","BIN_START","BIN_END"))
+ns200
+
 ```
 </div>
 
-Check they are the same length
-<div class="fold s">
-```{R}
-#Check they are the same length
-nrow(syn) == nrow(nonsyn)
-```
-</div>
-
-Check the bins are in the same order
-<div class="fold s">
-```{R}
-#Check the bins are in the same order
-all(syn$BIN_START == nonsyn$BIN_START)
-```
-</div>
-
-Now make a new data frame and take a look
+This gives us a single file, with the N_VARIANTS and PI columns from the nonsyn and syn datasets appended with x and y, respectively. Can you figure out what `left_join()` has done with the non-matching values? Next, try to figure out how to rename the PI columns to something more sensible using `rename()` from the `dplyr` library.
 
 <div class="fold s">
 ```{R}
-dd <- data.frame(CHROM = syn$CHROM,
-                 BIN_START = syn$BIN_START,
-                 synPI = syn$PI,
-                 nonsynPI = nonsyn$PI)
 
-#Take a look
-head(dd)
+ns200 <- dplyr::rename(ns200, NS_pi = "PI.x",S_pi = "PI.y")
+ns200
+
 ```
 </div>
+
 
 Now we are ready to make our plot. The only thing that is different here is the addition of a manually added line with a slope of 1 and intercept of zero. I have also specified axis limits so panels B and C end up being the same.
 
 <div class="fold s">
-```{R}
-FigB <- ggplot(dd,aes(x = synPI, y = nonsynPI))+
+```{R, warning = F}
+FigB <- ggplot(ns200,aes(x = S_pi, y = NS_pi))+
   geom_point(col = grey(0.2))+
   theme_bw()+
   ylab(expression(paste(pi," (non-synonymous sites)")))+
@@ -370,21 +344,15 @@ Once we have done this we can go through exactly the same process for the FA pop
 ```{R}
 
 #Read in the data
-nonsyn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_nonsyn_FA200k.windowed.pi",header = T)
-syn <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/Tribolium_syn_FA200k.windowed.pi",header = T)
+nonsyn <- read.table("Tribolium_nonsyn_FA200k.windowed.pi",header = T)
+syn <- read.table("Tribolium_syn_FA200k.windowed.pi",header = T)
 
-#Get unique 
-inboth <- intersect(syn$BIN_START,nonsyn$BIN_START)
+#Join and rename
+ns200 <- left_join(nonsyn,syn,by = c("CHROM","BIN_START","BIN_END")) %>%
+  dplyr::rename(NS_pi = "PI.x",S_pi = "PI.y")
 
-syn <- subset(syn,BIN_START %in% inboth)
-nonsyn <- subset(nonsyn,BIN_START %in% inboth)
-
-dd <- data.frame(CHROM = syn$CHROM,
-                 BIN_START = syn$BIN_START,
-                 synPI = syn$PI,
-                 nonsynPI = nonsyn$PI)
-
-FigC <- ggplot(dd,aes(x = synPI, y = nonsynPI))+
+#plot
+FigC <- ggplot(ns200,aes(x = S_pi, y = NS_pi))+
   geom_point(col = "grey")+
   theme_bw()+
   ylab(expression(paste(pi," (non-synonymous sites)")))+
@@ -397,34 +365,36 @@ FigC
 ```
 </div>
 
-Now we just need to put the plots together using `multiplot()`, and we're done!
+Now we just need to put the plots together using `plot_grid()`, and we're done!
 
 <div class="fold s">
 ```{r,fig.width = 8,fig.height = 7,message = F, warning = F}
-library(Rmisc)
+library(cowplot)
 
-multiplot(FigA,FigB,FigC,layout = matrix(c(1,1,2,3),nrow = 2,byrow = T))
+bottom_row <- plot_grid(FigB,FigC,nrow = 1,labels = c("B","C"))
+
+plot_grid(FigA,bottom_row,nrow = 2,labels = c("A",""))
 
 
 ```
 </div>
 
-## Delving a bit further
+### Delving a bit further
 
 Discuss the figure with some colleagues. How do you interpret the findings? Do you think there is good evidence for selection anywhere on this chromosome?
 
 If you do identify regions showing unusual patterns of diversity, it is generally a good idea to follow them up a bit further. Let's take a closer look at the region with highest $\pi$ in our dataset, found at around position 8MB. One thing we can do is zoom in on the region, using smaller sliding windows. Let's take a look with the 50kb window data. 
 
 <div class="fold s">
-```{R, warning = F}
+```{R, warning = F, message = F}
 
 #Read in data
-temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB50k.windowed.pi",header = T)
-temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA50k.windowed.pi",header = T)
+MB <- read_delim("TriboliumSSGenomesMB50k.windowed.pi",delim = "\t")
+FA <-  read_delim("TriboliumSSGenomesFA50k.windowed.pi",delim = "\t")
 
 #Combine the data and add a population ID column
-pi50 <- rbind(temp1,temp2)
-pi50$Pop <- c(rep("MB",nrow(temp1)),rep("FA",nrow(temp2)))
+pi50 <- bind_rows(MB,FA) %>%
+  mutate(Pop = c(rep("MB",nrow(MB)),rep("FA",nrow(FA))))
 
 #Make the plot
 FigA <- ggplot(pi50,aes(x = BIN_START/1000, y = PI,col = Pop))+
@@ -439,15 +409,15 @@ FigA
 The region of high diversity in the FA population is still there. How about using 10kb windows?
 
 <div class="fold s">
-```{R, warning = F}
+```{R, warning = F, message = F}
 
 #Read in data
-temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB10k.windowed.pi",header = T)
-temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA10k.windowed.pi",header = T)
+MB <- read_delim("TriboliumSSGenomesMB10k.windowed.pi",delim = "\t")
+FA <-  read_delim("TriboliumSSGenomesFA10k.windowed.pi",delim = "\t")
 
 #Combine the data and add a population ID column
-pi10 <- rbind(temp1,temp2)
-pi10$Pop <- c(rep("MB",nrow(temp1)),rep("FA",nrow(temp2)))
+pi10 <- bind_rows(MB,FA) %>%
+  mutate(Pop = c(rep("MB",nrow(MB)),rep("FA",nrow(FA))))
 
 #Make the plot
 Fig <- ggplot(pi10,aes(x = BIN_START/1000, y = PI,col = Pop))+
@@ -463,10 +433,10 @@ There is still something going on, but the pattern is much less clear - any idea
 
 Another thing we can do is look at a range of statistics in our region of interest. We can take a look at Tajima's D for the FA population.
 <div class="fold s">
-```{R, warning = F}
+```{R, warning = F, message = F}
 
 #Read in data
-dd <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA50k.Tajima.D",header = T)
+dd <-  read_delim("TriboliumSSGenomesFA50k.Tajima.D",delim = "\t")
 
 #Make a variable to colour the region of interest
 dd$Region <- ifelse(dd$BIN_START %in% seq(8e06,9e06,5e04),"HD region","Not HD region")
@@ -489,7 +459,7 @@ https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?context=genome&acc=GCF_00000233
 
 Use the genome data viewer to zoom into the relevant region on chromosome Lg2. What genes are there? Are there good candidates? Is looking for genes in this way a good idea?
 
-##If you are finished
+## If you are finished
 Download the table of gene locations for *Tribolium* LG2, here:
 
 https://www.ncbi.nlm.nih.gov/genome/proteins/216?genome_assembly_id=271841
@@ -502,12 +472,12 @@ Read this table into R (HINT - this may need cleaning first!), and use R to:
 
 ```{R,echo = F,warning = F,message = F}
 #Read in data
-temp1 <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesMB10k.windowed.pi",header = T)
-temp2 <-  read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/TriboliumSSGenomesFA10k.windowed.pi",header = T)
+MB <- read_delim("TriboliumSSGenomesMB10k.windowed.pi",delim = "\t")
+FA <-  read_delim("TriboliumSSGenomesFA10k.windowed.pi",delim = "\t")
 
 #Combine the data and add a population ID column
-pi10 <- rbind(temp1,temp2)
-pi10$Pop <- c(rep("MB",nrow(temp1)),rep("FA",nrow(temp2)))
+pi10 <- bind_rows(MB,FA) %>%
+  mutate(Pop = c(rep("MB",nrow(MB)),rep("FA",nrow(FA))))
 
 #Make the plot
 Fig <- ggplot(pi10,aes(x = BIN_START/1000, y = PI,col = Pop))+
@@ -516,7 +486,7 @@ Fig <- ggplot(pi10,aes(x = BIN_START/1000, y = PI,col = Pop))+
   xlim(8000,9000)+
   xlab("Genomic position (KB)")
 
-genes <- read.table("~/Documents/Teaching/PopGenBerlinLGS/session7_output/LG2genes.txt",header = T)
+genes <- read_delim("LG2genes.txt",delim = "\t")
 genes <- subset(genes,Start %in% (8.4e06:8.6e06))
 genes <- subset(genes,!duplicated(GeneID))
 genes$y1 <- rep(0.022,nrow(genes))
