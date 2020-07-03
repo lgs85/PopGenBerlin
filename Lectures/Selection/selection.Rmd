@@ -24,11 +24,6 @@ knitr::opts_chunk$set(echo = FALSE)
 
 Darwin, *The Origin of Species*
 
-## The modern synthesis
-<div align = "center">
-<img src="Images/FoundingFathers.png" width=400>
-</div>
-
 ## Natural selection and genetic variation
 
 - How much of the genome is subject to natural selection?
@@ -65,11 +60,6 @@ Darwin, *The Origin of Species*
 <img src="Images/LewontinHubby.png" width=550>
 </div>
 
-
-## Neutral theory
-<div align = "center">
-<img src="Images/Kimura.png" width=550>
-</div>
 
 ## Selectionism vs neutralism
 
@@ -218,11 +208,12 @@ Combine signals from multiple statistics!
 
 ## Issues
 
+- Type i error
+- Type ii error
+
 <div align = "center">
-<img src="Images/error.png" width=500>
+<img src="Images/snake.png" width=350>
 </div>
-
-
 
 
 

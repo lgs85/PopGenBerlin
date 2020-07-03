@@ -487,8 +487,8 @@ Fig <- ggplot(pi10,aes(x = BIN_START/1000, y = PI,col = Pop))+
   xlab("Genomic position (KB)")
 
 genes <- read_delim("LG2genes.txt",delim = "\t")
-genes <- subset(genes,Start %in% (8.4e06:8.6e06))
-genes <- subset(genes,!duplicated(GeneID))
+genes <- filter(genes,Start %in% (8.4e06:8.6e06))
+genes <- filter(genes,!duplicated(GeneID))
 genes$y1 <- rep(0.022,nrow(genes))
 
 Fig +

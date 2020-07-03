@@ -13,7 +13,7 @@ output: ioslides_presentation
 
 
 
-#What have we covered
+# What have we covered
 
 
 
@@ -43,10 +43,10 @@ output: ioslides_presentation
 
 
 ## What we have covered | R
-- Reading in files (`read.table()`,`read.csv()`)
-- Manipulating files (`as.numeric()`,`subset()`,`rbind()`)
+- Reading in files (`read_delim()`,`read_csv()`)
+- Manipulating data (`as.numeric()`,`filter()`,`bind_rows()`)
 - Performing calculations (`mean()`)
-- Summarising data (`table()`,`ddply()`,`for()`)
+- Summarising data (`group_by()`,`summarise()`,`for()`)
 - Making lovely graphs (`plot()`,`ggplot()`)
 
 
@@ -60,40 +60,34 @@ output: ioslides_presentation
 - BayEnv (genotype-environment association)
 
 
-## What have we covered
-<div align = "center">
-<img src="Images/music.png" width=700>
-</div>
 
+# A roadmap for population genomics analysis (post SNP-calling)
 
-
-
-#A roadmap for population genomics analysis (post SNP-calling)
-
-##Population genomic analysis
+## Population genomic analysis
 
 <br>
 <div align = "center">
-<img src="Images/workflow1.png" width=400>
+<img src="Images/workflow1.png" width=800>
 </div>
 
 
 
-##Population genomic analysis
-
+## Population genomic analysis
+<br>
+<br>
 <div align = "center">
-<img src="Images/workflow.png" width=600>
+<img src="Images/workflow.png" width=800>
 </div>
 
 
 
-#What next?
+# What next?
 
 
 
 
 
-##What next
+## What next
 
 **NOW:** Have a break!
 
@@ -106,7 +100,7 @@ output: ioslides_presentation
 
 
 
-##What next | General tips
+## What next | General tips
 
 - **Practise**, practise, practise!
 - **Work** with expert programmers (if they will let you!)
@@ -116,7 +110,7 @@ output: ioslides_presentation
 
 
 
-##What next?
+## What next?
 
 - Talk to each other (Google Groups)
 - Ask us (but not too much!)
@@ -124,10 +118,10 @@ output: ioslides_presentation
 
 
 
-##What next?
+## What next?
 
 <div align = "center">
-<img src="Images/programming.png" width=600>
+<img src="Images/practice.png" width=300>
 </div>
 
 
